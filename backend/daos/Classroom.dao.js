@@ -89,5 +89,22 @@ class ClassroomDAO{
             message:"You are not learning this class"
         }
     }
+    async deleteClassroom(accountId, classroomId) {
+        const teacherId = accountId;
+        const classroom = await db('Classroom')
+            .where({ teacherId: teacherId, id: classroomId })
+            .first();
+        if (!classroom) {
+            return {
+                success: false,
+                message: "Classroom not found or you do not have permission to delete it",
+            };
+        }
+        await db('Classroom').where({ teacherId: teacherId, id: classroomId }).del();
+        return {
+            success: true,
+            message: "Delete classroom successfully",
+        };
+    }
 }
 export default new ClassroomDAO();

@@ -1,10 +1,12 @@
 import SideBarClassroom from '#components/Classroom/SideBarClassroom/SideBarClassroom.jsx'
 import ForumStudentClass from '#components/StudentClassroom/ForumStudentClassroom/ForumStudentClassroom.jsx'
 import RoadmapStudentClassroom from '#components/StudentClassroom/RoadmapStudentClassroom/RoadmapStudentClassroom.jsx'
+import ClassroomStudentSettings from '#components/StudentClassroom/ClassroomStudentSettings/ClassroomStudentSettings.jsx'
 import { useParams,useNavigate,useLocation } from "react-router-dom";
 import api from '#utils/api.js'
 import './StudentClassroomView.css'
 import { useState,useEffect } from 'react'
+import {useCheckLogin} from "#hooks/userCheckLogin";
 export default function StudentClassroomView(){
     const navigate = useNavigate();
     const { name,classroomId } = useParams();
@@ -12,14 +14,17 @@ export default function StudentClassroomView(){
     const [activeNav, setActiveNav] = useState('Forum');
     const [classes, setClassess] = useState([{name:name,id:classroomId}]);
     const [selectedClass, setSelectedClass] = useState({name:name,id:classroomId});
+    const { isLoggedIn, profile } = useCheckLogin();
     const navItems = [
         { id: 'Forum', label: 'Forum', icon: '👤' },
         { id: 'Roadmap', label: 'Roadmap', icon: '👥' },
+        { id: 'Settings', label: 'Settings', icon: '⚙️' },
     ];
     const renderContent = () => {
         switch (activeNav) {
           case "Forum": return <ForumStudentClass classroomId={classroomId} key={classroomId} />;
           case "Roadmap": return <RoadmapStudentClassroom classroomId={classroomId}  key={classroomId}/>;
+          case "Settings": return <ClassroomStudentSettings classroomId={classroomId} key={classroomId} profile={profile} />;
           default: return null;
         }
       };

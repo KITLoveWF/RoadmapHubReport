@@ -48,7 +48,7 @@ export default function RoadmapClassroom(props) {
         roadmapId: selectedRoadmap.id,
       });
       const getRoadmap = await api.get("/roadmaps/getTopicRoadmapByUserId", {
-        params: { id: selectedRoadmap.id },
+        params: { roadmapId: selectedRoadmap.id },
       });
       setRoadmaps([getRoadmap]);
     }
@@ -162,7 +162,7 @@ export default function RoadmapClassroom(props) {
               }}
             >
               <option value="">Select Roadmaps</option>
-              {myRoadmaps.map((r) => (
+              {myRoadmaps?.map((r) => (
                 <option key={r.id} value={r.id}>
                   {r.name}
                 </option>
@@ -178,10 +178,10 @@ export default function RoadmapClassroom(props) {
           </div>
 
           <ul className="list-group">
-            {roadmaps !== undefined &&
-              roadmaps.map((r) => (
+            {roadmaps[0]?.data.roadmap !== null &&
+              roadmaps?.map((r) => (
                 <li
-                  key={r.id}
+                  key={r.data.roadmap.roadmapId}
                   className="list-group-item d-flex justify-content-between align-items-center"
                 >
                   {r.data.roadmap.name}

@@ -41,8 +41,9 @@ class RoadmapDAO {
       .first();
     return roadmap;
   }
-  async deleteRoadmap(name) {
-    await db("Roadmap").where({ name }).del();
+  async deleteRoadmap(id) {
+    await db("Roadmap").where({ id }).del();
+    await RoadmapSchemaModel.findOneAndDelete({ roadmapId: id });
     return {
       success: true,
       message: "Delete roadmap successfully",

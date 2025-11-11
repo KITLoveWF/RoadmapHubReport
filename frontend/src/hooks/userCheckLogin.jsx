@@ -5,8 +5,8 @@ export const useCheckLogin = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { 
     const token = localStorage.getItem("accessToken");
     if (!token) {
       setIsLoggedIn(false);
@@ -37,8 +37,12 @@ export const useCheckLogin = () => {
       .catch(() => {
         setIsLoggedIn(false);
         setUser(null);
+        setProfile(null);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
-  return { isLoggedIn, user, profile };
+  return { isLoggedIn, user, profile, loading };
 };

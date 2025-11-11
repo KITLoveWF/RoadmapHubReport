@@ -34,8 +34,8 @@ class RoadmapController {
     }
   }
   async deleteRoadmap(req, res) {
-    const { name } = req.params;
-    await RoadmapService.deleteRoadmap(name);
+    const { id } = req.body;
+    await RoadmapService.deleteRoadmap(id);
   }
   async editNodeRoadmap(req, res) {
     const { name, nodes, edges, id } = req.body;
