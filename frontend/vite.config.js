@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import {fileURLToPath} from 'url';
 import {dirname, resolve} from 'path';
+import { all } from 'axios';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,14 +31,17 @@ export default defineConfig({
     //         usePolling: true,
     //         interval: 100, 
     // }, // Dùng cho docker
-    proxy: {
-            '/api': {
-                //target: 'http://app:5000', // Dùng cho docker
-                target: 'https://roadmaphub.onrender.com', // Dùng cho local
-                changeOrigin: true,
-                secure: false,
-            }
-    }
+    // proxy: {
+    //         '/api': {
+    //             //target: 'http://app:5000', // Dùng cho docker
+    //             target: 'https://roadmaphub.onrender.com', // Dùng cho local
+    //             changeOrigin: true,
+    //             secure: false,
+    //         },
+    // },
+    allowedHosts: [
+      "portfolio.nengoilahoang.io.vn"
+    ],
   },
   preview: {
     host: '0.0.0.0', // 👈 cho phép Render truy cập
