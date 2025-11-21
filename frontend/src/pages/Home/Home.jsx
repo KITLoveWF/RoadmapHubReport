@@ -79,52 +79,6 @@ export default function Home() {
     },
   ];
 
-  const customRoadmaps = [
-    {
-      id: 3,
-      name: "For Newbie in Gym",
-      description: "Complete beginner's guide to fitness",
-      author: "Tuan Le",
-      learning: 156,
-      teaching: 12,
-      isUserCard: true,
-    },
-    {
-      id: 4,
-      name: "Advanced Workout Plans",
-      description:
-        "Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs.",
-      author: "Phuong Hoang",
-      learning: 89,
-      teaching: 8,
-      isUserCard: true,
-    },
-  ];
-
-  // const teachingClasses = [
-  // {
-  //     id: 5,
-  //     name: "Gym Class",
-  //     description: "Fitness training sessions",
-  //     author: "Quang Bui",
-  //     learning: 25,
-  //     teaching: 1,
-  //     isUserCard: true
-  // }
-  // ];
-
-  const learningClasses = [
-    {
-      id: 6,
-      name: "Cooking Class",
-      description: "Interactive cooking lessons",
-      author: "Lan Pham",
-      learning: 1,
-      teaching: 0,
-      isUserCard: true,
-    },
-  ];
-
   const recommendedRoadmaps = [
     {
       id: 7,

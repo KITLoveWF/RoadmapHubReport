@@ -6,13 +6,14 @@ import AlertError from '#components/SignUp/AlertError.jsx';
 export default function CreateRoadmap(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [isPublic, setIsPublic] = useState(true);
     const [error, setError] = useState('');
     const { onClose ,user} = props;
     const navigate = useNavigate();
     const onhandleSubmit = async (e) => {
         e.preventDefault();
         // Handle roadmap creation logic here
-        const response = await api.post('/roadmaps/create', { name:title, description:description, accountId:user.id });
+        const response = await api.post('/roadmaps/create', { name:title, description:description, accountId:user.id, isPublic:isPublic });
         //console.log(response)
         
         if(response.data.success){
@@ -54,7 +55,19 @@ export default function CreateRoadmap(props) {
                     onChange={(e)=>setDescription(e.target.value)}
                 />
             </div>
-
+            <div className="form-group">
+                <label className="toggle-label">
+                    <span>{isPublic ? 'Public' : 'Private'}</span>
+                    <label className="switch">
+                    <input
+                        type="checkbox"
+                        checked={isPublic}
+                        onChange={() => setIsPublic(!isPublic)}
+                    />
+                    <span className="slider"></span>
+                    </label>
+                </label>
+            </div>
             <div className="button-group">
                 <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
                 <button type="submit" className="btn-create" >Create</button>
