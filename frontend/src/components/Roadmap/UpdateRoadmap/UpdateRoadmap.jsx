@@ -7,6 +7,7 @@ export default function UpdateRoadmap(props) {
     const { onClose ,user,nameRoadmap} = props;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState( '');
+    const [isPublic, setIsPublic] = useState(true);
     const [error, setError] = useState('');
     const [roadmapId, setRoadmapId] = useState('');
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function UpdateRoadmap(props) {
             setTitle(response.data.name);
             setDescription(response.data.description);
             setRoadmapId(response.data.id);
+            setIsPublic(response.data.isPublic);
         }
         fetchData();
         
@@ -24,11 +26,11 @@ export default function UpdateRoadmap(props) {
     const onhandleSubmit = async (e) => {
         e.preventDefault();
         // Handle roadmap creation logic here
-        const response = await api.post(`/roadmaps/edit/${nameRoadmap}`, { name:title, description:description, accountId:user.id, roadmapId: roadmapId });
+        const response = await api.post(`/roadmaps/edit/${nameRoadmap}`, { name:title, description:description, accountId:user.id, roadmapId: roadmapId, isPublic:isPublic });
         //console.log(response)
         
         if(response.data.success){
-            navigate(`/roadmap/edit/${title}`)
+            navigate(`/roadmap/edit/${title}/${roadmapId}`)
             onClose();
         }
         else {
@@ -68,6 +70,20 @@ export default function UpdateRoadmap(props) {
                     onChange={(e)=>setDescription(e.target.value)}
                     value={description}
                 />
+            </div>
+
+            <div className="form-group">
+                <label className="toggle-label">
+                    <span>{isPublic ? 'Public' : 'Private'}</span>
+                    <label className="switch">
+                    <input
+                        type="checkbox"
+                        checked={isPublic}
+                        onChange={() => setIsPublic(!isPublic)}
+                    />
+                    <span className="slider"></span>
+                    </label>
+                </label>
             </div>
 
             <div className="button-group">

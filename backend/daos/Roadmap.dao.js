@@ -7,14 +7,14 @@ import geneUUID from "../Helps/genUUID.js";
 import RoadmapSchemaModel from "../models/RoadmapSchema.model.js";
 class RoadmapDAO {
   //====================my sql
-  async createRoadmap(name, description, accountId) {
+  async createRoadmap(name, description, accountId, isPublic) {
     const roadmap = new Roadmap(
       geneUUID(),
       accountId,
       null,
       name,
       description,
-      null,
+      isPublic,
       null,
       null
     );
@@ -25,10 +25,10 @@ class RoadmapDAO {
       roadmap: roadmap,
     };
   }
-  async editRoadmap(name, description, accountId, roadmapId) {
+  async editRoadmap(name, description, accountId, roadmapId,isPublic) {
     await db("Roadmap")
       .where({ accountId: accountId, id: roadmapId })
-      .update({ name: name, description: description });
+      .update({ name: name, description: description, isPublic: isPublic });
     return {
       success: true,
       message: "Edit roadmap successfully",
@@ -48,20 +48,46 @@ class RoadmapDAO {
       message: "Delete roadmap successfully",
     };
   }
-  async checkRoadmap(name, accountId) {
-    const exit = await db("Roadmap").where({ name, accountId }).first();
-    if (exit) {
-      return {
-        success: false,
-        message: "Name of roadmap already taken",
-      };
-    } else {
-      return {
-        success: true,
-        message: "Roadmap already created successfully",
-      };
-    }
+  async checkRoadmap(name, accountId, type) {
+    const countResult = await db("Roadmap")
+      .where({ name, accountId })
+      .count('* as count')
+      .first();
+
+    const count = Number(countResult.count);
+
+    if(type==="create"){
+      if (count > 0) {
+        return {
+          success: false,
+          message: "Name of roadmap already taken",
+          count,
+        };
+      } else {
+        return {
+          success: true,
+          message: "Roadmap name is available",
+          count,
+        };
+      }
+    } 
+    else {
+      if (count > 1) {
+        return {
+          success: false,
+          message: "Name of roadmap already taken",
+          count,
+        };
+      } else {
+        return {
+          success: true,
+          message: "Roadmap name is available",
+          count,
+        };
+      }
+    };
   }
+
   // async editNodeRoadmap(accountId,name,nodes,edges,id) {
   //     const roadmap = RoadmapSchemaModel({accountId,name, roadmapId: id,nodes,edges,id});
   //     await roadmap.save();

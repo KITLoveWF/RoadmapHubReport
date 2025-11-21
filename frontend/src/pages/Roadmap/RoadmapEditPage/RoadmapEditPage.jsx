@@ -158,19 +158,18 @@ export default function RoadmapEditPage() {
   //const { isLoggedIn, user } = useCheckLogin();
   const navigate = useNavigate();
   const { name,id } = useParams();
-  useEffect( ()=>{
-    async function checkLogin(){
-      const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
-        withCredentials: true
-      }) ;
-      //console.log(response)
-      if(!response.data.success){
-      navigate("/");
-      }
-    }
-    checkLogin()  
-    
-  },[])
+  // useEffect( ()=>{
+  //   async function checkLogin(){
+  //     const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
+  //       withCredentials: true
+  //     }) ;
+  //     //console.log(response)
+  //     if(!response.data.success){
+  //     navigate("/");
+  //     }
+  //   }
+  //   checkLogin()  
+  // },[])
   //const [nodes, setNodes] = useState(initialNodes);
   //const [edges, setEdges] = useState(initialEdges);
 

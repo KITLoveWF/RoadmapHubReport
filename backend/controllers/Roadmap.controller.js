@@ -4,22 +4,23 @@ import CheckListAccountService from "../services/CheckListAccount.service.js";
 import { Buffer } from "buffer";
 class RoadmapController {
   async createRoadmap(req, res) {
-    const { name, description, accountId } = req.body;
-    const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
+    const { name, description, accountId, isPublic } = req.body;
+    const responseCheck = await RoadmapService.checkRoadmap(name, accountId, "create");
     if (!responseCheck.success) {
       res.json(responseCheck);
     } else {
       const response = await RoadmapService.createRoadmap(
         name,
         description,
-        accountId
+        accountId,
+        isPublic
       );
       res.json(response);
     }
   }
   async editRoadmap(req, res) {
-    const { name, description, accountId, roadmapId } = req.body;
-    const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
+    const { name, description, accountId, roadmapId, isPublic } = req.body;
+    const responseCheck = await RoadmapService.checkRoadmap(name, accountId, "edit");
     ////console.log("Response Check:", responseCheck);
     if (!responseCheck.success) {
       res.json(responseCheck);
@@ -28,7 +29,8 @@ class RoadmapController {
         name,
         description,
         accountId,
-        roadmapId
+        roadmapId,
+        isPublic
       );
       res.json(response);
     }
