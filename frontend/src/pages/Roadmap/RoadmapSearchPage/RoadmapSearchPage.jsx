@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useParams} from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import RoadmapCardInHome from '#components/RoadmapView/RoadmapCardInHome/RoadmapCardInHome.jsx';
 import './RoadmapSearchPage.css';
 import api from '../../../utils/api';
@@ -9,11 +9,16 @@ export default function RoadmapSearchPage({ handleBookmarkToggle }) {
   const [index, setIndex] = useState(1);
   const { query } = useParams();
   const [roadmapsList, setRoadmapsList] = useState([]);
+  const navigate = useNavigate(); 
 
   const onClickFilter = (filter) => {
     setSelectedFilter(filter);
   };
   
+  const ViewPageRoadmap = (roadmap) => {
+    navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
+  };
+
   const fetchMoreRoadmaps = async (page = index) => {
     const response = await api.get(`/roadmaps/search/${query}/${selectedFilter}/${page}`, {
       withCredentials: true
@@ -70,7 +75,7 @@ export default function RoadmapSearchPage({ handleBookmarkToggle }) {
         </div>
       <div className="search-roadmap-grid">
         {roadmapsList.map(r => (
-          <div key={r.id} className="search-card-wrapper">
+          <div key={r.id} className="search-card-wrapper" onClick={() => ViewPageRoadmap(r)}>
             <RoadmapCardInHome
               id={r.id}
               name={r.name}
