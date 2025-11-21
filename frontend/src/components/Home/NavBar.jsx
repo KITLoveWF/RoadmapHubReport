@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 export default function NavBar() {
   const navigate = useNavigate();
   const { isLoggedIn, profile } = useCheckLogin();
+  const [loggedFlag, setLoggedFlag] = useState(false);
 
   function onLogin() {
     navigate("/login");
@@ -41,18 +42,30 @@ export default function NavBar() {
     if (isLoggedIn) {
       connectSocket(); // Connect socket with JWT token
       getNotifications();
-
+      setLoggedFlag(true);
       // Listen for new notifications
       socket.on("newNotification", (data) => {
         console.log("📬 New notification received via socket:", data);
         getNotifications();
       });
+    } else {
+      setLoggedFlag(false);
     }
 
     return () => {
       socket.off("newNotification");
     };
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if(loggedFlag){
+      localStorage.setItem("loggedFlag", "true");
+    }
+    else{
+      localStorage.removeItem("loggedFlag");
+    }
+  }, [loggedFlag]);
+
   const markAsRead = async (notificationId) => {
     try {
       // Backend tự động lấy user info từ token
@@ -66,7 +79,7 @@ export default function NavBar() {
     }
   };
   let notificationbutton;
-  if (isLoggedIn) {
+  if (localStorage.getItem("loggedFlag") === "true") {
     notificationbutton = (
       <div className="dropdown me-3">
         <button
