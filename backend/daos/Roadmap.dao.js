@@ -5,6 +5,8 @@ import db from "../utils/db.js";
 import Roadmap from "../models/Roadmap.model.js";
 import geneUUID from "../Helps/genUUID.js";
 import RoadmapSchemaModel from "../models/RoadmapSchema.model.js";
+import QuizSchemaModel from "../models/QuizSchema.model.js";
+import QuizResultSchemaModel from "../models/QuizResultSchema.model.js";
 class RoadmapDAO {
   //====================my sql
   async createRoadmap(name, description, accountId, isPublic) {
@@ -41,8 +43,11 @@ class RoadmapDAO {
       .first();
     return roadmap;
   }
-  async deleteRoadmap(name) {
-    await db("Roadmap").where({ name }).del();
+  async deleteRoadmap(id, accountId) {
+    await db("Roadmap").where({ id }).del();
+    await RoadmapSchemaModel.findOneAndDelete({ roadmapId: id });
+    await QuizSchemaModel.findOneAndDelete({ roadmapId: id , userCreateQuiz: accountId});
+    await QuizResultSchemaModel.findOneAndDelete({ roadmapId: id, userCreateQuiz: accountId });
     return {
       success: true,
       message: "Delete roadmap successfully",

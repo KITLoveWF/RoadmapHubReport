@@ -25,6 +25,7 @@ import Edge from '#components/Roadmap/Nodes/Edge/Edge.jsx';
 import api from "../../../utils/api";
 import RightBarView from "#components/Roadmap/NodesView/RightBarView/RightBarView.jsx";
 import RightBarPopUp from "#components/Roadmap/NodesView/RightBarPopUp/RightBarPopUp.jsx"
+import {useCheckLogin} from "#hooks/userCheckLogin";
 //import { set } from "mongoose";
 
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
@@ -93,9 +94,13 @@ export default function RoadmapView(){
     const onPaneClick = useCallback(() => {
         setSelectedNode(null);
     });
+    const { isLoggedIn, user, loading } = useCheckLogin();
+    const deleteRoadmap = () => {
+       const result = api.post(`/roadmaps/delete`, { id: roadmap.id })
+    }
     return(
         <div style={{ display: 'flex',width:'100%', height:'130vh', flexDirection: "column", margin: 0}}>
-            <TopBarView roadmap={roadmap}/>
+            <TopBarView roadmap={roadmap} user={user} deleteRoadmap={deleteRoadmap} loading={loading} />
             <div style={{ display: 'flex', width:'100%', height:'130vh', flexDirection: "row", margin: 0}}>
                 <ReactFlow
                     nodes={nodes}

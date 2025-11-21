@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from "react";
 import Post from "#components/Classroom/ForumClass/Post/Post.jsx";
 import ItemPost from "#components/Classroom/ForumClass/ItemPost/ItemPost";
-
+import {useCheckLogin} from "#hooks/userCheckLogin";
 import api from '#utils/api.js'
 export default function ForumStudentClass(props) {
   const {classroomId}=props;
   const [posts,setPost]=useState([]);
   const [user,setUser]=useState({});
+  const { isLoggedIn, profile, loading } = useCheckLogin();
   async function getPosts(){
             const response = await api.get('/posts/getPosts',{
                 withCredentials: true,
@@ -16,16 +17,11 @@ export default function ForumStudentClass(props) {
            
         }
   useEffect(()=>{
-         async function getAvatarComment(){
-                    const response = await api.get('/profiles/get-profile',{
-                    withCredentials: true
-                    })
-                    setUser(response.data?.profile);
-                   }
-          
-         getAvatarComment();
+        if(!loading) {
+          setUser(profile);
          getPosts();
-     },[])
+        }
+     },[loading])
   const handleComment = async(postId,content)=>{
      const response = await api.post('/comments/create',{
       classroomId:classroomId,
@@ -47,7 +43,7 @@ export default function ForumStudentClass(props) {
 
   return (
     <div className="container mt-4">
-      {posts.map((post) => (
+      {user && posts.map((post) => (
         <ItemPost key={post.postId} 
                   post={post.post} 
                   comments={post.comments} 

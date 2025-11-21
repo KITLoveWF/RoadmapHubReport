@@ -10,6 +10,7 @@ router.post(
   ClassroomController.checkYourClassroom
 );
 router.post("/create", requireAuth, ClassroomController.createClassroom);
+router.post("/delete", requireAuth, ClassroomController.deleteClassroom); 
 router.get("/getNameAll", requireAuth, ClassroomController.getNameAll);
 router.post(
   "/addRoadmapIntoClass",

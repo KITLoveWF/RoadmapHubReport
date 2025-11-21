@@ -78,5 +78,14 @@ class ClassroomController {
     );
     res.json(responseCheck);
   }
+  async deleteClassroom(req, res) {
+    const { classroomId } = req.body;
+    const accountId = req.authenticate.id;
+    const response = await ClassroomService.deleteClassroom(
+      accountId,
+      classroomId
+    );
+    res.json(response);
+  }
 }
 export default new ClassroomController(ClassroomService);

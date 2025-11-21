@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Post from "#components/Classroom/ForumClass/Post/Post.jsx";
 import ItemPost from "#components/Classroom/ForumClass/ItemPost/ItemPost";
-
+import { useCheckLogin } from "#hooks/userCheckLogin";
 import api from "#utils/api.js";
 export default function ForumClass(props) {
   const { classroomId } = props;
   const [posts, setPost] = useState([]);
   const [user, setUser] = useState({});
-
+  const { isLoggedIn, profile, loading } = useCheckLogin();
   async function getPosts() {
     // Backend tự động lấy user info từ token
     const response = await api.get("/posts/getPosts", {
@@ -17,14 +17,12 @@ export default function ForumClass(props) {
   }
 
   useEffect(() => {
-    async function getAvatarComment() {
-      // Backend tự động lấy user info từ token
-      const response = await api.get("/profiles/get-profile");
-      setUser(response.data?.profile);
+    if(!loading) 
+    {
+      setUser(profile);
+      getPosts();
     }
-    getAvatarComment();
-    getPosts();
-  }, []);
+  }, [loading]);
   const handlePost = async (content) => {
     // Backend tự động lấy user info từ token và emit socket notification
     const response = await api.post("/posts/create", {
@@ -68,7 +66,7 @@ export default function ForumClass(props) {
   return (
     <div className="container mt-4">
       <Post onCancel={() => console.log("Cancel")} onPost={handlePost} />
-      {posts.map((post) => (
+      {user && posts.map((post) => (
         <ItemPost
           key={post.postId}
           post={post.post}

@@ -27,5 +27,8 @@ class ClassroomService{
     async checkLearningClass(accountId,classroomId){
         return await ClassroomDAO.checkLearningClass(accountId,classroomId);
     }
+    async deleteClassroom(accountId, classroomId) {
+        return await ClassroomDAO.deleteClassroom(accountId, classroomId);
+    }
 }
 export default new ClassroomService(ClassroomDAO)

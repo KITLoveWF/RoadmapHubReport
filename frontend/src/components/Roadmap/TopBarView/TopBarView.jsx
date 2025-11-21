@@ -1,13 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './TopBarView.css';
-
+import { useEffect } from 'react';
 export default function TopBarView(props) {
-    const {roadmap} = props 
+    const {roadmap,user,deleteRoadmap,loading} = props 
+    const [User,setUser]=React.useState({});
+    useEffect(() => {
+        if(!loading) {
+          setUser(user);
+        }
+    }, [loading]);
     return (
         <div className="topbar-container">
             <div className="topbar-navigation">
-                <Link to="/roadmaps" className="back-link">
+                <Link to="/" className="back-link">
                     <i className="bi bi-arrow-left"></i> All Roadmaps
                 </Link>
 
@@ -15,6 +21,7 @@ export default function TopBarView(props) {
                     <button className="btn-bookmark">
                         <i className="bi bi-bookmark"></i>
                     </button>
+                    {User.id === roadmap.accountId && (
                     <div class="dropdown">
                         <button className="btn-schedule" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-three-dots-vertical"></i>
@@ -22,21 +29,11 @@ export default function TopBarView(props) {
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href={`/roadmap/edit/${roadmap.name}/${roadmap.id}`}>Edit</a></li>
-                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                            <li><a class="dropdown-item" href="/" onClick={deleteRoadmap}>Delete</a></li>
                         </ul>
                     </div>
-
-
-                    <button className="btn-schedule">
-                        <i className="bi bi-calendar3"></i>
-                        Schedule Learning Time
-                    </button>
-
-                    <button className="btn-download">
-                        <i className="bi bi-download"></i>
-                        Download
-                    </button>
-
+                    )}
+                      
                     <button className="btn-share">
                         <i className="bi bi-share"></i>
                         Share
@@ -45,25 +42,15 @@ export default function TopBarView(props) {
             </div>
 
             <div className="roadmap-header">
-                <h1 className="roadmap-title">Frontend Developer</h1>
+                <h1 className="roadmap-title">{roadmap.name}</h1>
                 <p className="roadmap-subtitle">
-                    Step by step guide to becoming a modern frontend developer in 2025
+                    {roadmap.description}
                 </p>
             </div>
 
             <div className="roadmap-tabs">
                 <button className="tab-btn active">
                     <i className="bi bi-map"></i> Roadmap
-                </button>
-                <button className="tab-btn">
-                    <i className="bi bi-folder"></i> Projects
-                </button>
-                <button className="tab-btn">
-                    <i className="bi bi-robot"></i> AI Tutor
-                </button>
-                <button className="tab-btn personalize">
-                    <i className="bi bi-person-gear"></i> Personalize
-                    <span className="badge-new">New</span>
                 </button>
             </div>
         </div>

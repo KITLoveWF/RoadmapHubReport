@@ -1,0 +1,204 @@
+.classroom-settings-container {
+  padding: 24px;
+  background: #fff;
+}
+
+.settings-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 32px;
+}
+
+/* Danger Zone */
+.danger-zone {
+  border: 2px solid #ff4444;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff9f9;
+}
+
+.danger-zone-header {
+  background: #ffe6e6;
+  padding: 16px 20px;
+  border-bottom: 2px solid #ff4444;
+}
+
+.danger-zone-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #d32f2f;
+  margin: 0 0 4px 0;
+}
+
+.danger-zone-header p {
+  font-size: 0.9rem;
+  color: #d32f2f;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.danger-zone-content {
+  padding: 20px;
+}
+
+.delete-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.delete-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 8px 0;
+}
+
+.delete-info p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.btn-delete-classroom {
+  padding: 10px 20px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-delete-classroom:hover {
+  background: #e63535;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+}
+
+.btn-delete-classroom:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #ffebee;
+  color: #d32f2f;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  border-left: 4px solid #d32f2f;
+}
+
+/* ✅ Modal Body Styles */
+.delete-confirm-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.warning-text {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.warning-important {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 12px;
+  border-radius: 4px;
+  color: #856404;
+}
+
+/* ✅ Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.modal-actions .btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-actions .btn-secondary {
+  background: #f0f0f0;
+  color: #222;
+}
+
+.modal-actions .btn-secondary:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.modal-actions .btn-danger {
+  background: #ff4444;
+  color: white;
+}
+
+.modal-actions .btn-danger:hover:not(:disabled) {
+  background: #e63535;
+}
+
+.modal-actions .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ✅ Loading spinner */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ✅ Responsive */
+@media (max-width: 600px) {
+  .delete-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-delete-classroom {
+    width: 100%;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
