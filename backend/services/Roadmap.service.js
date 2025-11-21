@@ -24,8 +24,8 @@ class RoadmapService {
     async editRoadmap(name, description,accountId,roadmapId) {
         return await RoadmapDAO.editRoadmap(name, description,accountId,roadmapId);
     }
-    async deleteRoadmap(name) {
-        return await RoadmapDAO.deleteRoadmap(name);
+    async deleteRoadmap(id, accountId) {
+        return await RoadmapDAO.deleteRoadmap(id, accountId);
     }
     async checkRoadmap(name, accountId) {
         return await RoadmapDAO.checkRoadmap(name, accountId);

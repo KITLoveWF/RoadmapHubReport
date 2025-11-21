@@ -1,0 +1,465 @@
+
+/* ============ TABLE WRAPPER ============ */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
+}
+
+/* ============ MAIN CONTAINER ============ */
+.process-classroom-container {
+  padding: 30px;
+  min-height: 100vh;
+  min-width: 1200px;
+}
+
+.process-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.process-header h1 {
+  font-size: 2.5rem;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+}
+
+.process-header .text-muted {
+  color: rgba(255, 255, 255, 0.8) !important;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* ============ CONTENT LAYOUT ============ */
+.process-content {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 30px;
+  min-height: 500px;
+}
+
+/* ============ STUDENT LIST PANEL ============ */
+.student-list-panel {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  height: fit-content;
+  position: sticky;
+  top: 30px;
+}
+
+.search-box input {
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  padding: 12px 18px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+/* Students List */
+.students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.student-item {
+  padding: 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: grid;
+  grid-template-columns: 55px 1fr 65px;
+  gap: 14px;
+  align-items: center;
+}
+
+.student-item:hover {
+  border-color: #667eea;
+  background: #f9f9f9;
+}
+
+.student-item.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.student-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+}
+
+.student-item.active .student-avatar {
+  border-color: white;
+}
+
+.student-info h5 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.student-info p {
+  margin: 3px 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.student-score {
+  text-align: center;
+}
+
+.score-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.student-item.active .score-value {
+  color: white;
+}
+
+.score-label {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* ============ STUDENT DETAILS PANEL ============ */
+.student-details-panel {
+  background: white;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+.student-report {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Report Header */
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.student-profile {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.student-profile img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #667eea;
+}
+
+.student-profile h2 {
+  margin: 0;
+  color: #222;
+  font-size: 1.5rem;
+}
+
+.student-profile p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* ============ STATS GRID ============ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-align: center;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border-color: #667eea;
+}
+
+.stat-icon {
+  font-size: 1.8rem;
+  min-width: auto;
+  text-align: center;
+}
+
+.stat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #667eea;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ============ CHARTS SECTION ============ */
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.chart-container {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.chart-container h3 {
+  margin: 0 0 25px 0;
+  color: #222;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* ============ SCROLLBAR ============ */
+.students-list::-webkit-scrollbar,
+.student-details-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.students-list::-webkit-scrollbar-track,
+.student-details-panel::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.students-list::-webkit-scrollbar-thumb,
+.student-details-panel::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+.students-list::-webkit-scrollbar-thumb:hover,
+.student-details-panel::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
+}
+
+/* ============ EXPORT SECTION ============ */
+.export-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px 40px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.export-info p {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.export-buttons-main {
+  display: flex;
+  gap: 18px;
+}
+
+.export-buttons-main .btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.05rem;
+  background: #4CAF50;
+  color: white;
+}
+
+.export-buttons-main .btn:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.export-buttons-main .btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.export-buttons-main .spinner-border {
+  width: 16px;
+  height: 16px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1200px) {
+  .export-section {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .export-buttons-main {
+    width: 100%;
+  }
+
+  .export-buttons-main .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .export-section {
+    padding: 15px 20px;
+  }
+
+  .export-info p {
+    font-size: 0.95rem;
+  }
+
+  .export-buttons-main .btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .process-content {
+    grid-template-columns: 1fr;
+  }
+
+  .student-list-panel {
+    position: relative;
+    top: auto;
+    max-height: none;
+  }
+
+  .report-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .process-header {
+    padding: 20px;
+  }
+
+  .process-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .export-section {
+    padding: 12px 15px;
+  }
+
+  .export-info p {
+    font-size: 0.85rem;
+  }
+
+  .export-buttons-main {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .export-buttons-main .btn {
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .student-item {
+    grid-template-columns: 1fr;
+  }
+
+  .student-score {
+    display: none;
+  }
+}

@@ -19,7 +19,7 @@ export default function ClassroomView(){
       case "Forum": return <ForumClass classroomId={classroomId} key={classroomId} />;
       case "Roadmap": return <RoadmapClassroom classroomId={classroomId}  key={classroomId}/>;
       case "Student": return <ManagementStudent classroomId={classroomId}  key={classroomId}/>;
-      case "Process": return <ProcessClassroom  key={classroomId}/>;
+      case "Process": return <ProcessClassroom  key={classroomId} classroomId={classroomId}/>;
       default: return null;
     }
   };

@@ -1,6 +1,7 @@
 import connectDB from '../utils/dbmongo.js';
 import Quiz from "../models/QuizSchema.model.js";
 import QuizResult from "../models/QuizResultSchema.model.js";
+import db from "../utils/db.js";
 class QuizDAO{
     async getQuizClassroom({ userCreateQuiz, roadmapId, classroomId }){
         const filter = { userCreateQuiz, roadmapId, classroomId };
@@ -33,6 +34,18 @@ class QuizDAO{
         setDefaultsOnInsert: true
         });
         return quizResult;
+    }
+    async getScoreStudent({ classroomId }){
+        const quizResults = await QuizResult.find({ classroomId });
+        return quizResults;
+    }
+    async getStudentsInClassroom({ classroomId }){
+        const results = await db('studentclassroom')
+                             .join('account', 'studentclassroom.studentId', 'account.id')
+                             .join('profile', 'studentclassroom.studentId', 'profile.accountId')
+                             .where({ classroomId })
+                             .select('account.id', 'account.username', 'account.email','profile.avatar');
+        return results;
     }
     
 }
