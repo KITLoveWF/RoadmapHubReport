@@ -35,6 +35,17 @@ class RoadmapController {
       res.json(response);
     }
   }
+
+  async searchRoadmap(req, res) {
+    const { search, typeSearch, index } = req.params;
+    const roadmaps = await RoadmapService.searchRoadmap(search, typeSearch, index);
+    if(roadmaps.length ===0){
+      return res.json({ status: "failed", message: "No roadmap found" });
+    }
+    else{
+      res.json({ status: "success", data: roadmaps });
+    }
+  }
   async deleteRoadmap(req, res) {
     const { id } = req.body;
     const accountId = req.authenticate.id;

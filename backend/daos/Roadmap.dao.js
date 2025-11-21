@@ -92,7 +92,46 @@ class RoadmapDAO {
       }
     };
   }
-
+  async searchRoadmap(search, typeSearch, index) {
+    const pageSize = 16;
+    const offset = (index - 1) * pageSize;
+    const searchTerm = search.trim().split(/\s+/).map(word => `${word}*`).join(' ');
+    let results = [];
+    if(typeSearch==="popular"){
+      results = await db("Roadmap")
+        .whereRaw(
+            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
+            [searchTerm]
+        )
+        // .orderByRaw('MATCH(name, description) AGAINST(?) DESC', [search]) 
+        .select('*')
+        .limit(pageSize)
+        .offset(offset);
+    }
+    else if(typeSearch==="newest"){
+      results = await db("Roadmap")
+        .whereRaw(
+            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
+            [searchTerm]
+        )
+        .select('*')
+        .limit(pageSize)
+        .offset(offset)
+        .orderBy('createdAt', 'desc');
+    }
+    else if(typeSearch==="oldest"){
+      results = await db("Roadmap")
+        .whereRaw(
+            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
+            [searchTerm]
+        )
+        .select('*')
+        .limit(pageSize)
+        .offset(offset)
+        .orderBy('createdAt', 'asc');
+    }
+    return results;
+}
   // async editNodeRoadmap(accountId,name,nodes,edges,id) {
   //     const roadmap = RoadmapSchemaModel({accountId,name, roadmapId: id,nodes,edges,id});
   //     await roadmap.save();

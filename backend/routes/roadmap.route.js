@@ -9,6 +9,7 @@ router.post("/edit/:name", requireAuth, RoadmapController.editRoadmap);
 router.post("/delete", requireAuth, RoadmapController.deleteRoadmap);
 router.post("/edit-nodes", requireAuth, RoadmapController.editNodeRoadmap);
 router.get("/edit/:name", requireAuth, RoadmapController.getRoadmapByName);
+router.get("/search/:search/:typeSearch/:index", RoadmapController.searchRoadmap);
 router.get(
   "/getYourRoadmap/:name",
   requireAuth,
