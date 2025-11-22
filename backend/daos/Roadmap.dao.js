@@ -103,7 +103,6 @@ class RoadmapDAO {
             'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
             [searchTerm]
         )
-        // .orderByRaw('MATCH(name, description) AGAINST(?) DESC', [search]) 
         .select('*')
         .limit(pageSize)
         .offset(offset);
@@ -197,6 +196,20 @@ class RoadmapDAO {
         throw error; // Hoặc return lỗi tùy theo cách bạn xử lý response
     }
   }
+
+  async getMarkRoadmaps(accountId) {
+    try {
+      const markedRoadmaps = await db("roadmap")
+        .join("markroadmap", "roadmap.id", "markroadmap.roadmapId")
+        .join("account", "roadmap.accountId", "account.id")
+        .where("markroadmap.accountId", accountId)
+        .select("roadmap.*", "account.username as author");
+      return markedRoadmaps;
+      } 
+      catch (error) {
+        console.error("Lỗi getMarkRoadmaps:", error);
+      }
+    }
 
   //====================mongoDB
   async editNodeRoadmap(accountId, name, roadmapId, nodes, edges) {

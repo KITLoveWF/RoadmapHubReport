@@ -19,10 +19,18 @@ export default function Home() {
   };
   const [listLearningClass, setListLearningClass] = useState([]);
   const [listTeachingClass, setListTeachingClass] = useState([]);
+  const [markedRoadmaps, setMarkedRoadmaps] = useState([]);
   const [myRoadmaps, setMyRoadmaps] = useState([]);
   const navigate = useNavigate();
   const { isLoggedIn, user } = useCheckLogin();
   useEffect(() => {
+    const markedRoadmaps = async () => {
+      const response = await api.get("/roadmaps/mark", {
+        withCredentials: true,  
+      });
+      console.log("Marked roadmaps: ", response.data.data);
+      setMarkedRoadmaps(response.data.data);
+    };
     const learningClass = async () => {
       const response = await api.get("/classrooms/getLearningClass", {
         withCredentials: true,
@@ -45,7 +53,9 @@ export default function Home() {
     learningClass();
     teachingClass();
     myRoadmap();
+    markedRoadmaps();
   }, [isLoggedIn]);
+
   const ViewPageRoadmap = (roadmap) => {
     navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
   };
@@ -55,29 +65,29 @@ export default function Home() {
       roadmapId: id,
     }, { withCredentials: true });
   };
-  
-  const markedRoadmaps = [
-    {
-      id: 1,
-      name: "Learn Cooking",
-      description: "Master the art of cooking",
-      author: "Alice Nguyen",
-      learning: 12500,
-      teaching: 45,
-      isMarked: true,
-      isUserCard: true,
-    },
-    {
-      id: 2,
-      name: "Learn Drawing",
-      description: "Creative art techniques",
-      author: "Minh Tran",
-      learning: 8300,
-      teaching: 23,
-      isMarked: true,
-      isUserCard: true,
-    },
-  ];
+
+  // const markedRoadmaps = [
+  //   {
+  //     id: 1,
+  //     name: "Learn Cooking",
+  //     description: "Master the art of cooking",
+  //     author: "Alice Nguyen",
+  //     learning: 12500,
+  //     teaching: 45,
+  //     isMarked: true,
+  //     isUserCard: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Learn Drawing",
+  //     description: "Creative art techniques",
+  //     author: "Minh Tran",
+  //     learning: 8300,
+  //     teaching: 23,
+  //     isMarked: true,
+  //     isUserCard: true,
+  //   },
+  // ];
 
   const recommendedRoadmaps = [
     {
