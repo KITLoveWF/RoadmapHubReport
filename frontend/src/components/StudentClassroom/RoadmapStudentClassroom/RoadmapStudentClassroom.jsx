@@ -142,15 +142,14 @@ export default function RoadmapStudentClassroom(props) {
       if (index !== -1) {
         copy.topics[index].tests[quizIndex].durationDo = copy.topics[index].tests[quizIndex].duration * 60 - timeLeft;
         const correctAnswerUser = copy.topics[index].tests[quizIndex].questions.reduce((acc, question) => {
-          const correctAnswer = question.answers.find(ans => ans.correct);
           const userAnswer = question.answers.find(ans => ans.userChoose);
-          if (correctAnswer && userAnswer && correctAnswer.text === userAnswer.text) {
+          if (userAnswer.correct && userAnswer.userChoose) {
             return acc + 1; 
           }
           return acc; 
         }, 0);
         copy.topics[index].tests[quizIndex].submit = true;
-        copy.topics[index].tests[quizIndex].point = 10 * correctAnswerUser / copy.topics[index].tests[quizIndex].questions.length;
+        copy.topics[index].tests[quizIndex].point = Math.round(10 * correctAnswerUser * 10 / copy.topics[index].tests[quizIndex].questions.length) / 10;
       }
       setQuizzes(copy);
     const response = await api.post('/quizzes/doQuiz',{quiz:copy},{
