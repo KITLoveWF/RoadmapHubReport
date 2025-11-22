@@ -134,7 +134,9 @@ export default function Home() {
               </h3>
               <div className="roadmap-grid">
                 {markedRoadmaps.map((roadmap) => (
-                  <div key={roadmap.id} className="roadmap-card-wrapper">
+                  <div key={roadmap.id} className="roadmap-card-wrapper"
+                    onClick={() => ViewPageRoadmap(roadmap)}
+                  >
                     <RoadmapCardInHome
                       id={roadmap.id}
                       name={roadmap.name}
