@@ -54,8 +54,6 @@ export default function Home() {
     //console.log(`Card ${id} bookmarked: ${isBookmarked}`);
     // Handle bookmark logic here
   };
-
-  // Sample data for different sections (with added `author` field)
   const markedRoadmaps = [
     {
       id: 1,
