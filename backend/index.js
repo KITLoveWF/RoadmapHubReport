@@ -41,11 +41,22 @@ app.use(
   cors({
     origin: [
       process.env.FRONTEND_URL || "http://localhost:3000",
-      "https://portfolio.nengoilahoang.io.vn"
+      "https://roadmaphub.nengoilahoang.io.vn"
     ], // FE port
     credentials: true,
   })
 );
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin:[
+      process.env.FRONTEND_URL || "http://localhost:3000",
+      "https://roadmaphub.nengoilahoang.io.vn"
+    ],
+    credentials: true,
+  },
+});
+
 app.use(express.json());
 // app.use("/", authenticate); // REMOVED: Dùng RequireAuth trực tiếp trên từng route cần protect
 app.use("/api/accounts", auRoutes);
@@ -67,16 +78,6 @@ app.use("/api/oauth2", oauth2Routes); // OAuth2 routes
 // app.listen(process.env.PORT, () => {
 //     //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 // });
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin:[
-      process.env.FRONTEND_URL || "http://localhost:3000",
-      "https://backend.nengoilahoang.io.vn"
-    ], // FE port
-    credentials: true,
-  },
-});
 
 // app.listen(process.env.PORT, async () => {
 //     await connectDB();
@@ -88,7 +89,6 @@ httpServer.listen(process.env.PORT, async () => {
 });
 
 app.set("io", io);
-app.set('trust proxy', true);
 
 // Socket.IO middleware - Verify JWT token
 io.use((socket, next) => {
