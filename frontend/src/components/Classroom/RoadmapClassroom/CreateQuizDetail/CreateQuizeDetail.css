@@ -3,8 +3,101 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 24px;
-  background: #f8f9fa;
   border-radius: 16px;
+}
+
+/* Invalid Input Styling */
+.form-control.is-invalid {
+  border-color: #dc3545 !important;
+  background-image: none;
+}
+
+.form-control.is-invalid:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25) !important;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.question-input.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.question-input.is-invalid:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25) !important;
+}
+
+.answer-input.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.answer-input.is-invalid:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Question Card with Error */
+.question-card.has-error {
+  border-color: #dc3545;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(220, 53, 69, 0.1);
+}
+
+.question-card.has-error:hover {
+  border-color: #dc3545;
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.15);
+}
+
+.question-error-banner {
+  background: #f8d7da;
+  border-left: 4px solid #dc3545;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.question-error-banner i {
+  color: #dc3545;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.error-messages {
+  flex: 1;
+}
+
+.error-messages p {
+  margin: 0 0 6px 0;
+  color: #721c24;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.error-messages p:last-child {
+  margin-bottom: 0;
+}
+
+/* Correct Answer Indicator */
+.correct-answer .answer-index {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #28a745;
+  font-weight: 700;
 }
 
 .quiz-header {
@@ -270,6 +363,7 @@
   font-weight: 600;
   color: #6c757d;
   transition: all 0.3s ease;
+  min-width: fit-content;
 }
 
 .answer-correct-checkbox input[type="checkbox"] {
@@ -294,6 +388,7 @@
   font-size: 0.8rem;
   transition: all 0.3s ease;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-delete-answer:hover {

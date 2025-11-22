@@ -515,7 +515,7 @@ export default function ProcessClassroom({ classroomId }) {
                   <p>{student.email}</p>
                 </div>
                 <div className="student-score">
-                  <div className="score-value">{student.stats.averageScore}</div>
+                  <div className="score-value">{Math.round(student.stats.averageScore * 10) / 10}</div>
                 </div>
               </div>
             ))}
@@ -542,7 +542,7 @@ export default function ProcessClassroom({ classroomId }) {
                 <div className="stat-card">
                   <div className="stat-icon">📊</div>
                   <div className="stat-content">
-                    <div className="stat-value">{selectedStudent.stats.averageScore}</div>
+                    <div className="stat-value">{Math.round(selectedStudent.stats.averageScore * 10) / 10}</div>
                     <div className="stat-label">Điểm TB</div>
                   </div>
                 </div>
