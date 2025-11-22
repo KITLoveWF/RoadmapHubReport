@@ -169,7 +169,7 @@ const RoadmapCard = ({
           <h3 className="card-title" title={name}>
             {truncate(name)}
           </h3>
-          {/* <div
+          <div
             className={`bookmark-icon ${isBookmarked ? "bookmarked" : ""}`}
             onClick={handleBookmarkClick}
             title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
@@ -188,7 +188,7 @@ const RoadmapCard = ({
                                 7,14.74 2,9 8.91,8.26"
               />
             </svg>
-          </div> */}
+          </div>
         </div>
 
         {/* Author */}

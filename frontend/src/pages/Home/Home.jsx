@@ -50,10 +50,12 @@ export default function Home() {
     navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
   };
 
-  const handleBookmarkToggle = (id, isBookmarked) => {
-    //console.log(`Card ${id} bookmarked: ${isBookmarked}`);
-    // Handle bookmark logic here
+  const handleBookmarkToggle = async (id) => {
+    await api.post("/roadmaps/mark/id", {
+      roadmapId: id,
+    }, { withCredentials: true });
   };
+  
   const markedRoadmaps = [
     {
       id: 1,

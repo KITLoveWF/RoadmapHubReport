@@ -160,6 +160,43 @@ class RoadmapDAO {
       .first();
     return roadmap;
   }
+  async markRoadmap(accountId, roadmapId) {
+    try {
+      const roadmapExists = await db("Roadmap").where({ id: roadmapId }).first();
+      if (!roadmapExists) {
+          throw new Error("Roadmap không tồn tại");
+      }
+      const existingMark = await db("MarkRoadmap")
+          .where({
+              accountId: accountId,
+              roadmapId: roadmapId
+          })
+          .first();
+      if (existingMark) {
+          await db("MarkRoadmap")
+              .where({ id: existingMark.id })
+              .del();
+          return { 
+              status: "unmarked", 
+              message: "Đã bỏ lưu roadmap" 
+          };
+      } else {
+          const newId = geneUUID();
+          await db("MarkRoadmap").insert({
+              id: newId,
+              accountId: accountId,
+              roadmapId: roadmapId
+          });
+          return { 
+              status: "marked", 
+              message: "Đã lưu roadmap thành công" 
+          };
+      }
+    } catch (error) {
+        console.error("Lỗi markRoadmap:", error);
+        throw error; // Hoặc return lỗi tùy theo cách bạn xử lý response
+    }
+  }
 
   //====================mongoDB
   async editNodeRoadmap(accountId, name, roadmapId, nodes, edges) {

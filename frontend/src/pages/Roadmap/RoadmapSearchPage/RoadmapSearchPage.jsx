@@ -4,7 +4,13 @@ import RoadmapCardInHome from '#components/RoadmapView/RoadmapCardInHome/Roadmap
 import './RoadmapSearchPage.css';
 import api from '../../../utils/api';
 
-export default function RoadmapSearchPage({ handleBookmarkToggle }) {
+const handleBookmarkToggle = async (id) => {
+  await api.post(`/roadmaps/mark/${id}`, {
+    roadmapId: id,
+  }, { withCredentials: true });
+};
+
+export default function RoadmapSearchPage() {
   const [selectedFilter, setSelectedFilter] = useState('popular');
   const [index, setIndex] = useState(1);
   const { query } = useParams();

@@ -64,5 +64,8 @@ class RoadmapService {
     async getTopicRoadmapByUserId(roadmapId){
         return await RoadmapDAO.getTopicRoadmapByUserId(roadmapId);
     }
+    async markRoadmap(accountId, roadmapId){
+        return await RoadmapDAO.markRoadmap(accountId, roadmapId);
+    }
 }
 export default new RoadmapService(RoadmapDAO)
