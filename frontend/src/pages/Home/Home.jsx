@@ -19,9 +19,26 @@ export default function Home() {
   };
   const [listLearningClass, setListLearningClass] = useState([]);
   const [listTeachingClass, setListTeachingClass] = useState([]);
+  const [markedRoadmaps, setMarkedRoadmaps] = useState([]);
   const [myRoadmaps, setMyRoadmaps] = useState([]);
+  const [resetMarkRoadmap, setResetMarkRoadmap] = useState(true);
   const navigate = useNavigate();
   const { isLoggedIn, user } = useCheckLogin();
+  
+  useEffect(() => {
+    const markedRoadmaps = async () => {
+      const response = await api.get("/roadmaps/mark", {
+        withCredentials: true,  
+      });
+      console.log("Marked roadmaps: ", response.data.data);
+      setMarkedRoadmaps(response.data.data);
+    };
+    if(resetMarkRoadmap) {
+      markedRoadmaps();
+      setResetMarkRoadmap(false);
+    }
+  }, [isLoggedIn, resetMarkRoadmap]);
+  
   useEffect(() => {
     const learningClass = async () => {
       const response = await api.get("/classrooms/getLearningClass", {
@@ -46,84 +63,17 @@ export default function Home() {
     teachingClass();
     myRoadmap();
   }, [isLoggedIn]);
+
   const ViewPageRoadmap = (roadmap) => {
     navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
   };
 
-  const handleBookmarkToggle = (id, isBookmarked) => {
-    //console.log(`Card ${id} bookmarked: ${isBookmarked}`);
-    // Handle bookmark logic here
+  const handleBookmarkToggle = async (id) => {
+    await api.post(`/roadmaps/mark/${id}`, {
+      roadmapId: id,
+    }, { withCredentials: true });
+    setResetMarkRoadmap(true);
   };
-
-  // Sample data for different sections (with added `author` field)
-  const markedRoadmaps = [
-    {
-      id: 1,
-      name: "Learn Cooking",
-      description: "Master the art of cooking",
-      author: "Alice Nguyen",
-      learning: 12500,
-      teaching: 45,
-      isMarked: true,
-      isUserCard: true,
-    },
-    {
-      id: 2,
-      name: "Learn Drawing",
-      description: "Creative art techniques",
-      author: "Minh Tran",
-      learning: 8300,
-      teaching: 23,
-      isMarked: true,
-      isUserCard: true,
-    },
-  ];
-
-  const customRoadmaps = [
-    {
-      id: 3,
-      name: "For Newbie in Gym",
-      description: "Complete beginner's guide to fitness",
-      author: "Tuan Le",
-      learning: 156,
-      teaching: 12,
-      isUserCard: true,
-    },
-    {
-      id: 4,
-      name: "Advanced Workout Plans",
-      description:
-        "Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs.",
-      author: "Phuong Hoang",
-      learning: 89,
-      teaching: 8,
-      isUserCard: true,
-    },
-  ];
-
-  // const teachingClasses = [
-  // {
-  //     id: 5,
-  //     name: "Gym Class",
-  //     description: "Fitness training sessions",
-  //     author: "Quang Bui",
-  //     learning: 25,
-  //     teaching: 1,
-  //     isUserCard: true
-  // }
-  // ];
-
-  const learningClasses = [
-    {
-      id: 6,
-      name: "Cooking Class",
-      description: "Interactive cooking lessons",
-      author: "Lan Pham",
-      learning: 1,
-      teaching: 0,
-      isUserCard: true,
-    },
-  ];
 
   const recommendedRoadmaps = [
     {
@@ -193,7 +143,7 @@ export default function Home() {
                       learning={roadmap.learning}
                       teaching={roadmap.teaching}
                       isUserCard={false}
-                      isMarked={roadmap.isMarked}
+                      isMarked={1}
                       onBookmarkToggle={handleBookmarkToggle}
                     />
                   </div>

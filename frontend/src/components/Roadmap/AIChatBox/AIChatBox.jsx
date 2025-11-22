@@ -27,14 +27,7 @@ const ChatBox = ({ nodes = [], edges = [], demoNodes = [], demoEdges = [], setDe
   const getAIResponse = async (message) => {
     try {
       const lowerMessage = message.toLowerCase();
-      // dùng API gemeni
-      // const AIResponse = await api.post('/LLM/generate-roadmap', 
-      //   { text: lowerMessage }, 
-      //   { withCredentials: true }
-      // );
-      // return AIResponse?.data?.response || "Xin lỗi, tôi không thể xử lý yêu cầu này.";
-      //dùng MML model host từ ML studio
-      const AIResponse = await api.post('/LLM/generate-roadmap-local',
+      const AIResponse = await api.post('/LLM/generate-roadmap-gemini',
         { text: lowerMessage, nodes, edges, demoNodes, demoEdges},
         {
           withCredentials: true,
@@ -44,9 +37,9 @@ const ChatBox = ({ nodes = [], edges = [], demoNodes = [], demoEdges = [], setDe
         }
       );
       console.log(AIResponse.data)
-      setDemoNodes(AIResponse.data?.demoNodes);
-      setDemoEdges(AIResponse.data?.demoEdges);
-      return AIResponse.data.data;
+      setDemoNodes(AIResponse.data?.nodes);
+      setDemoEdges(AIResponse.data?.edges);
+      return AIResponse.data?.message;
     } catch (error) {
       console.error('API Error:', error);
       return "Đã có lỗi xảy ra khi xử lý yêu cầu của bạn.";

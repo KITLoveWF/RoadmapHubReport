@@ -37,7 +37,6 @@ const getRandomId = () => {
   return Math.floor(1000000000 + Math.random() * 9000000000).toString();
 }
 
-import axios from 'axios';
 //let id = 0;
 const getId = () => getRandomId();
 
@@ -158,19 +157,18 @@ export default function RoadmapEditPage() {
   //const { isLoggedIn, user } = useCheckLogin();
   const navigate = useNavigate();
   const { name,id } = useParams();
-  useEffect( ()=>{
-    async function checkLogin(){
-      const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
-        withCredentials: true
-      }) ;
-      //console.log(response)
-      if(!response.data.success){
-      navigate("/");
-      }
-    }
-    checkLogin()  
-    
-  },[])
+  // useEffect( ()=>{
+  //   async function checkLogin(){
+  //     const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
+  //       withCredentials: true
+  //     }) ;
+  //     //console.log(response)
+  //     if(!response.data.success){
+  //     navigate("/");
+  //     }
+  //   }
+  //   checkLogin()  
+  // },[])
   //const [nodes, setNodes] = useState(initialNodes);
   //const [edges, setEdges] = useState(initialEdges);
 
@@ -268,7 +266,13 @@ export default function RoadmapEditPage() {
           {selectedEdge &&<RightBarEdge selectedEdge={selectedEdge}  onEdgeChange={handleEdgeChange} />}
           
           </DnDProvider>
-          <ChatBox nodes={nodes} edges={edges} demoNodes={demoNodes} demoEdges={demoEdges} setDemoNodes={setDemoNodes} setDemoEdges={setDemoEdges} handleViewDemo={handleViewDemo}/>
+          <ChatBox nodes={nodes} 
+            edges={edges} 
+            demoNodes={demoNodes} 
+            demoEdges={demoEdges} 
+            setDemoNodes={setDemoNodes} 
+            setDemoEdges={setDemoEdges} 
+            handleViewDemo={handleViewDemo}/>
           {/* Popup RoadmapDemo */}
           <RoadmapDemo
             isOpen={isOpen}

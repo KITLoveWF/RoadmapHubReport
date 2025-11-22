@@ -39,7 +39,10 @@ app.get("/", (req, res) => {
 });
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000", // FE port
+    origin: [
+      process.env.FRONTEND_URL || "http://localhost:3000",
+      "https://portfolio.nengoilahoang.io.vn"
+    ], // FE port
     credentials: true,
   })
 );

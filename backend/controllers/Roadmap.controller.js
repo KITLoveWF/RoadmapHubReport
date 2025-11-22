@@ -2,24 +2,26 @@ import RoadmapService from "../services/Roadmap.service.js";
 import LearnTopicService from "../services/LearnTopic.service.js";
 import CheckListAccountService from "../services/CheckListAccount.service.js";
 import { Buffer } from "buffer";
+import { stat } from "fs";
 class RoadmapController {
   async createRoadmap(req, res) {
-    const { name, description, accountId } = req.body;
-    const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
+    const { name, description, accountId, isPublic } = req.body;
+    const responseCheck = await RoadmapService.checkRoadmap(name, accountId, "create");
     if (!responseCheck.success) {
       res.json(responseCheck);
     } else {
       const response = await RoadmapService.createRoadmap(
         name,
         description,
-        accountId
+        accountId,
+        isPublic
       );
       res.json(response);
     }
   }
   async editRoadmap(req, res) {
-    const { name, description, accountId, roadmapId } = req.body;
-    const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
+    const { name, description, accountId, roadmapId, isPublic } = req.body;
+    const responseCheck = await RoadmapService.checkRoadmap(name, accountId, "edit");
     ////console.log("Response Check:", responseCheck);
     if (!responseCheck.success) {
       res.json(responseCheck);
@@ -28,9 +30,21 @@ class RoadmapController {
         name,
         description,
         accountId,
-        roadmapId
+        roadmapId,
+        isPublic
       );
       res.json(response);
+    }
+  }
+
+  async searchRoadmap(req, res) {
+    const { search, typeSearch, index } = req.params;
+    const roadmaps = await RoadmapService.searchRoadmap(search, typeSearch, index);
+    if(roadmaps.length ===0){
+      return res.json({ status: "failed", message: "No roadmap found" });
+    }
+    else{
+      res.json({ status: "success", data: roadmaps });
     }
   }
   async deleteRoadmap(req, res) {
@@ -167,6 +181,18 @@ class RoadmapController {
     const { roadmapId } = req.query;
     const response = await RoadmapService.getTopicRoadmapByUserId(roadmapId);
     res.json({ success: true, roadmap: response });
+  }
+  async markRoadmap(req, res) {
+    const { roadmapId } = req.params;
+    const accountId = req.authenticate.id;
+    const response = await RoadmapService.markRoadmap(accountId, roadmapId);
+    res.json({status:"success", data: response });
+  }
+  async getMarkRoadmaps(req, res) {
+    //const accountId = req.authenticate.id;
+    const accountId = "2a1fa820-049c-80ef-0509-cdff743ce8c6";
+    const response = await RoadmapService.getMarkRoadmaps(accountId);
+    res.json({status:"success", data: response });
   }
 }
 export default new RoadmapController(RoadmapService);
