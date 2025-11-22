@@ -69,25 +69,25 @@ const RoadmapCard = ({
           <div className="overlay-header">
             <h3 className="overlay-title">{name}</h3>
             <div
-              className={`bookmark-icon ${isBookmarked ? "bookmarked" : ""}`}
-              onClick={handleBookmarkClick}
-              title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+            className={`bookmark-icon ${isBookmarked ? "bookmarked" : ""}`}
+            onClick={handleBookmarkClick}
+            title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill={isBookmarked ? "#ff6b6b" : "none"}
+              stroke={isBookmarked ? "#ff6b6b" : "#64748b"}
+              strokeWidth="2"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill={isBookmarked ? "#ff6b6b" : "none"}
-                stroke={isBookmarked ? "#ff6b6b" : "#64748b"}
-                strokeWidth="2"
-              >
-                <polygon
-                  points="12,2 15.09,8.26 22,9 17,14.74 
+              <polygon
+                points="12,2 15.09,8.26 22,9 17,14.74 
                                 18.18,21.02 12,17.77 5.82,21.02 
                                 7,14.74 2,9 8.91,8.26"
-                />
-              </svg>
-            </div>
+              />
+            </svg>
+          </div>
           </div>
 
           <p className="overlay-desc">{description}</p>
@@ -169,7 +169,7 @@ const RoadmapCard = ({
           <h3 className="card-title" title={name}>
             {truncate(name)}
           </h3>
-          <div
+          {/* <div
             className={`bookmark-icon ${isBookmarked ? "bookmarked" : ""}`}
             onClick={handleBookmarkClick}
             title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
@@ -188,7 +188,7 @@ const RoadmapCard = ({
                                 7,14.74 2,9 8.91,8.26"
               />
             </svg>
-          </div>
+          </div> */}
         </div>
 
         {/* Author */}

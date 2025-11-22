@@ -75,7 +75,9 @@ export default function RoadmapSearchPage({ handleBookmarkToggle }) {
         </div>
       <div className="search-roadmap-grid">
         {roadmapsList.map(r => (
-          <div key={r.id} className="search-card-wrapper" onClick={() => ViewPageRoadmap(r)}>
+          <div key={r.id} className="search-card-wrapper" 
+            onClick={() => ViewPageRoadmap(r)}
+            >
             <RoadmapCardInHome
               id={r.id}
               name={r.name}
