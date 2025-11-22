@@ -23,7 +23,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     setFullname(userData.data.profile.fullname);
     setGithub(userData.data.profile.github);
     setLinkedin(userData.data.profile.linkedin);
-    setAvatarUrl(userData.data.profile.avatar);
+    setAvatarUrl(userData.data.profile.avatar||"https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg");
     return userData.data.profile;
   };
   useEffect(() => {

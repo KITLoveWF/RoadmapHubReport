@@ -23,7 +23,7 @@ const PopUpAvatar = ({ show, onClose, onUpload, uploading }) => {
         <div className="avatar-modal-img-box">
           <label htmlFor="avatar-upload" className="avatar-upload-label">
             <img
-              src={selectedFile ? URL.createObjectURL(selectedFile) : profile.avatar}
+              src={selectedFile ? URL.createObjectURL(selectedFile) : profile.avatar || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"}
               alt="Preview"
               className="avatar-modal-img"
             />
