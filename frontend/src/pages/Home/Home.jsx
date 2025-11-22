@@ -21,8 +21,10 @@ export default function Home() {
   const [listTeachingClass, setListTeachingClass] = useState([]);
   const [markedRoadmaps, setMarkedRoadmaps] = useState([]);
   const [myRoadmaps, setMyRoadmaps] = useState([]);
+  const [resetMarkRoadmap, setResetMarkRoadmap] = useState(true);
   const navigate = useNavigate();
   const { isLoggedIn, user } = useCheckLogin();
+  
   useEffect(() => {
     const markedRoadmaps = async () => {
       const response = await api.get("/roadmaps/mark", {
@@ -31,6 +33,13 @@ export default function Home() {
       console.log("Marked roadmaps: ", response.data.data);
       setMarkedRoadmaps(response.data.data);
     };
+    if(resetMarkRoadmap) {
+      markedRoadmaps();
+      setResetMarkRoadmap(false);
+    }
+  }, [isLoggedIn, resetMarkRoadmap]);
+  
+  useEffect(() => {
     const learningClass = async () => {
       const response = await api.get("/classrooms/getLearningClass", {
         withCredentials: true,
@@ -53,7 +62,6 @@ export default function Home() {
     learningClass();
     teachingClass();
     myRoadmap();
-    markedRoadmaps();
   }, [isLoggedIn]);
 
   const ViewPageRoadmap = (roadmap) => {
@@ -61,33 +69,11 @@ export default function Home() {
   };
 
   const handleBookmarkToggle = async (id) => {
-    await api.post("/roadmaps/mark/id", {
+    await api.post(`/roadmaps/mark/${id}`, {
       roadmapId: id,
     }, { withCredentials: true });
+    setResetMarkRoadmap(true);
   };
-
-  // const markedRoadmaps = [
-  //   {
-  //     id: 1,
-  //     name: "Learn Cooking",
-  //     description: "Master the art of cooking",
-  //     author: "Alice Nguyen",
-  //     learning: 12500,
-  //     teaching: 45,
-  //     isMarked: true,
-  //     isUserCard: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Learn Drawing",
-  //     description: "Creative art techniques",
-  //     author: "Minh Tran",
-  //     learning: 8300,
-  //     teaching: 23,
-  //     isMarked: true,
-  //     isUserCard: true,
-  //   },
-  // ];
 
   const recommendedRoadmaps = [
     {
@@ -157,7 +143,7 @@ export default function Home() {
                       learning={roadmap.learning}
                       teaching={roadmap.teaching}
                       isUserCard={false}
-                      isMarked={roadmap.isMarked}
+                      isMarked={1}
                       onBookmarkToggle={handleBookmarkToggle}
                     />
                   </div>
