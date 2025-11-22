@@ -189,8 +189,7 @@ class RoadmapController {
     res.json({status:"success", data: response });
   }
   async getMarkRoadmaps(req, res) {
-    //const accountId = req.authenticate.id;
-    const accountId = "2a1fa820-049c-80ef-0509-cdff743ce8c6";
+    const accountId = req.authenticate.id;
     const response = await RoadmapService.getMarkRoadmaps(accountId);
     res.json({status:"success", data: response });
   }
