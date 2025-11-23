@@ -20,17 +20,17 @@ export default function FriendRequestForm() {
   };
 
   return (
-    <form className="card form" onSubmit={handleSubmit}>
+    <form className="request-form-card" onSubmit={handleSubmit}>
       <h2>Send Friend Request</h2>
       <input
         type="email"
         placeholder="Enter email..."
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="input"
+        className="request-form-input"
         required
       />
-      <button onClick={handleSubmit} className="btn send">Send</button>
+      <button type="submit" className="request-form-btn">Send</button>
     </form>
   );
 }

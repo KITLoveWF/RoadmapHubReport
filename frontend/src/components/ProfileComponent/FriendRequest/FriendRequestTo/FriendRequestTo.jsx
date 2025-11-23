@@ -34,20 +34,20 @@ export default function FriendRequestTo() {
     fetchRequests();
   }
   return (
-    <div className="card">
+    <div className="request-to-card">
       <h2>Friend Requests To You</h2>
-      {requests?.length === 0 && <p className="empty">No requests</p>}
+      {requests?.length === 0 && <p className="request-to-empty">No requests</p>}
       {requests?.map((req) => (
-        <div key={req.id} className="request-item">
+        <div key={req.id} className="request-to-item">
           <div>
-            <p className="email">From: {req.senderEmail}</p>
+            <p className="request-to-email">From: {req.senderEmail}</p>
             <small>{new Date(req.createAt).toLocaleString()}</small>
           </div>
-          <div className="actions">
-            <button className="btn accept" onClick={() => onAccept(req.id)}>
+          <div className="request-to-actions">
+            <button className="request-to-btn accept" onClick={() => onAccept(req.id)}>
               Accept
             </button>
-            <button className="btn reject" onClick={() => onReject(req.id)}>
+            <button className="request-to-btn reject" onClick={() => onReject(req.id)}>
               Reject
             </button>
           </div>

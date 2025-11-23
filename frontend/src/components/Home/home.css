@@ -20,7 +20,12 @@
   box-shadow: var(--shadow-elegant);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
+  z-index: 1100 !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 .navbar::before {
@@ -325,4 +330,27 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* Body padding for fixed navbar */
+body {
+  padding-top: 0;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+/* Ensure proper spacing for layouts with fixed navbar */
+.d-flex.flex-column.min-vh-100 {
+  padding-top: 0;
+  overflow-x: hidden;
+}
+
+/* Main content needs top spacing to avoid navbar overlap */
+.d-flex.flex-column.min-vh-100 > main.container,
+.d-flex.flex-column.min-vh-100 > main.container-fluid {
+  padding-top: 80px !important;
 }

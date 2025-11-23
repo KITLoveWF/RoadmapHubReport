@@ -35,7 +35,7 @@ const RoadmapList = () => {
     GetRoadmap();
   }, []);
   return (
-    <div className="roadmap-list-wrapper">
+    <div className="roadmaps-wrapper">
       <div className="roadmap-total">
         Total {roadmaps?.length ?? 0} roadmaps
       </div>

@@ -1,78 +1,77 @@
-.card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  max-width: 520px;
-  margin: 20px auto;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  font-family: "Segoe UI", sans-serif;
+.request-to-card {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
-.card h2 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 15px;
+.request-to-card h2 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 24px;
   color: #333;
 }
 
-.empty {
+.request-to-empty {
   text-align: center;
   font-style: italic;
-  color: #aaa;
+  color: #6c757d;
+  font-size: 14px;
+  padding: 20px 0;
 }
 
-.request-item {
+.request-to-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fafafa;
-  border-radius: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
   padding: 14px 16px;
-  margin-bottom: 12px;
-  transition: all 0.3s ease;
+  margin-bottom: 10px;
+  border: 1px solid #e9ecef;
 }
 
-.request-item:hover {
-  background: #f0f0f0;
-  transform: translateY(-2px);
-}
-
-.email {
+.request-to-email {
   font-weight: 500;
   margin: 0 0 4px;
-  color: #222;
+  color: #333;
+  font-size: 14px;
 }
 
-small {
+.request-to-item small {
   font-size: 12px;
-  color: #888;
+  color: #6c757d;
 }
 
-.actions .btn {
+.request-to-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.request-to-btn {
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.3s ease;
-  margin-left: 8px;
+  transition: all 0.2s;
 }
 
-.btn.accept {
-  background: #4caf50;
+.request-to-btn.accept {
+  background: #21808d;
   color: #fff;
 }
 
-.btn.accept:hover {
-  background: #43a047;
+.request-to-btn.accept:hover {
+  background: #1d7480;
 }
 
-.btn.reject {
-  background: #f44336;
+.request-to-btn.reject {
+  background: #dc3545;
   color: #fff;
 }
 
-.btn.reject:hover {
-  background: #e53935;
+.request-to-btn.reject:hover {
+  background: #bb2d3b;
 }

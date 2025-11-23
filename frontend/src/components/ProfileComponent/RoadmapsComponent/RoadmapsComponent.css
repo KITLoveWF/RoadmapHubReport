@@ -1,8 +1,14 @@
-.roadmap-list-wrapper {
-  margin: 0 auto;
+/* ===== RoadmapsComponent - Clean & Organized ===== */
+
+.roadmaps-wrapper {
   width: 100%;
-  max-width: 680px;
-  padding: 25px 0 60px 0;
+  max-width: 750px;
+  margin: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 32px;
+  padding-bottom: 40px;
 }
 
 .roadmap-total {
@@ -20,17 +26,14 @@
 
 .roadmap-item {
   background: #d6d6d6;
+  border: 1.5px solid #222;
   border-radius: 11px;
   box-shadow: 0 2px 8px rgba(60,60,60,0.06);
   padding: 10px 12px 6px 13px;
-  display: flex;
-  align-items: stretch;
   min-height: 70px;
-  border: 1.5px solid #222;
 }
 
 .roadmap-top {
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -62,16 +65,6 @@
   color: #222;
 }
 
-.roadmap-privacy span {
-  font-size: 1.08em;
-  vertical-align: middle;
-}
-
-.roadmap-topic span,
-.roadmap-learning span {
-  font-size: 1em;
-}
-
 .roadmap-action {
   display: flex;
   align-items: center;
@@ -83,7 +76,6 @@
   font-size: 1.55em;
   color: #555;
   cursor: pointer;
-  margin-right: 3px;
 }
 
 .roadmap-view,
@@ -95,10 +87,10 @@
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  margin-left: 3px;
   transition: background 0.17s, box-shadow 0.17s;
   box-shadow: 0 1px 3px rgba(80,80,80,0.05);
 }
+
 .roadmap-edit {
   background: #eee;
 }
@@ -109,10 +101,9 @@
 }
 
 .roadmap-add-btn {
-  display: block;
   width: 350px;
   max-width: 96%;
-  margin: 35px auto 0 auto;
+  margin: 35px auto 0;
   font-size: 1.25rem;
   font-weight: 500;
   background: #fff;
@@ -123,6 +114,7 @@
   cursor: pointer;
   transition: border-color .18s, background .18s;
   box-shadow: 0 2px 10px rgba(60,60,60,0.04);
+  display: block;
 }
 
 .roadmap-add-btn:hover {
@@ -130,10 +122,9 @@
   border-color: #555;
 }
 
-/* Responsive */
 @media (max-width: 700px) {
-  .roadmap-list-wrapper {
-    padding: 16px 0 32px 0;
+  .roadmaps-wrapper {
+    padding: 16px 0 32px;
   }
   .roadmap-add-btn {
     font-size: 1.12rem;

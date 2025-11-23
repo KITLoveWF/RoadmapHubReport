@@ -122,22 +122,31 @@
 /* ProfilePage Styles */
 .profile-container {
   display: flex;
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
   background: linear-gradient(135deg, #fcfdff 0%, #ffffff 70%);
   font-family: var(--font-family-base);
-  margin-right: var(--space-32);
+  margin: 0;
+  padding: 0;
+  z-index: 10;
 }
 
 /* Sidebar */
 .sidebar {
   width: 250px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-  padding: var(--space-20);
+  padding: var(--space-16) var(--space-20);
+  padding-top: 130px;
   box-shadow: 2px 0 12px rgba(33, 128, 141, 0.08);
-  position: absolute;
+  position: fixed;
   height: 100vh;
   left: 0;
-  top: 115px;
+  top: 0;
   z-index: 100;
   overflow-y: auto;
   border-right: 2px solid rgba(33, 128, 141, 0.1);
@@ -149,8 +158,8 @@
 .sidebar::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--color-primary-hover) 0%, var(--color-primary-active) 100%); }
 
 .team-selector {
-  margin-bottom: var(--space-24);
-  padding: var(--space-16);
+  margin-bottom: var(--space-16);
+  padding: var(--space-12);
   background: linear-gradient(135deg, rgba(33, 128, 141, 0.08) 0%, rgba(33, 128, 141, 0.03) 100%);
   border-radius: var(--radius-md);
   border: 1px solid rgba(33, 128, 141, 0.15);
@@ -160,7 +169,7 @@
   display: block;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-6);
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-teal-400) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -203,7 +212,7 @@
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-6);
 }
 
 .nav-item {
@@ -263,18 +272,33 @@
 
 /* Main Content */
 .main-content {
-  flex: 1;
-  margin-left: 250px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: var(--space-32) var(--space-20);
-  min-height: 100vh;
+  position: fixed;
+  left: 250px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  width: calc(100% - 250px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Content Center Wrapper - chiếm 100% và căn giữa content */
+.content-center-wrapper {
+  min-height: 100%;
+  width: 100%;
+  padding: 130px 40px var(--space-32);
+  box-sizing: border-box;
 }
 
 .content-wrapper {
   width: 100%;
-  max-width: 600px;
+  max-width: 750px;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 80px;
+  box-sizing: border-box;
 }
 
 /* Profile Header */
@@ -433,15 +457,15 @@
 .save-btn:active { transform: translateY(0); box-shadow: var(--shadow-sm); background: var(--color-primary-active); }
 .save-btn:focus-visible { outline: var(--focus-outline); box-shadow: var(--focus-ring); }
 
-/* Setting Page */
+/* Setting */
 .setting-content-wrapper {
-  margin: 0 auto;
-  max-width: 470px;
+  max-width: 750px;
   width: 100%;
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--space-32) 0;
+  padding-bottom: 80px;
   display: flex;
   flex-direction: column;
   gap: var(--space-32);
@@ -522,16 +546,24 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .sidebar {
-    position: relative;
+    position: absolute;
     width: 100%;
-    height: auto;
+    height: 40%;
+    max-height: 300px;
     top: 0;
+    left: 0;
     border-right: none;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 2px solid rgba(33, 128, 141, 0.2);
+    z-index: 200;
   }
 
   .main-content {
-    margin-left: 0;
+    position: absolute;
+    left: 0;
+    top: 40%;
+    right: 0;
+    bottom: 0;
+    height: 60%;
     padding: var(--space-20);
   }
 
@@ -542,8 +574,8 @@
 
 @media (max-width: 480px) {
   .profile-container { margin-right: 0; }
-  .sidebar { padding: var(--space-16); top: 0; }
-  .main-content { padding: var(--space-16); }
+  .sidebar { padding: var(--space-16); height: 35%; max-height: 250px; }
+  .main-content { padding: var(--space-16); top: 35%; height: 65%; }
   .content-wrapper { max-width: 100%; }
   .team-selector { margin-bottom: var(--space-20); padding-bottom: var(--space-16); }
   .team-label { font-size: var(--font-size-xs); margin-bottom: var(--space-8); }

@@ -29,22 +29,22 @@ export default function FriendRequestFrom() {
   }
 
   return (
-    <div className="card">
+    <div className="request-from-card">
       <h2>Requests You Sent</h2>
-      {requests?.length === 0 && <p className="empty">No requests</p>}
+      {requests?.length === 0 && <p className="request-from-empty">No requests</p>}
       {requests?.map((req) => (
-        <div key={req.id} className="request-item">
+        <div key={req.id} className="request-from-item">
           <div>
-            <p className="email">To: {req.receiverEmail}</p>
+            <p className="request-from-email">To: {req.receiverEmail}</p>
             <small>{new Date(req.createAt).toLocaleString()}</small>
           </div>
-          <div className="actions">
+          <div className="request-from-actions">
             {req.requestState === "pending" ? (
-              <button className="btn cancel" onClick={() => onCancel(req.id)}>
+              <button className="request-from-btn cancel" onClick={() => onCancel(req.id)}>
                 Cancel
               </button>
             ) : (
-              <span className="status">{req.requestState}</span>
+              <span className="request-from-status">{req.requestState}</span>
             )}
           </div>
         </div>

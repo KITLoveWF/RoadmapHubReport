@@ -106,7 +106,9 @@ const ProfilePage = () => {
             </nav>
         </div>
             <div className="main-content">
-                {mainContent}
+                <div className="content-center-wrapper">
+                    {mainContent}
+                </div>
             </div>
         </div>
     );
