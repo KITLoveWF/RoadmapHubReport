@@ -1,10 +1,13 @@
+/* ===== ManageStudent - Clean & Organized ===== */
+
 .students-content-wrapper {
   width: 100%;
-  max-width: 650px;
-  margin: 0 auto;
-  padding: 32px 0;
+  max-width: 850px;
+  margin: 0;
+  padding: 32px;
   background: #fff;
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   min-height: 400px;
 }
 
@@ -12,32 +15,39 @@
   display: flex;
   gap: 12px;
   margin-bottom: 32px;
-  justify-content: flex-start;
-  align-items: center;
 }
 
 .students-tab-btn {
-  border: 1.4px solid #bbb;
+  border: 1px solid #ddd;
   background: #fff;
-  color: #222;
-  font-size: 1rem;
-  padding: 8px 22px;
-  border-radius: 7px;
+  color: #333;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  transition: all 0.2s;
+}
+
+.students-tab-btn:hover {
+  border-color: #21808d;
+  background: #f8f9fa;
 }
 
 .students-tab-btn.active {
-  background: #ebebeb;
-  border-color: #888;
+  background: #21808d;
+  border-color: #21808d;
+  color: white;
 }
 
-.students-tab-btn.invite {
-  margin-left: auto;
-  font-size: 1rem;
+.students-content-main {
   display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 18px;
+  justify-content: center;
+  width: 100%;
+}
+
+.students-content-main > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

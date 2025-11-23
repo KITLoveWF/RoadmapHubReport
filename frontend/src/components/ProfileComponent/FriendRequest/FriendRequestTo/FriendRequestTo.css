@@ -50,12 +50,13 @@
 
 .request-to-btn {
   border: none;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s;
+  min-width: 100px;
 }
 
 .request-to-btn.accept {

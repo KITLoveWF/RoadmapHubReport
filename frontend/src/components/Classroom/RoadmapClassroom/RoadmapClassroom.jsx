@@ -147,7 +147,7 @@ export default function RoadmapClassroom(props) {
   };
 
   return (
-    <div className="container mt-4">
+    <div style={{width: '100%', maxWidth: '850px'}}>
       {/* --- STEP 1: DANH SÁCH ROADMAP --- */}
       {step === 1 && (
         <>
@@ -155,7 +155,7 @@ export default function RoadmapClassroom(props) {
           <div className="input-group mb-3 ">
             <select
               className="form-select me-2"
-              value={selectedRoadmap?.name}
+              value={selectedRoadmap?.id || ""}
               onChange={(e) => {
                 const roadmap = myRoadmaps.find((i) => i.id == e.target.value);
                 setSelectedRoadmap(roadmap);

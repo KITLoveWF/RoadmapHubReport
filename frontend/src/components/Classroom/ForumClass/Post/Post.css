@@ -1,8 +1,12 @@
+/* ===== Post - Clean & Organized ===== */
+
 .postbox {
-  border-radius: 12px;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-  border: 2px solid #ccc;
-  width: 700px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid #ddd;
+  width: 100%;
+  background: #fff;
+  margin-bottom: 16px;
 }
 
 .icon-btn {
@@ -12,6 +16,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  background: transparent;
 }
 
-
+.icon-btn:hover {
+  background: #f8f9fa;
+}

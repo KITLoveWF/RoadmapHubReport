@@ -1,24 +1,27 @@
-.item-post{
-    width: 700px ;
-    height:auto ; 
-    border-radius: 12px;
-    margin: 12px 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 2px solid #ccc; 
-    /* border:2px solid #000 */
+/* ===== ItemPost - Clean & Organized ===== */
+
+.item-post {
+  width: 100%;
+  border-radius: 8px;
+  margin: 12px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+  background: #fff;
 }
-.header-post{
-    padding-top: 20px;
-    padding-left: 20px;
-    border: none;
-    /* border-bottom: 2px solid #ccc; */
-    display: flex;
-    justify-content: space-between;
+
+.header-post {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.body-post{
-    padding: 20px;
-    word-break: break-word;
+
+.body-post {
+  padding: 20px;
+  word-break: break-word;
+  color: #333;
 }
-.comment{
-     border-top: 2px solid #ccc;
+
+.comment {
+  border-top: 1px solid #ddd;
 }

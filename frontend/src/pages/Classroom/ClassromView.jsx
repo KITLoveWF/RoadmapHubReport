@@ -60,8 +60,9 @@ export default function ClassroomView(){
      <div className="profile-container">
             <SideBarClassroom activeNav={activeNav}navItems={navItems} handleNavClick = {setActiveNav} selectedClass = {selectedClass} setSelectedClass={setSelectedClass} classes={classes}/>
             <div className="main-content">
-                {renderContent()}
-                
+                <div className="content-center-wrapper">
+                    {renderContent()}
+                </div>
             </div>
      </div>
 

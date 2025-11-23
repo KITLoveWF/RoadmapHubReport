@@ -1,6 +1,8 @@
+/* ===== StudentList - Clean & Organized ===== */
+
 .card {
   background: #fff;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 16px;
   margin: 12px 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -21,10 +23,11 @@
 .email {
   font-weight: 500;
   margin: 10px;
+  color: #333;
 }
 
 small {
-  color: #777;
+  color: #6c757d;
   font-size: 12px;
 }
 
@@ -36,10 +39,12 @@ small {
 .btn {
   padding: 6px 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: 0.2s;
+  font-weight: 500;
+  transition: all 0.2s;
+  min-width: 80px;
 }
 
 .btn.cancel {
@@ -47,9 +52,17 @@ small {
   color: white;
 }
 
+.btn.cancel:hover {
+  background: #f57c00;
+}
+
 .btn.view {
   background: #e6f0ff;
   color: #2660a4;
+}
+
+.btn.view:hover {
+  background: #cce0ff;
 }
 
 .btn.remove {
@@ -58,13 +71,15 @@ small {
   margin-right: 10px;
 }
 
-.btn:hover {
-  opacity: 0.85;
+.btn.remove:hover {
+  background: #ffd5d5;
 }
 
 .empty {
-  color: #777;
+  color: #6c757d;
   font-style: italic;
+  text-align: center;
+  padding: 20px;
 }
 
 .status {

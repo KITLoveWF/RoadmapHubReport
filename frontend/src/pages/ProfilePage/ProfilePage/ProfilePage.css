@@ -294,7 +294,7 @@
 
 .content-wrapper {
   width: 100%;
-  max-width: 750px;
+  max-width: 850px;
   margin: 0;
   padding: 0;
   padding-bottom: 80px;
@@ -459,7 +459,7 @@
 
 /* Setting */
 .setting-content-wrapper {
-  max-width: 750px;
+  max-width: 850px;
   width: 100%;
   background: var(--color-surface);
   border-radius: var(--radius-lg);

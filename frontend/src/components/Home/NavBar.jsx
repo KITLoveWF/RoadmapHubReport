@@ -81,14 +81,15 @@ export default function NavBar() {
   let notificationbutton;
   if (localStorage.getItem("loggedFlag") === "true") {
     notificationbutton = (
-      <div className="dropdown me-3">
+      <div className="dropdown me-3" style={{ flexShrink: 0 }}>
         <button
           className="btn btn-dark position-relative"
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
+          style={{ width: "35px", height: "35px", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", minWidth: "35px" }}
         >
-          <i className="bi bi-bell-fill fs-5"></i>
+          <i className="bi bi-bell-fill" style={{ fontSize: "16px" }}></i>
           {unreadCount > 0 && (
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
               {unreadCount}
@@ -177,13 +178,13 @@ export default function NavBar() {
           {/* Auth / Avatar */}
           {notificationbutton}
           {isLoggedIn ? (
-            <div className="dropdown">
+            <div className="dropdown" style={{ flexShrink: 0 }}>
               <button
                 className="btn p-0 border-0 rounded-circle overflow-hidden"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                style={{ width: "60px", height: "60px" }}
+                style={{ width: "55px", height: "55px", flexShrink: 0 }}
               >
                 <img
                   src={
@@ -191,8 +192,7 @@ export default function NavBar() {
                     "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"
                   }
                   alt="User Avatar"
-                  className="w-100 h-100"
-                  style={{ objectFit: "cover" }}
+                  style={{ width: "55px", height: "55px", objectFit: "cover", borderRadius: "50%" }}
                 />
               </button>
               <ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end">

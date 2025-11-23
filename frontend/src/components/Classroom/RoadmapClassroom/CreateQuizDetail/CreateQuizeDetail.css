@@ -1,7 +1,7 @@
 /* Modern Quiz Editor Styles */
 .quiz-editor-container {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 0;
   padding: 24px;
   border-radius: 16px;
 }

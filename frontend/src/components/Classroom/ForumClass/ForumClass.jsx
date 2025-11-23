@@ -64,7 +64,7 @@ export default function ForumClass(props) {
   };
 
   return (
-    <div className="container mt-4">
+    <div style={{width: '100%', maxWidth: '850px'}}>
       <Post onCancel={() => console.log("Cancel")} onPost={handlePost} />
       {user && posts.map((post) => (
         <ItemPost

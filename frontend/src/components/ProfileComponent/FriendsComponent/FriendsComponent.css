@@ -2,7 +2,7 @@
 
 .friends-content-wrapper {
   width: 100%;
-  max-width: 750px;
+  max-width: 850px;
   margin: 0;
   padding: 30px;
   background: white;
@@ -184,10 +184,10 @@
   background: #21808d;
   color: #fff;
   font-weight: 500;
-  width: 90px;
+  min-width: 100px;
   border-radius: 6px;
   border: none;
-  padding: 8px 0;
+  padding: 8px 16px;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
@@ -214,7 +214,8 @@
   border: 1px solid #ddd;
   font-weight: 500;
   border-radius: 6px;
-  padding: 8px 14px;
+  min-width: 100px;
+  padding: 8px 16px;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
