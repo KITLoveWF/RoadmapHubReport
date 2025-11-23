@@ -67,6 +67,9 @@ export default function Home() {
   const ViewPageRoadmap = (roadmap) => {
     navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
   };
+  const ViewPageClassroom = (roadmap) => {
+    navigate(`/classroom/view/${roadmap.name}/${roadmap.id}`);
+  }
 
   const handleBookmarkToggle = async (id) => {
     await api.post(`/roadmaps/mark/${id}`, {
@@ -194,9 +197,10 @@ export default function Home() {
               </h3>
               <div className="roadmap-grid">
                 {listTeachingClass?.map((roadmap) => (
-                  <a
+                  <div
                     key={roadmap.id}
-                    href={`classroom/view/${roadmap.name}/${roadmap.id}`}
+                    className="roadmap-card-wrapper"
+                    onClick={() => ViewPageClassroom(roadmap)}
                   >
                     <div key={roadmap.id} className="roadmap-card-wrapper">
                       <RoadmapCardInHome
@@ -211,7 +215,7 @@ export default function Home() {
                         onBookmarkToggle={handleBookmarkToggle}
                       />
                     </div>
-                  </a>
+                  </div>
                 ))}
                 <div className="roadmap-card-wrapper">
                   <button

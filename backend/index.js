@@ -14,6 +14,7 @@ import postRoutes from "./routes/post.route.js";
 import commentRoutes from "./routes/comment.route.js";
 import quizRoutes from "./routes/quiz.route.js";
 import notificationRoutes from "./routes/notification.route.js";
+import adminRoutes from "./routes/admin.route.js";
 import cors from "cors";
 // import authenticate from "./middlewares/AuthMiddleware.js"; // REMOVED: Dùng RequireAuth cho protected routes thay vì global middleware
 import learnTopicRoutes from "./routes/learnTopic.route.js";
@@ -74,6 +75,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/admin", adminRoutes); // Admin routes
 app.use("/api/oauth2", oauth2Routes); // OAuth2 routes
 // app.listen(process.env.PORT, () => {
 //     //console.log(`Server is running at http://localhost:${process.env.PORT}`)

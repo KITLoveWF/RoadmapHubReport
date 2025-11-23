@@ -10,6 +10,13 @@ CREATE TABLE Account(
   password VARCHAR(64) NULL,
   classroomLimit INT DEFAULT(1)
 );
+-- Admin table
+CREATE TABLE Admin(
+  id VARCHAR(36) PRIMARY KEY,
+  username VARCHAR(32) NOT NULL,
+  password VARCHAR(64) NULL
+);
+
 -- Friend table
 CREATE TABLE Friend(
   id VARCHAR(36) PRIMARY KEY,
