@@ -120,8 +120,6 @@ const UserManagement = () => {
   const handleDeleteUser = async (userId) => {
     if (deleteConfirm !== userId) {
       setDeleteConfirm(userId);
-      setTimeout(() => setDeleteConfirm(null), 5000); // Reset after 5s
-      return;
     }
 
     try {
