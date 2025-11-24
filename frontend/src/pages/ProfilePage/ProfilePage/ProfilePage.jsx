@@ -5,7 +5,6 @@ import SettingComponent from '../../../components/ProfileComponent/SettingCompon
 import FriendsComponent from '../../../components/ProfileComponent/FriendsComponent/FriendsComponent.jsx';
 import RoadmapsComponent from '../../../components/ProfileComponent/RoadmapsComponent/RoadmapsComponent.jsx';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import api from '../../../utils/api.js';
 //import {useCheckLogin} from '../../../hooks/userCheckLogin.jsx'
 
@@ -93,7 +92,7 @@ const ProfilePage = () => {
             </select>
             </div>
 
-            <nav className="sidebar-nav">
+        <nav className="sidebar-nav">
             {navItems.map((item) => (
                 <div
                 key={item.id}
@@ -107,7 +106,9 @@ const ProfilePage = () => {
             </nav>
         </div>
             <div className="main-content">
-                {mainContent}
+                <div className="content-center-wrapper">
+                    {mainContent}
+                </div>
             </div>
         </div>
     );

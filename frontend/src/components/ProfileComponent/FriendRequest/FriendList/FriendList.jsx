@@ -28,19 +28,19 @@ export default function FriendList() {
         fetchRequests();
     }
     return (
-    <div className="card">
+    <div className="friend-list-card">
         <h2>Danh sách bạn bè</h2>
-        {friends?.length === 0 && <p className="empty">Không có bạn bè</p>}
+        {friends?.length === 0 && <p className="friend-list-empty">Không có bạn bè</p>}
         {friends?.map(friend => (
-            <div key={friend.id} className="request-item">
+            <div key={friend.id} className="friend-list-item">
             <div>
-                <p className="email">{friend.email}</p>
+                <p className="friend-list-email">{friend.email}</p>
             </div>
-            <div className="actions">
-                <button className="btn view">
+            <div className="friend-list-actions">
+                <button className="friend-list-btn view">
                 Xem profile
                 </button>
-                <button className="btn remove" onClick={() => onRemove(friend.id)}>
+                <button className="friend-list-btn remove" onClick={() => onRemove(friend.id)}>
                 Xóa bạn
                 </button>
             </div>

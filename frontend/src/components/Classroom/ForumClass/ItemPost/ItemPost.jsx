@@ -31,7 +31,7 @@ export default function ItemPost(props){
         <div className="item-post" id={`post-${post.id}`} key={key}>
         <div className="header-post">
                 <div className='d-flex'>
-                    <img src={post.avatar} className="rounded-circle me-4" width="40" height="40" alt="avatar"/>
+                    <img src={post.avatar||"https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"} className="rounded-circle me-4" width="40" height="40" alt="avatar"/>
                     <div className="d-flex flex-column">
                         <span><strong>{post.name}</strong></span>
                         <span>{post.createDate}</span>

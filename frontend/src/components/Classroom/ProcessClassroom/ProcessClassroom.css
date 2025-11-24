@@ -27,63 +27,63 @@
 .process-classroom-container {
   padding: 30px;
   min-height: 100vh;
-  min-width: 1200px;
+  max-width: 950px;
+  width: 100%;
 }
 
 .process-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 40px;
-  border-radius: 10px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .process-header h1 {
-  font-size: 2.5rem;
-  margin: 0 0 12px 0;
+  font-size: 28px;
+  margin: 0 0 8px 0;
   font-weight: 700;
 }
 
 .process-header .text-muted {
   color: rgba(255, 255, 255, 0.8) !important;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 16px;
 }
 
 /* ============ CONTENT LAYOUT ============ */
 .process-content {
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   min-height: 500px;
 }
 
 /* ============ STUDENT LIST PANEL ============ */
 .student-list-panel {
   background: white;
-  border-radius: 10px;
-  padding: 25px;
+  border-radius: 8px;
+  padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  height: fit-content;
-  position: sticky;
-  top: 30px;
+  gap: 15px;
+  width: 100%;
 }
 
 .search-box input {
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  padding: 12px 18px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  font-size: 14px;
+  transition: all 0.2s;
+  width: 100%;
 }
 
 .search-box input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #21808d;
+  box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.1);
   outline: none;
 }
 

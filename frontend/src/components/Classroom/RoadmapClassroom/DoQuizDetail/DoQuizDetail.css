@@ -1,6 +1,6 @@
 .quiz-container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0;
     padding: 20px;
     background: white;
     border-radius: 12px;
@@ -140,7 +140,7 @@
 }
 .quiz-unavailable {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 50px 0;
     text-align: center;
     padding: 20px;
     background: white;

@@ -1,62 +1,76 @@
-.card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.request-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.request-item:last-child {
-  border-bottom: none;
-}
-
-.email {
-  font-weight: 500;
+.request-from-card {
+  background: transparent;
+  border: none;
+  padding: 0;
   margin: 0;
 }
 
-small {
-  color: #777;
+.request-from-card h2 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.request-from-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.request-from-item:last-child {
+  border-bottom: none;
+}
+
+.request-from-email {
+  font-weight: 500;
+  margin: 0 0 4px;
+  color: #333;
+  font-size: 14px;
+}
+
+.request-from-item small {
+  color: #6c757d;
   font-size: 12px;
 }
 
-.actions {
+.request-from-actions {
   display: flex;
   gap: 8px;
 }
 
-.btn {
-  padding: 6px 12px;
+.request-from-btn {
+  padding: 8px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: 0.2s;
+  font-weight: 500;
+  transition: all 0.2s;
+  min-width: 100px;
 }
 
-.btn.cancel {
-  background: #ff9800;
+.request-from-btn.cancel {
+  background: #dc3545;
   color: white;
 }
 
-.btn:hover {
-  opacity: 0.85;
+.request-from-btn.cancel:hover {
+  background: #bb2d3b;
 }
 
-.empty {
-  color: #777;
+.request-from-empty {
+  color: #6c757d;
   font-style: italic;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
 }
 
-.status {
+.request-from-status {
   font-size: 14px;
-  color: #555;
+  color: #6c757d;
+  font-weight: 500;
 }

@@ -1,32 +1,41 @@
 
-.handle-comment{
-    padding-top: 20px;
-    padding-left: 20px;
-    margin-bottom: 12px;
+/* ===== Comment - Clean & Organized ===== */
+
+.handle-comment {
+  padding: 20px;
+  margin-bottom: 12px;
 }
 
+.handle-comment-input {
+  border: 1px solid #ddd;
+  width: 100%;
+  border-radius: 8px;
+  background: #fff;
+}
 
-/* Nút gửi */
+.ql-container.ql-snow {
+  border: 0;
+}
+
+.ql-toolbar.ql-snow {
+  border: 0;
+  border-bottom: 1px solid #eee;
+}
+
 .btn-send {
   background-color: transparent;
   border: none;
   color: #333;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-send:hover {
-  background-color: #e9ecef; /* xám nhạt Bootstrap */
-  color: #000;
-  border-radius: 50%;
-}
-.handle-comment-input{
-  border:1px solid #ccc;
-  width: 580px;
-  border-radius: 12px;
-}
-.ql-container.ql-snow{
-  border: 0;
-} 
-.ql-toolbar.ql-snow{
-  border: 0;
+  background-color: #e9ecef;
+  color: #21808d;
 }

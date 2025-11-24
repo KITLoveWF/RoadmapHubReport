@@ -42,7 +42,7 @@ export default function QuizRoadmapClassroom(props) {
       </h2>)
       }
       {selectedQuizIndex === null && (<>
-        <div className="container">
+        <div style={{width: '100%'}}>
           <div className="row">
             {topic.tests.map((quiz, index) => (
               <div className="col-md-4 mb-4" key={index}>

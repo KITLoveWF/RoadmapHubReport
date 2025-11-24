@@ -1,16 +1,17 @@
+/* ===== AddStudentForm - Clean & Organized ===== */
+
 .card.form {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 480px;
-  margin: 20px auto;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  font-family: "Segoe UI", sans-serif;
-  text-align: center;
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 700px;
+  width: 100%;
+  margin: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .card.form h2 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   margin-bottom: 18px;
   color: #333;
@@ -20,30 +21,30 @@
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 6px;
   margin-bottom: 14px;
   font-size: 14px;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: all 0.2s;
 }
 
 .input:focus {
   outline: none;
-  border-color: #4caf50;
-  box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+  border-color: #21808d;
+  box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.1);
 }
 
 .btn.send {
-  background: #4caf50;
+  background: #21808d;
   color: white;
   border: none;
   padding: 10px 18px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
+  width: 100%;
 }
 
 .btn.send:hover {
-  background: #43a047;
-  transform: translateY(-2px);
+  background: #1d7480;
 }
