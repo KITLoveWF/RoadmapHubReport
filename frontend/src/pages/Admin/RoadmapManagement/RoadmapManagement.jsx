@@ -75,8 +75,6 @@ const RoadmapManagement = () => {
   const handleDeleteRoadmap = async (roadmapId) => {
     if (deleteConfirm !== roadmapId) {
       setDeleteConfirm(roadmapId);
-      setTimeout(() => setDeleteConfirm(null), 5000); // Reset after 5s
-      return;
     }
 
     try {
