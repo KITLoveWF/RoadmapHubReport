@@ -1,50 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './ProfilePage.css';
 import ProfileComponent from '../../../components/ProfileComponent/ProfileComponent/ProfileComponent.jsx';
 import SettingComponent from '../../../components/ProfileComponent/SettingComponent/SettingComponent.jsx';
 import FriendsComponent from '../../../components/ProfileComponent/FriendsComponent/FriendsComponent.jsx';
 import RoadmapsComponent from '../../../components/ProfileComponent/RoadmapsComponent/RoadmapsComponent.jsx';
-import { useNavigate } from 'react-router-dom';
-import api from '../../../utils/api.js';
 //import {useCheckLogin} from '../../../hooks/userCheckLogin.jsx'
 
 const ProfilePage = () => {
-    const navigate = useNavigate();
     //side bar data
-    const [selectedTeamId, setSelectedTeamId] = useState('');
     const [activeNav, setActiveNav] = useState('Profile');
     // const { user } = useCheckLogin();
     // //console.log(user);
-    const [teams, setTeams] = useState([]);
 
     const changeIntoSetting = () => {
         setMainContent(setting);
         setActiveNav('Setting');
     };
-
-    useEffect(() => {
-        const getTeams = async () =>{
-            try {
-                const response = await api.get(`/teams/my-teams`, {
-                    withCredentials: true
-                });
-                if(response.data.status === true)
-                    setTeams(response.data.teams || []);
-            } catch (error) {
-                console.error('Error fetching teams:', error);
-            }
-        } 
-        getTeams();
-    }, []);
-
-    useEffect(() => {
-        if(selectedTeamId === '') {
-            navigate('/profile');
-        }
-        else{
-            navigate(`/team/${selectedTeamId}`);
-        }
-    }, [selectedTeamId, navigate]);
 
     const profile = <ProfileComponent changeIntoSetting={changeIntoSetting}/>;
     const setting = <SettingComponent/>;
@@ -78,21 +49,6 @@ const ProfilePage = () => {
     return (
         <div className="profile-container">
         <div className="sidebar">
-            <div className="team-selector">
-            <label className="team-label" htmlFor="team-select">Choose Team</label>
-            <select
-                id="team-select"
-                className="team-select"
-                value={selectedTeamId}
-                onChange={e => setSelectedTeamId(e.target.value)}
-            >
-                <option value="">your account</option>
-                {teams.map((team) => (
-                <option value={team.id} key={team.id}>{team.name}</option>
-                ))}
-            </select>
-            </div>
-
         <nav className="sidebar-nav">
             {navItems.map((item) => (
                 <div
