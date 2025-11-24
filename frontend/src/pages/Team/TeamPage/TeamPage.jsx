@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "#utils/api.js";
+import TeamRoadmapModal from "#components/TeamComponent/TeamRoadmapModal/TeamRoadmapModal.jsx";
 import "./TeamPage.css";
 
 const NAV_ITEMS = [
 	{ id: "overview", label: "Overview", icon: "📋" },
 	{ id: "members", label: "Members", icon: "👥" },
+	{ id: "roadmaps", label: "Roadmaps", icon: "🗺️" },
 ];
 
 const roleLabels = {
@@ -41,6 +43,12 @@ export default function TeamPage() {
 	const [memberRole, setMemberRole] = useState("view");
 	const [addingMember, setAddingMember] = useState(false);
 	const [actionLoadingId, setActionLoadingId] = useState(null);
+	const [roadmaps, setRoadmaps] = useState([]);
+	const [roadmapsLoading, setRoadmapsLoading] = useState(true);
+	const [roadmapError, setRoadmapError] = useState("");
+	const [roadmapModalVisible, setRoadmapModalVisible] = useState(false);
+	const [editingRoadmap, setEditingRoadmap] = useState(null);
+	const [roadmapActionId, setRoadmapActionId] = useState("");
 
 	useEffect(() => {
 		const loadTeams = async () => {
@@ -49,8 +57,8 @@ export default function TeamPage() {
 				const response = await api.get("/teams/my-teams");
 				const userTeams = response.data?.teams ?? [];
 				setTeams(userTeams);
-				if (!selectedTeamId && userTeams.length > 0) {
-					setSelectedTeamId(userTeams[0].id);
+				if (userTeams.length > 0) {
+					setSelectedTeamId((prev) => prev || userTeams[0].id);
 				}
 			} catch (err) {
 				const message = err.response?.data?.message || "Không thể tải danh sách nhóm.";
@@ -84,6 +92,29 @@ export default function TeamPage() {
 		[]
 	);
 
+	const loadRoadmaps = useCallback(
+		async (teamIdentifier) => {
+			if (!teamIdentifier) {
+				setRoadmaps([]);
+				setRoadmapsLoading(false);
+				return;
+			}
+			try {
+				setRoadmapsLoading(true);
+				const response = await api.get(`/teams/${teamIdentifier}/roadmaps`);
+				setRoadmaps(response.data?.roadmaps ?? []);
+				setRoadmapError("");
+			} catch (err) {
+				const message = err.response?.data?.message || "Không thể tải danh sách roadmap.";
+				setRoadmaps([]);
+				setRoadmapError(message);
+			} finally {
+				setRoadmapsLoading(false);
+			}
+		},
+		[]
+	);
+
 	useEffect(() => {
 		if (!selectedTeamId) {
 			return;
@@ -91,6 +122,16 @@ export default function TeamPage() {
 
 		loadMembers(selectedTeamId);
 	}, [selectedTeamId, loadMembers]);
+
+	useEffect(() => {
+		if (!selectedTeamId) {
+			setRoadmaps([]);
+			setRoadmapsLoading(false);
+			return;
+		}
+
+		loadRoadmaps(selectedTeamId);
+	}, [selectedTeamId, loadRoadmaps]);
 
 	useEffect(() => {
 		setActionMessage("");
@@ -101,7 +142,7 @@ export default function TeamPage() {
 		if (teamId && teamId !== selectedTeamId) {
 			setSelectedTeamId(teamId);
 		}
-	}, [teamId]);
+	}, [teamId, selectedTeamId]);
 
 	useEffect(() => {
 		if (selectedTeamId && selectedTeamId !== teamId) {
@@ -110,6 +151,8 @@ export default function TeamPage() {
 	}, [selectedTeamId, teamId, navigate]);
 
 	const currentTeam = teams.find((team) => team.id === selectedTeamId);
+	const canManageRoadmaps = ["leader", "edit"].includes(currentTeam?.role);
+	const canDeleteRoadmaps = currentTeam?.role === "leader";
 
 	const memberStats = useMemo(() => {
 		const stats = { total: members.length, leader: 0, edit: 0, view: 0 };
@@ -301,6 +344,64 @@ export default function TeamPage() {
 		}
 	};
 
+	const formatTimestamp = (value) => {
+		if (!value) {
+			return "";
+		}
+		try {
+			return new Date(value).toLocaleString();
+		} catch {
+			return "";
+		}
+	};
+
+	const openRoadmapModal = (roadmap = null) => {
+		setEditingRoadmap(roadmap);
+		setRoadmapModalVisible(true);
+	};
+
+	const closeRoadmapModal = () => {
+		setRoadmapModalVisible(false);
+		setEditingRoadmap(null);
+	};
+
+	const handleDeleteRoadmap = async (roadmapId) => {
+		if (!selectedTeamId) {
+			return;
+		}
+		const confirmed = window.confirm("Bạn có chắc chắn muốn xóa roadmap này?");
+		if (!confirmed) {
+			return;
+		}
+		try {
+			setRoadmapActionId(roadmapId);
+			await api.delete(`/teams/${selectedTeamId}/roadmaps/${roadmapId}`);
+			setActionType("success");
+			setActionMessage("Đã xóa roadmap.");
+			await loadRoadmaps(selectedTeamId);
+		} catch (err) {
+			const message = err.response?.data?.message || "Không thể xóa roadmap.";
+			setActionType("error");
+			setActionMessage(message);
+		} finally {
+			setRoadmapActionId("");
+		}
+	};
+
+	const handleOpenRoadmap = (roadmapId) => {
+		if (!selectedTeamId) {
+			return;
+		}
+		navigate(`/team/${selectedTeamId}/roadmaps/${roadmapId}/edit`);
+	};
+
+	const handleRefreshRoadmaps = () => {
+		if (!selectedTeamId) {
+			return;
+		}
+		loadRoadmaps(selectedTeamId);
+	};
+
 	return (
 		<div className="team-page-layout">
 			<aside className="team-page-sidebar">
@@ -339,6 +440,7 @@ export default function TeamPage() {
 
 			<main className="team-page-main">
 				{actionMessage && (
+
 					<div className={`alert ${actionType === "success" ? "success-alert" : "error-alert"}`}>
 						{actionMessage}
 					</div>
@@ -422,7 +524,7 @@ export default function TeamPage() {
 								{filteredMembers.map((member) => (
 									<article className="member-card" key={member.id}>
 										<div className="member-meta">
-											<div className="avatar" aria-hidden="true">
+											<div className="avatar-team" aria-hidden="true">
 												<img src={getAvatarUrl(member.avatar)} alt="" onError={handleAvatarError} />
 											</div>
 											<div>
@@ -451,6 +553,83 @@ export default function TeamPage() {
 														Remove
 													</button>
 												</div>
+											)}
+										</div>
+									</article>
+								))}
+							</div>
+						)}
+					</section>
+				)}
+
+				{activeNav === "roadmaps" && (
+					<section className="team-roadmaps">
+						<header>
+							<div>
+								<h2>Team roadmaps</h2>
+								<p>Khởi tạo, chỉnh sửa và chia sẻ roadmap với toàn bộ thành viên.</p>
+							</div>
+							<div className="roadmap-header-actions">
+								<button className="ghost-cta" type="button" onClick={handleRefreshRoadmaps} disabled={!selectedTeamId || roadmapsLoading}>
+									Refresh
+								</button>
+								{canManageRoadmaps && (
+									<button className="add-member-btn" type="button" onClick={() => openRoadmapModal()}>
+										+ New roadmap
+									</button>
+								)}
+							</div>
+						</header>
+
+						{roadmapError && <div className="alert error-alert">{roadmapError}</div>}
+
+						{roadmapsLoading ? (
+							<div className="placeholder-card">Loading roadmaps...</div>
+						) : roadmaps.length === 0 ? (
+							<div className="placeholder-card">
+								<h3>Chưa có roadmap</h3>
+								<p>Bắt đầu bằng cách tạo roadmap đầu tiên cho nhóm này.</p>
+								{canManageRoadmaps && (
+									<button className="primary-cta" type="button" onClick={() => openRoadmapModal()}>
+										Create roadmap
+									</button>
+								)}
+							</div>
+						) : (
+							<div className="roadmaps-grid">
+								{roadmaps.map((roadmap) => (
+									<article className="roadmap-card" key={roadmap.id}>
+										<div className="roadmap-card-header">
+											<div>
+												<h3>{roadmap.name}</h3>
+												<p>{roadmap.description || "Chưa có mô tả."}</p>
+											</div>
+											<span className={roadmap.isPublic ? "status-pill public" : "status-pill private"}>
+												{roadmap.isPublic ? "Public" : "Private"}
+											</span>
+										</div>
+										<div className="roadmap-meta-row">
+											<p>ID: {roadmap.id}</p>
+											<p>Updated {formatTimestamp(roadmap.updatedAt)}</p>
+										</div>
+										<div className="roadmap-card-actions">
+											<button className="primary-cta" type="button" onClick={() => handleOpenRoadmap(roadmap.id)}>
+												Open board
+											</button>
+											{canManageRoadmaps && (
+												<button className="ghost-cta" type="button" onClick={() => openRoadmapModal(roadmap)}>
+													Edit info
+												</button>
+											)}
+											{canDeleteRoadmaps && (
+												<button
+													className="danger-link"
+													type="button"
+													onClick={() => handleDeleteRoadmap(roadmap.id)}
+													disabled={roadmapActionId === roadmap.id}
+												>
+													{roadmapActionId === roadmap.id ? "Removing..." : "Delete"}
+												</button>
 											)}
 										</div>
 									</article>
@@ -510,7 +689,7 @@ export default function TeamPage() {
 															className={selectedFriendId === account.id ? "candidate-item selected" : "candidate-item"}
 															onClick={() => setSelectedFriendId(account.id)}
 														>
-															<div className="avatar">
+															<div className="avatar-team">
 																<img src={getAvatarUrl(account.avatar)} alt="" onError={handleAvatarError} />
 															</div>
 															<div>
@@ -600,6 +779,23 @@ export default function TeamPage() {
 						</footer>
 					</div>
 				</div>
+			)}
+
+			{roadmapModalVisible && (
+				<TeamRoadmapModal
+					teamId={selectedTeamId}
+					roadmap={editingRoadmap}
+					onClose={closeRoadmapModal}
+					onSuccess={(message) => {
+						if (selectedTeamId) {
+							loadRoadmaps(selectedTeamId);
+						}
+						if (message) {
+							setActionType("success");
+							setActionMessage(message);
+						}
+					}}
+				/>
 			)}
 		</div>
 	);

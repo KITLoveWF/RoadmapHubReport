@@ -1,4 +1,5 @@
 import TeamController from "../controllers/Team.controller.js";
+import TeamRoadmapController from "../controllers/TeamRoadmap.controller.js";
 import express from "express";
 import requireAuth from "../middlewares/RequireAuth.js";
 const router = express.Router();
@@ -15,6 +16,15 @@ router.delete("/:teamId/members/:memberId", requireAuth, TeamController.removeMe
 router.put("/:teamId/members/:memberId/role", requireAuth, TeamController.updateMemberRole);
 router.get("/:teamId/friends-not-in-team", requireAuth, TeamController.getFriendsNotInTeam);
 router.get("/:teamId/search-accounts", requireAuth, TeamController.searchAccounts);
+
+// Team roadmap routes
+router.get("/:teamId/roadmaps", requireAuth, TeamRoadmapController.list);
+router.post("/:teamId/roadmaps", requireAuth, TeamRoadmapController.create);
+router.get("/:teamId/roadmaps/:roadmapId", requireAuth, TeamRoadmapController.detail);
+router.put("/:teamId/roadmaps/:roadmapId", requireAuth, TeamRoadmapController.update);
+router.delete("/:teamId/roadmaps/:roadmapId", requireAuth, TeamRoadmapController.remove);
+router.get("/:teamId/roadmaps/:roadmapId/nodes", requireAuth, TeamRoadmapController.getNodes);
+router.post("/:teamId/roadmaps/:roadmapId/nodes", requireAuth, TeamRoadmapController.saveNodes);
 
 // Invitation routes
 router.get("/invitations/pending", requireAuth, TeamController.getPendingInvitations);

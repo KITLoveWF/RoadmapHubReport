@@ -112,6 +112,13 @@
 ### Routes (Đã cập nhật)
 - ✅ `routes/team.route.js` - Thêm tất cả API routes
 
+### Roadmap (Team-aware Enhancements)
+- 🔄 **Đang triển khai**: mở rộng toàn bộ luồng Roadmap để hỗ trợ team sử dụng giống như cá nhân (tạo/sửa/xoá/xem)
+  - Cho phép leader và member `edit` tạo roadmap cho team, lưu `teamId` thay cho `accountId`
+  - Thành viên `view` chỉ đọc, không được sửa/xoá
+  - Chia sẻ quyền truy cập qua TeamMember, đảm bảo kiểm tra quyền ở mọi endpoint
+- Việc cập nhật chi tiết được mô tả trong phần "📈 Team Roadmap Management" bên dưới
+
 ### Migrations (Đã tạo)
 - ✅ `migrations/create_team_invitation_table.sql` - SQL tạo bảng TeamInvitation
 
@@ -154,6 +161,14 @@ Sử dụng Postman hoặc frontend để test các endpoints theo tài liệu t
 - [x] Kiểm tra tên không trùng
 - [x] Tự động làm leader
 - [x] API endpoint
+
+### Team Roadmap Management *(Mới)*
+- [ ] Team tạo roadmap mới (leader + edit)
+- [ ] Team sửa/thay đổi node roadmap (leader + edit)
+- [ ] Team xoá roadmap (leader)
+- [ ] Xem danh sách roadmap của team theo role
+- [ ] Gán roadmap cho classroom trong team (nếu cần)
+- [ ] Phân quyền rõ ràng giữa account roadmap và team roadmap
 
 ### Xóa Nhóm
 - [x] Kiểm tra quyền leader
@@ -235,5 +250,6 @@ Tất cả các chức năng yêu cầu đã được implement đầy đủ:
 ✅ **Chuyển quyền Leader** - Hoàn thành  
 ✅ **Hệ thống lời mời** - Hoàn thành  
 ✅ **Thông báo** - Hoàn thành  
+⚙️ **Team Roadmap Management** - Đang triển khai
 
 Backend đã sẵn sàng để frontend tích hợp!

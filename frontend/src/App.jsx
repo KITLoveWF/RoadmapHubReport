@@ -94,6 +94,7 @@ function App() {
           //         {path:'roadmap/edit/:name', element: <RoadmapEditPage />},
           // =======
           { path: "roadmap/edit/:name/:id", element: <RoadmapEditPage /> },
+          { path: "team/:teamId/roadmaps/:roadmapId/edit", element: <RoadmapEditPage /> },
         ],
       },
       {

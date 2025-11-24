@@ -156,7 +156,8 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
 export default function RoadmapEditPage() {
   //const { isLoggedIn, user } = useCheckLogin();
   const navigate = useNavigate();
-  const { name,id } = useParams();
+  const { name, id, teamId, roadmapId } = useParams();
+  const isTeamRoadmap = Boolean(teamId && roadmapId);
   // useEffect( ()=>{
   //   async function checkLogin(){
   //     const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
@@ -180,39 +181,51 @@ export default function RoadmapEditPage() {
   const [demoEdges, setDemoEdges] = useState([]);
   // quản lý roadmap demo
   const { isOpen, openDemo, closeDemo, roadmapData } = useRoadmapDemo();
-  const fetchAPI = async () => {
-      const roadmap = await api.get(`/roadmaps/getYourRoadmap/${name}`,{
-          withCredentials: true
-      })
-      const res = await api.get(`/roadmaps/edit/view/${roadmap.data?.id}`,{
-          withCredentials: true
-      })
-      //console.log(res.data)
-      if(res.data.status==="success"){
-        const nodesWithHandlers = res.data.roadmap?.nodes.map((node) => ({
-        ...node,
-        data: {
-          ...node.data,
-          onResize: (id, w, h) => {
-            setNodes((nds) =>
-              nds.map((n) =>
-                n.id === id
-                  ? { ...n, data: { ...n.data, width: w, height: h } }
-                  : n
-              )
-            );
-          },
-        },
-      }));
+  const fetchAPI = useCallback(async () => {
+      try {
+        let graphPayload = { nodes: [], edges: [] };
+        if (isTeamRoadmap) {
+          const response = await api.get(`/teams/${teamId}/roadmaps/${roadmapId}/nodes`);
+          if (response.data?.roadmap) {
+            graphPayload = response.data.roadmap;
+          }
+        } else {
+          const roadmap = await api.get(`/roadmaps/getYourRoadmap/${name}` ,{
+            withCredentials: true
+          });
+          const res = await api.get(`/roadmaps/edit/view/${roadmap.data?.id}` ,{
+            withCredentials: true
+          });
+          if (res.data.status === "success") {
+            graphPayload = res.data.roadmap;
+          }
+        }
 
-      setNodes(nodesWithHandlers);
-        // setNodes(res.data.roadmap?.nodes);
-        setEdges(res.data.roadmap?.edges);
+        const nodesWithHandlers = (graphPayload?.nodes || []).map((node) => ({
+          ...node,
+          data: {
+            ...node.data,
+            onResize: (id, w, h) => {
+              setNodes((nds) =>
+                nds.map((n) =>
+                  n.id === id
+                    ? { ...n, data: { ...n.data, width: w, height: h } }
+                    : n
+                )
+              );
+            },
+          },
+        }));
+
+        setNodes(nodesWithHandlers);
+        setEdges(graphPayload?.edges || []);
+      } catch (error) {
+        console.error(error);
       }
-  };
-  useEffect(()=>{
+  }, [isTeamRoadmap, teamId, roadmapId, name]);
+    useEffect(()=>{
       fetchAPI();
-  },[])
+    },[fetchAPI])
   // Hàm xử lý khi click vào nút "Xem Demo"
   const handleViewDemo = useCallback(() => {
     // console.log(demoNodes);
@@ -230,13 +243,17 @@ export default function RoadmapEditPage() {
   };
   const onSaveNodes = async (e) => {
       e.preventDefault();
-      //console.log('Nodes:', nodes);
-      //console.log('Edges:', edges);
-      console.log()
-      const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges,id:id},{
-          withCredentials: true
-      });
-      //console.log(response);
+      try {
+        if (isTeamRoadmap) {
+          await api.post(`/teams/${teamId}/roadmaps/${roadmapId}/nodes`, { nodes, edges });
+        } else {
+          await api.post('/roadmaps/edit-nodes',{ name, nodes, edges, id },{
+            withCredentials: true
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
   }
   
   const handleNodeChange = (updatedNode)=>{

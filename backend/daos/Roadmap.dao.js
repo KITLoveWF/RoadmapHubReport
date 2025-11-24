@@ -9,11 +9,11 @@ import QuizSchemaModel from "../models/QuizSchema.model.js";
 import QuizResultSchemaModel from "../models/QuizResultSchema.model.js";
 class RoadmapDAO {
   //====================my sql
-  async createRoadmap(name, description, accountId, isPublic) {
+  async createRoadmap(name, description, accountId, isPublic, teamId = null) {
     const roadmap = new Roadmap(
       geneUUID(),
       accountId,
-      null,
+      teamId,
       name,
       description,
       isPublic,
@@ -29,7 +29,7 @@ class RoadmapDAO {
   }
   async editRoadmap(name, description, accountId, roadmapId,isPublic) {
     await db("Roadmap")
-      .where({ accountId: accountId, id: roadmapId })
+      .where({ accountId: accountId, id: roadmapId, teamId: null })
       .update({ name: name, description: description, isPublic: isPublic });
     return {
       success: true,
@@ -43,11 +43,27 @@ class RoadmapDAO {
       .first();
     return roadmap;
   }
-  async deleteRoadmap(id, accountId) {
-    await db("Roadmap").where({ id }).del();
+  async deleteRoadmap(id, accountId = null, teamId = null) {
+    const query = db("Roadmap").where({ id });
+    if (accountId) {
+      query.andWhere({ accountId });
+    }
+    if (teamId) {
+      query.andWhere({ teamId });
+    }
+
+    const roadmap = await query.first();
+    if (!roadmap) {
+      return {
+        success: false,
+        message: "Roadmap not found or access denied",
+      };
+    }
+
+    await db("Roadmap").where({ id: roadmap.id }).del();
     await RoadmapSchemaModel.findOneAndDelete({ roadmapId: id });
-    await QuizSchemaModel.findOneAndDelete({ roadmapId: id , userCreateQuiz: accountId});
-    await QuizResultSchemaModel.findOneAndDelete({ roadmapId: id, userCreateQuiz: accountId });
+    await QuizSchemaModel.findOneAndDelete({ roadmapId: id , userCreateQuiz: roadmap.accountId});
+    await QuizResultSchemaModel.findOneAndDelete({ roadmapId: id, userCreateQuiz: roadmap.accountId });
     return {
       success: true,
       message: "Delete roadmap successfully",
@@ -148,16 +164,69 @@ class RoadmapDAO {
     }
   }
   async getRoadmapByTeamId(teamId) {
-    await db("Roadmap")
-      .join("Team", "Roadmap.teamId", "Team.id")
-      .where("Team.id", teamId)
+    const rows = await db("Roadmap")
+      .where({ teamId })
       .select("Roadmap.*");
+    return rows;
+  }
+  async getTeamRoadmaps(teamId) {
+    return await db("Roadmap")
+      .where({ teamId })
+      .orderBy("createdAt", "desc");
+  }
+  async getRoadmapById(roadmapId) {
+    return await db("Roadmap")
+      .where({ id: roadmapId })
+      .first();
+  }
+  async updateTeamRoadmap(roadmapId, teamId, payload) {
+    const nextPayload = {};
+    if (payload.name !== undefined) nextPayload.name = payload.name;
+    if (payload.description !== undefined) nextPayload.description = payload.description;
+    if (payload.isPublic !== undefined) nextPayload.isPublic = payload.isPublic;
+
+    if (Object.keys(nextPayload).length === 0) {
+      return { success: true, message: "Nothing to update" };
+    }
+
+    const updated = await db("Roadmap")
+      .where({ id: roadmapId, teamId })
+      .update(nextPayload);
+
+    if (!updated) {
+      return { success: false, message: "Roadmap không tồn tại trong team" };
+    }
+
+    return { success: true, message: "Cập nhật roadmap thành công" };
   }
   async getRoadmapByName(accountId, name) {
     const roadmap = await db("Roadmap")
       .where({ accountId: accountId, name: name })
       .first();
     return roadmap;
+  }
+  async checkTeamRoadmap(name, teamId, type) {
+    const countResult = await db("Roadmap")
+      .where({ name, teamId })
+      .count("* as count")
+      .first();
+
+    const count = Number(countResult.count);
+    const isCreateFlow = type === "create";
+    const threshold = isCreateFlow ? 0 : 1;
+
+    if (count > threshold) {
+      return {
+        success: false,
+        message: "Name of roadmap already taken in this team",
+        count,
+      };
+    }
+    return {
+      success: true,
+      message: "Roadmap name is available",
+      count,
+    };
   }
   async markRoadmap(accountId, roadmapId) {
     try {
@@ -213,23 +282,21 @@ class RoadmapDAO {
 
   //====================mongoDB
   async editNodeRoadmap(accountId, name, roadmapId, nodes, edges) {
-    ////console.log("lll",accountId,name,nodes,edges);
-    //await connectDB();
     const roadmap = RoadmapSchemaModel({
       accountId,
       name,
       roadmapId,
       nodes,
       edges,
+      ownerType: "account",
     });
     await roadmap.save();
   }
   async updateRoadmap(accountId, name, nodes, edges) {
-    //await connectDB();
     const roadmap = await RoadmapSchemaModel.findOneAndUpdate(
       { accountId, name },
-      { $set: { nodes, edges } },
-      { new: true } // trả về document sau khi update
+      { $set: { nodes, edges, ownerType: "account" } },
+      { new: true }
     );
     if (!roadmap) {
       throw new Error("Roadmap không tồn tại");
@@ -247,6 +314,25 @@ class RoadmapDAO {
 
     ////console.log("roadmap exist:", !!roadmap);
     return !!roadmap; // trả về true nếu tồn tại, false nếu không
+  }
+  async upsertTeamRoadmapNodes(teamId, roadmapId, name, nodes, edges) {
+    const roadmap = await RoadmapSchemaModel.findOneAndUpdate(
+      { roadmapId },
+      {
+        $set: {
+          nodes,
+          edges,
+          teamId,
+          name,
+          ownerType: "team",
+        },
+        $setOnInsert: {
+          accountId: null,
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+    return roadmap;
   }
   async viewRoadmap(roadmapId) {
     //await connectDB();
