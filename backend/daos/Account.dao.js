@@ -102,6 +102,10 @@ class AccountDAO {
     const row = await db("Account").where({ email }).first();
     return row ? Account.fromRow(row) : null;
   }
+  async getAccountById(id) {
+    const row = await db("Account").where({ id }).first();
+    return row ? Account.fromRow(row) : null;
+  }
   async changePassword(email, newPassword) {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     const rows = await db("Account")
@@ -153,6 +157,35 @@ class AccountDAO {
   async getAccountByGoogleId(googleId) {
     const row = await db("Account").where({ googleId }).first();
     return row ? Account.fromRow(row) : null;
+  }
+
+  async searchAccounts(keyword, limit = 10, excludedIds = []) {
+    if (!keyword) {
+      return [];
+    }
+
+    const normalized = `%${keyword.toLowerCase()}%`;
+    const query = db("Account as a")
+      .leftJoin("Profile as p", "a.id", "p.accountId")
+      .select(
+        "a.id",
+        "a.username",
+        "a.email",
+        "p.fullname",
+        "p.avatar"
+      )
+      .where(function () {
+        this.whereRaw("LOWER(a.username) LIKE ?", [normalized])
+          .orWhereRaw("LOWER(a.email) LIKE ?", [normalized])
+          .orWhereRaw("LOWER(p.fullname) LIKE ?", [normalized]);
+      })
+      .limit(limit);
+
+    if (excludedIds.length > 0) {
+      query.whereNotIn("a.id", excludedIds);
+    }
+
+    return query;
   }
 }
 export default new AccountDAO();

@@ -1,11 +1,13 @@
 export default class TeamMember{
 
-    constructor(AccountId, role)
+    constructor(id, accountId, teamId, role)
     {
-        this.AccountId = AccountId;
+        this.id = id;
+        this.accountId = accountId;
+        this.teamId = teamId;
         this.role = role;
     }
     static fromRow(row) {
-        return new TeamMember(row.AccountId, row.role);
+        return new TeamMember(row.id, row.accountId, row.teamId, row.role);
     }
 }

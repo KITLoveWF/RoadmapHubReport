@@ -69,7 +69,7 @@ export default function NavBar() {
   const markAsRead = async (notificationId) => {
     try {
       // Backend tự động lấy user info từ token
-      const response = await api.put(`/notifications/markAsRead`, {
+      await api.put(`/notifications/markAsRead`, {
         notificationId: notificationId,
       });
       getNotifications();
@@ -202,8 +202,15 @@ export default function NavBar() {
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
-                    Teams
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigate("/teams");
+                    }}
+                  >
+                    Manage teams
                   </a>
                 </li>
                 <li>

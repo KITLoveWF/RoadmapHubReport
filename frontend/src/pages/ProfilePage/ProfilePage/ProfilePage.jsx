@@ -11,11 +11,11 @@ import api from '../../../utils/api.js';
 const ProfilePage = () => {
     const navigate = useNavigate();
     //side bar data
-    const [selectedTeam, setSelectedTeam] = useState('your account');
+    const [selectedTeamId, setSelectedTeamId] = useState('');
     const [activeNav, setActiveNav] = useState('Profile');
     // const { user } = useCheckLogin();
     // //console.log(user);
-    const [teams, setTeams] = useState(['your account']);
+    const [teams, setTeams] = useState([]);
 
     const changeIntoSetting = () => {
         setMainContent(setting);
@@ -25,11 +25,11 @@ const ProfilePage = () => {
     useEffect(() => {
         const getTeams = async () =>{
             try {
-                const response = await api.get(`/teams/get-teams`, {
+                const response = await api.get(`/teams/my-teams`, {
                     withCredentials: true
                 });
                 if(response.data.status === true)
-                    setTeams(['your account', ...response.data.teams.map(team => team.name)]);
+                    setTeams(response.data.teams || []);
             } catch (error) {
                 console.error('Error fetching teams:', error);
             }
@@ -38,13 +38,13 @@ const ProfilePage = () => {
     }, []);
 
     useEffect(() => {
-        if(selectedTeam === 'your account') {
+        if(selectedTeamId === '') {
             navigate('/profile');
         }
         else{
-            navigate(`/team/${selectedTeam}`);
+            navigate(`/team/${selectedTeamId}`);
         }
-    }, [selectedTeam]);
+    }, [selectedTeamId, navigate]);
 
     const profile = <ProfileComponent changeIntoSetting={changeIntoSetting}/>;
     const setting = <SettingComponent/>;
@@ -83,11 +83,12 @@ const ProfilePage = () => {
             <select
                 id="team-select"
                 className="team-select"
-                value={selectedTeam}
-                onChange={e => setSelectedTeam(e.target.value)}
+                value={selectedTeamId}
+                onChange={e => setSelectedTeamId(e.target.value)}
             >
-                {teams.map((team, idx) => (
-                <option value={team} key={idx}>{team}</option>
+                <option value="">your account</option>
+                {teams.map((team) => (
+                <option value={team.id} key={team.id}>{team.name}</option>
                 ))}
             </select>
             </div>

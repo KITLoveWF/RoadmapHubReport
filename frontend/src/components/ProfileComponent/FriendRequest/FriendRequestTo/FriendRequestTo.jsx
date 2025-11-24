@@ -1,6 +1,5 @@
 import React,{useState, useEffect} from "react";
 import "./FriendRequestTo.css";
-import axios from "axios";
 import api from "../../../../utils/api";
 
 export default function FriendRequestTo() {
@@ -8,9 +7,8 @@ export default function FriendRequestTo() {
   const fetchRequests = async () => {
     try {
       const response = await api.get("/friends/friend-requests/to", {
-        withCredentials: true
+        withCredentials: true,
       });
-      //console.log(response.data.data);
       setRequests(response.data.data);
     } catch (error) {
       console.error("Error fetching friend requests:", error);
@@ -19,40 +17,54 @@ export default function FriendRequestTo() {
   useEffect(() => {
     fetchRequests();
   }, []);
-  const onAccept = async (id) =>{
-    //console.log("hí")
-    await api.post("/friends/friend-requests/to/accept",{id}, {
-      withCredentials: true
-    });
+  const onAccept = async (id) => {
+    await api.post(
+      "/friends/friend-requests/to/accept",
+      { id },
+      {
+        withCredentials: true,
+      }
+    );
     fetchRequests();
-  }
-  const onReject = async (id) =>{
-    //console.log("hí")
-    await api.post("/friends/friend-requests/to/reject",{id}, {
-      withCredentials: true
-    });
+  };
+  const onReject = async (id) => {
+    await api.post(
+      "/friends/friend-requests/to/reject",
+      { id },
+      {
+        withCredentials: true,
+      }
+    );
     fetchRequests();
-  }
+  };
   return (
-    <div className="request-to-card">
-      <h2>Friend Requests To You</h2>
-      {requests?.length === 0 && <p className="request-to-empty">No requests</p>}
-      {requests?.map((req) => (
-        <div key={req.id} className="request-to-item">
-          <div>
-            <p className="request-to-email">From: {req.senderEmail}</p>
-            <small>{new Date(req.createAt).toLocaleString()}</small>
-          </div>
-          <div className="request-to-actions">
-            <button className="request-to-btn accept" onClick={() => onAccept(req.id)}>
-              Accept
-            </button>
-            <button className="request-to-btn reject" onClick={() => onReject(req.id)}>
-              Reject
-            </button>
-          </div>
-        </div>
-      ))}
+    <div className="friends-card">
+      <header>
+        <h2>Lời mời kết bạn</h2>
+        <p>Danh sách những người đang chờ bạn phản hồi.</p>
+      </header>
+      {requests?.length === 0 ? (
+        <p className="friends-empty-state">Chưa có lời mời nào.</p>
+      ) : (
+        <ul className="friends-row-list">
+          {requests.map((req) => (
+            <li key={req.id} className="friends-row">
+              <div className="friends-row-info">
+                <p className="friends-row-title">Từ: {req.senderEmail}</p>
+                <span className="friends-row-meta">{new Date(req.createAt).toLocaleString()}</span>
+              </div>
+              <div className="friends-row-actions">
+                <button className="friends-btn primary" type="button" onClick={() => onAccept(req.id)}>
+                  Accept
+                </button>
+                <button className="friends-btn danger" type="button" onClick={() => onReject(req.id)}>
+                  Reject
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

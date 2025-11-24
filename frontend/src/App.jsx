@@ -35,6 +35,8 @@ import AdminLogin from "#pages/Admin/AdminLogin/AdminLogin.jsx";
 import AdminDashboard from "#pages/Admin/AdminDashboard/AdminDashboard.jsx";
 import UserManagement from "#pages/Admin/UserManagement/UserManagement.jsx";
 import RoadmapManagement from "#pages/Admin/RoadmapManagement/RoadmapManagement.jsx";
+import ManageTeamsPage from "#pages/Team/ManageTeamsPage/ManageTeamsPage.jsx";
+import TeamPage from "#pages/Team/TeamPage/TeamPage.jsx";
 function App() {
   const router = createBrowserRouter(
     [
@@ -63,6 +65,8 @@ function App() {
           { path: "privacy-policy", element: <PrivacyPolicy /> },
           { path: "terms-of-service", element: <TermsService /> },
           { path: "profile", element: <ProfilePage /> },
+          { path: "teams", element: <ManageTeamsPage /> },
+          { path: "team/:teamId", element: <TeamPage /> },
           //{path:'roadmap/view/:name', element:<RoadmapView/>},
           {
             path: "change-email/verify/:hashedPin/:oldEmail/:newEmail",
