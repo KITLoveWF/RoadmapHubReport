@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import TopBarView from "#components/Roadmap/TopBarView/TopBarView.jsx"
-import { useParams, useLocation, useSearchParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   ReactFlow,
 //   applyNodeChanges,
@@ -30,8 +30,6 @@ import {useCheckLogin} from "#hooks/userCheckLogin";
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
 const edgeTypes = { default :Edge}
 export default function RoadmapView(){
-    //
-    const [isReload, setIsReload] = useState(false);
     const [nodes, setNodes] = useState([]);
     // 1 cái lưu checklist đang chọn 1 cái lưu checklist cũ để so sánh nếu thay đổi thì mới call api
     const [checkListSelected, setCheckListSelected] = useState(null);
@@ -39,9 +37,6 @@ export default function RoadmapView(){
     const [edges, setEdges] = useState([]);
     const [selectedNode, setSelectedNode] = useState(null);
     const {roadmapId} = useParams();
-    const [searchParams] = useSearchParams();
-    const teamId = searchParams.get("teamId");
-    const isTeamRoadmap = Boolean(teamId);
     const location = useLocation();
     const [roadmapInfo, setRoadmapInfo] = useState(location.state || null);
     const [isMarked, setIsMarked] = useState(Boolean(location.state?.isMarked));
@@ -50,33 +45,36 @@ export default function RoadmapView(){
     useEffect(() => {
         const fetchAPI = async () => {
             try {
-                if (isTeamRoadmap) {
-                    const [graphRes, detailRes] = await Promise.all([
-                        api.get(`/teams/${teamId}/roadmaps/${roadmapId}/nodes`),
-                        api.get(`/teams/${teamId}/roadmaps/${roadmapId}`),
-                    ]);
-                    const graphPayload = graphRes.data?.roadmap || {};
-                    setNodes(graphPayload.nodes || []);
-                    setEdges(graphPayload.edges || []);
-                    setRoadmapInfo(detailRes.data?.roadmap || null);
-                    return;
-                }
-
-                const res = await api.get(`roadmaps/view/${roadmapId}`,{
+                const res = await api.get(`/roadmaps/view/${roadmapId}`,{
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     withCredentials: true
                 })
-                setNodes(res.data.roadmap?.nodes || []);
-                setEdges(res.data.roadmap?.edges || []);
+                const graphPayload = res.data?.roadmap || {};
+                const nextNodes = graphPayload.nodes || [];
+                setNodes(nextNodes);
+                setEdges(graphPayload.edges || []);
+                if (graphPayload && Object.keys(graphPayload).length > 0) {
+                    setRoadmapInfo((prev) => ({
+                        ...prev,
+                        ...graphPayload,
+                    }));
+                }
+                setSelectedNode((currentSelected) => {
+                    if (!currentSelected) {
+                        return currentSelected;
+                    }
+                    const updatedNode = nextNodes.find((node) => node.id === currentSelected.id);
+                    return updatedNode || currentSelected;
+                });
             } catch (error) {
                 console.error("Không thể tải roadmap", error);
             }
         };
 
         fetchAPI();
-    }, [isTeamRoadmap, teamId, roadmapId, isReload]);
+    }, [roadmapId]);
     const changeCheckListSelected = async(node) => {
         const res = await api.post(`checkListAccount/change-item-checklist`,{checkListSelected: node, roadmapId},{withCredentials: true});
         //console.log(res.data);
@@ -112,6 +110,21 @@ export default function RoadmapView(){
         setSelectedNode(null);
     });
     const { isLoggedIn, user, loading } = useCheckLogin();
+        const handleTopicStatusUpdate = useCallback((nodeId, nextStatus) => {
+            setNodes((currentNodes) =>
+                currentNodes.map((node) =>
+                    node.id === nodeId
+                        ? { ...node, data: { ...node.data, topicStatus: nextStatus } }
+                        : node
+                )
+            );
+            setSelectedNode((current) => {
+                if (!current || current.id !== nodeId) {
+                    return current;
+                }
+                return { ...current, data: { ...current.data, topicStatus: nextStatus } };
+            });
+        }, []);
     useEffect(() => {
         if (location.state?.isMarked !== undefined) {
             setIsMarked(Boolean(location.state.isMarked));
@@ -208,7 +221,12 @@ export default function RoadmapView(){
                     }} />
                 </ReactFlow>
                 <RightBarPopUp show={!!selectedNode} onClose={onPaneClick}>
-                    {selectedNode && <RightBarView node={selectedNode} setIsReload={setIsReload} isReload={isReload} />}
+                    {selectedNode && (
+                        <RightBarView
+                            node={selectedNode}
+                            onTopicStatusUpdate={handleTopicStatusUpdate}
+                        />
+                    )}
                 </RightBarPopUp>
             </div>
         </div>

@@ -364,7 +364,7 @@ class RoadmapDAO {
     console.log("Check road map db mongo", roadmapId);
     const roadmap = await RoadmapSchemaModel.findOne(
       { roadmapId },
-      { nodes: 1, edges: 1, _id: 0 }
+      { nodes: 1, edges: 1, name: 1, teamId: 1, accountId: 1, ownerType: 1, _id: 0 }
     );
 
     console.log("roadmap: ", roadmap);

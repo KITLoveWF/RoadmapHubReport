@@ -50,13 +50,15 @@ export default function TopBar(props) {
   };
 
   const liveViewClick = async () => {
-    if (isTeamRoadmap) {
-      navigate(`/roadmap/view/${roadmapId}?teamId=${teamId}`);
-      return;
-    }
-
-    if (id) {
-      navigate(`/roadmap/view/${id}`);
+    const targetId = roadmapId || id;
+    if (targetId) {
+      navigate(`/roadmap/view/${targetId}`, {
+        state: {
+          id: targetId,
+          name: title,
+          description: undefined,
+        },
+      });
       return;
     }
 
