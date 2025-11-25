@@ -1,21 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { useParams, useNavigate} from 'react-router-dom';
 import RoadmapCardInHome from '#components/RoadmapView/RoadmapCardInHome/RoadmapCardInHome.jsx';
 import './RoadmapSearchPage.css';
 import api from '../../../utils/api';
-
-const handleBookmarkToggle = async (id) => {
-  await api.post(`/roadmaps/mark/${id}`, {
-    roadmapId: id,
-  }, { withCredentials: true });
-};
 
 export default function RoadmapSearchPage() {
   const [selectedFilter, setSelectedFilter] = useState('popular');
   const [index, setIndex] = useState(1);
   const { query } = useParams();
   const [roadmapsList, setRoadmapsList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate(); 
+  const pageSize = 16;
 
   const onClickFilter = (filter) => {
     setSelectedFilter(filter);
@@ -25,25 +22,40 @@ export default function RoadmapSearchPage() {
     navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
   };
 
-  const fetchMoreRoadmaps = async (page = index) => {
-    const response = await api.get(`/roadmaps/search/${query}/${selectedFilter}/${page}`, {
-      withCredentials: true
-    });
-    console.log('Fetched roadmaps: ', response.data.data, "index: ", page);
-    if(response.data.status === "success" && page > 1) {
-      setRoadmapsList([...roadmapsList, ...response.data.data]);
-      setIndex(page + 1);
+  const fetchMoreRoadmaps = useCallback(async (page) => {
+    if (isLoading || (!hasMore && page !== 1)) {
+      return;
     }
-    else if(response.data.status === "success" && page === 1) {
-      setRoadmapsList(response.data.data);
-      setIndex(page + 1);
+    setIsLoading(true);
+    try {
+      const response = await api.get(`/roadmaps/search/${query}/${selectedFilter}/${page}`, {
+        withCredentials: true
+      });
+      console.log('Fetched roadmaps: ', response.data.data, 'index: ', page);
+      if (response.data.status === 'success') {
+        const normalized = (response.data.data || []).map((roadmap) => ({
+          ...roadmap,
+          isUserCard: false,
+        }));
+        setRoadmapsList((prev) => (page === 1 ? normalized : [...prev, ...normalized]));
+        setIndex(page + 1);
+        setHasMore(normalized.length === pageSize);
+      } else if (page === 1) {
+        setRoadmapsList([]);
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Failed to fetch roadmaps: ', error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [query, selectedFilter, hasMore, isLoading, pageSize]);
 
   useEffect(() => {
     setIndex(1);
+    setHasMore(true);
     fetchMoreRoadmaps(1);
-  }, [query, selectedFilter]);
+  }, [query, selectedFilter, fetchMoreRoadmaps]);
   //xử lý scroll để load thêm roadmap
   useEffect(() => {
   const handleWindowScroll = () => {
@@ -51,14 +63,29 @@ export default function RoadmapSearchPage() {
       const windowHeight = window.innerHeight;
       const fullHeight = document.documentElement.scrollHeight;
       
-      if (scrollTop + windowHeight >= fullHeight - 1) {
+      if (scrollTop + windowHeight >= fullHeight - 1 && !isLoading && hasMore) {
         console.log("Chạm đáy trang!");
         fetchMoreRoadmaps(index);
       }
     };
     window.addEventListener('scroll', handleWindowScroll);
     return () => window.removeEventListener('scroll', handleWindowScroll);
-  }, [index, fetchMoreRoadmaps]);
+  }, [index, fetchMoreRoadmaps, hasMore, isLoading]);
+
+  const handleBookmarkToggle = async (id, nextState) => {
+    try {
+      await api.post(`/roadmaps/mark/${id}`, {
+        roadmapId: id,
+      }, { withCredentials: true });
+      setRoadmapsList((prev) =>
+        prev.map((roadmap) =>
+          roadmap.id === id ? { ...roadmap, isMarked: nextState } : roadmap
+        )
+      );
+    } catch (error) {
+      console.error('Failed to toggle bookmark: ', error);
+    }
+  };
 
 
   return (
@@ -91,7 +118,8 @@ export default function RoadmapSearchPage() {
               author={r.author}
               learning={r.learning}
               teaching={r.teaching}
-              isUserCard={r.isUserCard}
+              isUserCard={false}
+              isMarked={r.isMarked}
               onBookmarkToggle={handleBookmarkToggle}
             />
           </div>

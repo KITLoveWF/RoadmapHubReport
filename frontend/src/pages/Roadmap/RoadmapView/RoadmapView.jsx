@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TopBarView from "#components/Roadmap/TopBarView/TopBarView.jsx"
-import { useParams,useLocation} from "react-router-dom";
-import { useCallback } from "react";
+import { useParams, useLocation, useSearchParams } from "react-router-dom";
 import {
   ReactFlow,
 //   applyNodeChanges,
@@ -33,42 +32,58 @@ const edgeTypes = { default :Edge}
 export default function RoadmapView(){
     //
     const [isReload, setIsReload] = useState(false);
-    const [nodes, setNodes] = useState();
+    const [nodes, setNodes] = useState([]);
     // 1 cái lưu checklist đang chọn 1 cái lưu checklist cũ để so sánh nếu thay đổi thì mới call api
     const [checkListSelected, setCheckListSelected] = useState(null);
     //const [oldCheckListSelected, setOldCheckListSelected] = useState(null);
-    const [edges, setEdges] = useState();
+    const [edges, setEdges] = useState([]);
     const [selectedNode, setSelectedNode] = useState(null);
     const {roadmapId} = useParams();
-    const fetchAPI = async () => {
-        const res = await api.get(`roadmaps/view/${roadmapId}`,{
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true
-        })
-        ////console.log(res.data)
-        //const nodeFromRes = res.data.roadmap?.nodes;
-        //console.log("nodeFromRes:", res);
-        setNodes(res.data.roadmap?.nodes);
-        setEdges(res.data.roadmap?.edges);
-        console.log(res);
-        console.log(nodes);
-        console.log(edges);
-        //const secondRes = await api.post(`learnTopic/solve-nodes-progress`,{nodes: nodeFromRes},{withCredentials: true});
-        ////console.log(secondRes.data.nodes);
-        //setNodes(secondRes.data.nodes);
-        //setEdges(res.data.roadmap?.edges);
-    };
+    const [searchParams] = useSearchParams();
+    const teamId = searchParams.get("teamId");
+    const isTeamRoadmap = Boolean(teamId);
+    const location = useLocation();
+    const [roadmapInfo, setRoadmapInfo] = useState(location.state || null);
+
+    useEffect(() => {
+        const fetchAPI = async () => {
+            try {
+                if (isTeamRoadmap) {
+                    const [graphRes, detailRes] = await Promise.all([
+                        api.get(`/teams/${teamId}/roadmaps/${roadmapId}/nodes`),
+                        api.get(`/teams/${teamId}/roadmaps/${roadmapId}`),
+                    ]);
+                    const graphPayload = graphRes.data?.roadmap || {};
+                    setNodes(graphPayload.nodes || []);
+                    setEdges(graphPayload.edges || []);
+                    setRoadmapInfo(detailRes.data?.roadmap || null);
+                    return;
+                }
+
+                const res = await api.get(`roadmaps/view/${roadmapId}`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true
+                })
+                setNodes(res.data.roadmap?.nodes || []);
+                setEdges(res.data.roadmap?.edges || []);
+            } catch (error) {
+                console.error("Không thể tải roadmap", error);
+            }
+        };
+
+        fetchAPI();
+    }, [isTeamRoadmap, teamId, roadmapId, isReload]);
     const changeCheckListSelected = async(node) => {
         const res = await api.post(`checkListAccount/change-item-checklist`,{checkListSelected: node, roadmapId},{withCredentials: true});
         //console.log(res.data);
     }
-    const location = useLocation();
-    const roadmap = location.state;
-    useEffect(()=>{
-        fetchAPI();
-    },[isReload])
+    useEffect(() => {
+        if (location.state) {
+            setRoadmapInfo(location.state);
+        }
+    }, [location.state]);
     useEffect(()=>{
         if(checkListSelected !== null){
             ////console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
@@ -96,12 +111,15 @@ export default function RoadmapView(){
     });
     const { isLoggedIn, user, loading } = useCheckLogin();
     const deleteRoadmap = () => {
-       const result = api.post(`/roadmaps/delete`, { id: roadmap.id })
+        if (!roadmapInfo?.id || roadmapInfo?.teamId) {
+            return;
+        }
+        return api.post(`/roadmaps/delete`, { id: roadmapInfo.id })
     }
     return(
-        <div style={{ display: 'flex',width:'100%', height:'130vh', flexDirection: "column", margin: 0}}>
-            <TopBarView roadmap={roadmap} user={user} deleteRoadmap={deleteRoadmap} loading={loading} />
-            <div style={{ display: 'flex', width:'100%', height:'130vh', flexDirection: "row", margin: 0}}>
+        <div style={{ display: 'flex',width:'100%', height:'100vh', flexDirection: "column", margin: 0}}>
+            <TopBarView roadmap={roadmapInfo} user={user} deleteRoadmap={deleteRoadmap} loading={loading} />
+            <div style={{ display: 'flex', width:'100%', flex: 1, minHeight: 0, flexDirection: "row", margin: 0}}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -118,7 +136,7 @@ export default function RoadmapView(){
                     onPaneClick={onPaneClick} 
                     // onNodeDrag={onNodeDrag}
                     fitView
-                    style={{marginLeft: "0px", paddingRight: "100px"}}
+                    style={{flex: 1, marginLeft: "0px", paddingRight: "100px", minHeight: 0}}
                     >
                     {/* <Background color="#ccc" variant={BackgroundVariant.Cross} /> */}
                     <Controls showFitView={false} />

@@ -5,7 +5,11 @@ import { Buffer } from "buffer";
 import { stat } from "fs";
 class RoadmapController {
   async createRoadmap(req, res) {
-    const { name, description, accountId, isPublic } = req.body;
+    const accountId = req.authenticate?.id;
+    const { name, description, isPublic } = req.body;
+    if (!accountId) {
+      return res.status(401).json({ status: false, message: "Unauthorized" });
+    }
     const responseCheck = await RoadmapService.checkRoadmap(name, accountId, "create");
     if (!responseCheck.success) {
       res.json(responseCheck);
@@ -20,7 +24,11 @@ class RoadmapController {
     }
   }
   async editRoadmap(req, res) {
-    const { name, description, accountId, roadmapId, isPublic } = req.body;
+    const accountId = req.authenticate?.id;
+    const { name, description, roadmapId, isPublic } = req.body;
+    if (!accountId) {
+      return res.status(401).json({ status: false, message: "Unauthorized" });
+    }
     const responseCheck = await RoadmapService.checkRoadmap(name, accountId, "edit");
     ////console.log("Response Check:", responseCheck);
     if (!responseCheck.success) {
@@ -39,7 +47,13 @@ class RoadmapController {
 
   async searchRoadmap(req, res) {
     const { search, typeSearch, index } = req.params;
-    const roadmaps = await RoadmapService.searchRoadmap(search, typeSearch, index);
+    const accountId = req.authenticate?.id || null;
+    const roadmaps = await RoadmapService.searchRoadmap(
+      search,
+      typeSearch,
+      index,
+      accountId
+    );
     if(roadmaps.length ===0){
       return res.json({ status: "failed", message: "No roadmap found" });
     }
@@ -75,7 +89,10 @@ class RoadmapController {
   }
   async getRoadmapByName(req, res) {
     const { name } = req.params;
-    const { accountId } = req.query;
+    const accountId = req.authenticate?.id;
+    if (!accountId) {
+      return res.status(401).json({ status: false, message: "Unauthorized" });
+    }
     const roadmap = await RoadmapService.getRoadmapByName(accountId, name);
     res.json(roadmap);
   }

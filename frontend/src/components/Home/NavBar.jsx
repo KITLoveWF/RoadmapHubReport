@@ -133,8 +133,8 @@ export default function NavBar() {
           onClick={() => navigate("/")}
         >
           <img
-            src="../../../public/logo.png"
-            alt="Logo"
+            src="/logo.png"
+            alt="Roadmap Hub logo"
             height="40"
             className="me-2"
           />

@@ -30,8 +30,8 @@ class RoadmapService {
     async checkRoadmap(name, accountId, type) {
         return await RoadmapDAO.checkRoadmap(name, accountId, type);
     }
-    async searchRoadmap(search, typeSearch, index) {
-        return await RoadmapDAO.searchRoadmap(search, typeSearch, index);
+    async searchRoadmap(search, typeSearch, index, accountId = null) {
+        return await RoadmapDAO.searchRoadmap(search, typeSearch, index, accountId);
     }
     // async editNodeRoadmap(accountId,name,nodes, edges,id) {
     //     return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges,id);

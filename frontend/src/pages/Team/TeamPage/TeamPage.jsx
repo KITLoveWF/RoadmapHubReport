@@ -151,7 +151,8 @@ export default function TeamPage() {
 	}, [selectedTeamId, teamId, navigate]);
 
 	const currentTeam = teams.find((team) => team.id === selectedTeamId);
-	const canManageRoadmaps = ["leader", "edit"].includes(currentTeam?.role);
+	const canEditRoadmaps = ["leader", "edit"].includes(currentTeam?.role);
+	const canCreateRoadmaps = currentTeam?.role === "leader";
 	const canDeleteRoadmaps = currentTeam?.role === "leader";
 
 	const memberStats = useMemo(() => {
@@ -178,6 +179,13 @@ export default function TeamPage() {
 	const handleAvatarError = useCallback((event) => {
 		event.currentTarget.onerror = null;
 		event.currentTarget.src = DEFAULT_AVATAR;
+	}, []);
+
+	const getAccountDisplayName = useCallback((account) => {
+		if (!account) {
+			return "Unknown";
+		}
+		return account.fullname || account.username || account.userName || "Unknown";
 	}, []);
 
 	const selectedAccount = useMemo(() => {
@@ -573,7 +581,7 @@ export default function TeamPage() {
 								<button className="ghost-cta" type="button" onClick={handleRefreshRoadmaps} disabled={!selectedTeamId || roadmapsLoading}>
 									Refresh
 								</button>
-								{canManageRoadmaps && (
+								{canCreateRoadmaps && (
 									<button className="add-member-btn" type="button" onClick={() => openRoadmapModal()}>
 										+ New roadmap
 									</button>
@@ -589,7 +597,7 @@ export default function TeamPage() {
 							<div className="placeholder-card">
 								<h3>Chưa có roadmap</h3>
 								<p>Bắt đầu bằng cách tạo roadmap đầu tiên cho nhóm này.</p>
-								{canManageRoadmaps && (
+								{canCreateRoadmaps && (
 									<button className="primary-cta" type="button" onClick={() => openRoadmapModal()}>
 										Create roadmap
 									</button>
@@ -616,7 +624,7 @@ export default function TeamPage() {
 											<button className="primary-cta" type="button" onClick={() => handleOpenRoadmap(roadmap.id)}>
 												Open board
 											</button>
-											{canManageRoadmaps && (
+											{canEditRoadmaps && (
 												<button className="ghost-cta" type="button" onClick={() => openRoadmapModal(roadmap)}>
 													Edit info
 												</button>
@@ -693,7 +701,7 @@ export default function TeamPage() {
 																<img src={getAvatarUrl(account.avatar)} alt="" onError={handleAvatarError} />
 															</div>
 															<div>
-																<p className="member-name">{account.fullname || account.username || "Unknown"}</p>
+																<p className="member-name">{getAccountDisplayName(account)}</p>
 																<p className="member-email">{account.email}</p>
 															</div>
 														</button>
@@ -726,11 +734,11 @@ export default function TeamPage() {
 															className={selectedFriendId === friend.id ? "candidate-item selected" : "candidate-item"}
 															onClick={() => setSelectedFriendId(friend.id)}
 														>
-															<div className="avatar">
+															<div className="team-friend-avatar">
 																<img src={getAvatarUrl(friend.avatar)} alt="" onError={handleAvatarError} />
 															</div>
 															<div>
-																<p className="member-name">{friend.fullname || friend.username || "Unknown"}</p>
+																<p className="member-name">{getAccountDisplayName(friend)}</p>
 																<p className="member-email">{friend.email}</p>
 															</div>
 														</button>
@@ -745,7 +753,7 @@ export default function TeamPage() {
 							<div className="selection-hint">
 								{selectedAccount ? (
 									<span>
-										Đang chọn: <strong>{selectedAccount.fullname || selectedAccount.username || "Unknown"}</strong>
+										Đang chọn: <strong>{getAccountDisplayName(selectedAccount)}</strong>
 										<span className="selection-email">{selectedAccount.email}</span>
 									</span>
 								) : (

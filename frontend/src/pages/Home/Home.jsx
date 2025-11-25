@@ -382,7 +382,6 @@ export default function Home() {
       {openCreateRoadmap && (
         <CreateRoadmap
           onClose={() => setOpenCreateRoadmap(false)}
-          user={user}
         />
       )}
       {openCreateClassroom && (

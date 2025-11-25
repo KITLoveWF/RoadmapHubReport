@@ -108,60 +108,85 @@ class RoadmapDAO {
       }
     };
   }
-  async searchRoadmap(search, typeSearch, index) {
+  async searchRoadmap(search, typeSearch, index, accountId = null) {
     const pageSize = 16;
     const offset = (index - 1) * pageSize;
-    const searchTerm = search.trim().split(/\s+/).map(word => `${word}*`).join(' ');
-    let results = [];
-    if(typeSearch==="popular"){
-      results = await db("Roadmap")
-        .whereRaw(
-            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
-            [searchTerm]
-        )
-        .select('*')
-        .limit(pageSize)
-        .offset(offset);
+    const searchTerm = search
+      .trim()
+      .split(/\s+/)
+      .map((word) => `${word}*`)
+      .join(" ");
+
+    const baseQuery = db({ r: "Roadmap" })
+      .leftJoin({ a: "Account" }, "r.accountId", "a.id")
+      .whereRaw(
+        "MATCH(r.name, r.description) AGAINST(? IN BOOLEAN MODE)",
+        [searchTerm]
+      )
+      .andWhere("r.isPublic", 1)
+      .select("r.*", "a.username as author");
+
+    if (accountId) {
+      baseQuery.leftJoin({ mr: "MarkRoadmap" }, function () {
+        this.on("mr.roadmapId", "=", "r.id").andOn(
+          "mr.accountId",
+          "=",
+          db.raw("?", [accountId])
+        );
+      });
+      baseQuery.select(
+        db.raw("CASE WHEN mr.id IS NULL THEN 0 ELSE 1 END as isMarked")
+      );
+    } else {
+      baseQuery.select(db.raw("0 as isMarked"));
     }
-    else if(typeSearch==="newest"){
-      results = await db("Roadmap")
-        .whereRaw(
-            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
-            [searchTerm]
-        )
-        .select('*')
-        .limit(pageSize)
-        .offset(offset)
-        .orderBy('createdAt', 'desc');
+
+    if (typeSearch === "newest") {
+      baseQuery.orderBy("r.createdAt", "desc");
+    } else if (typeSearch === "oldest") {
+      baseQuery.orderBy("r.createdAt", "asc");
     }
-    else if(typeSearch==="oldest"){
-      results = await db("Roadmap")
-        .whereRaw(
-            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
-            [searchTerm]
-        )
-        .select('*')
-        .limit(pageSize)
-        .offset(offset)
-        .orderBy('createdAt', 'asc');
-    }
-    return results;
-}
+
+    const results = await baseQuery.limit(pageSize).offset(offset);
+
+    return results.map((row) => ({
+      ...Roadmap.fromRow(row),
+      author: row.author,
+      isMarked: Boolean(row.isMarked),
+    }));
+  }
   // async editNodeRoadmap(accountId,name,nodes,edges,id) {
   //     const roadmap = RoadmapSchemaModel({accountId,name, roadmapId: id,nodes,edges,id});
   //     await roadmap.save();
   // }
   async getRoadmapByUserId(accountId) {
-    const rows = await db("Roadmap")
-      .join("Account", "Roadmap.accountId", "Account.id")
-      .where("Account.id", accountId)
-      .select("Roadmap.*");
+    const rows = await db({ r: "Roadmap" })
+      .leftJoin({ a: "Account" }, "r.accountId", "a.id")
+      .leftJoin({ mr: "MarkRoadmap" }, function () {
+        this.on("mr.roadmapId", "=", "r.id").andOn(
+          "mr.accountId",
+          "=",
+          db.raw("?", [accountId])
+        );
+      })
+      .where("a.id", accountId)
+      .select(
+        "r.*",
+        "a.username as author",
+        db.raw("CASE WHEN mr.id IS NULL THEN 0 ELSE 1 END as isMarked")
+      );
     ////console.log("rows: ", rows);
     if (rows.length === 0) {
-      return null;
-    } else {
-      return rows.map((row) => Roadmap.fromRow(row));
+      return [];
     }
+    return rows.map((row) => {
+      const roadmap = Roadmap.fromRow(row);
+      return {
+        ...roadmap,
+        author: row.author,
+        isMarked: Boolean(row.isMarked),
+      };
+    });
   }
   async getRoadmapByTeamId(teamId) {
     const rows = await db("Roadmap")

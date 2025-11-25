@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import './TopBarView.css';
 import { useEffect } from 'react';
 export default function TopBarView(props) {
-    const {roadmap,user,deleteRoadmap,loading} = props 
+    const { roadmap = {}, user, deleteRoadmap, loading } = props;
     const [User,setUser]=React.useState({});
     useEffect(() => {
         if(!loading) {
           setUser(user);
         }
     }, [loading]);
+    const canManage = User.id && roadmap?.accountId && User.id === roadmap.accountId;
+
     return (
         <div className="topbar-container">
             <div className="topbar-navigation">
@@ -21,7 +23,7 @@ export default function TopBarView(props) {
                     <button className="btn-bookmark">
                         <i className="bi bi-bookmark"></i>
                     </button>
-                    {User.id === roadmap.accountId && (
+                    {canManage && roadmap?.id && (
                     <div class="dropdown">
                         <button className="btn-schedule" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-three-dots-vertical"></i>
@@ -42,9 +44,9 @@ export default function TopBarView(props) {
             </div>
 
             <div className="roadmap-header">
-                <h1 className="roadmap-title">{roadmap.name}</h1>
+                <h1 className="roadmap-title">{roadmap?.name || "Roadmap"}</h1>
                 <p className="roadmap-subtitle">
-                    {roadmap.description}
+                    {roadmap?.description || ""}
                 </p>
             </div>
 

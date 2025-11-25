@@ -25,7 +25,7 @@ class TeamRoadmapService {
   }
 
   async createRoadmap(teamId, accountId, payload) {
-    await this.assertRole(teamId, accountId, ["leader", "edit"]);
+  await this.assertRole(teamId, accountId, ["leader"]);
 
     const { name, description = "", isPublic = false } = payload;
     if (!name || !name.trim()) {
