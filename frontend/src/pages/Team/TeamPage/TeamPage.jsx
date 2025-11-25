@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "#utils/api.js";
 import TeamRoadmapModal from "#components/TeamComponent/TeamRoadmapModal/TeamRoadmapModal.jsx";
@@ -49,6 +49,19 @@ export default function TeamPage() {
 	const [roadmapModalVisible, setRoadmapModalVisible] = useState(false);
 	const [editingRoadmap, setEditingRoadmap] = useState(null);
 	const [roadmapActionId, setRoadmapActionId] = useState("");
+	const latestTeamIdRef = useRef(selectedTeamId);
+	useEffect(() => {
+		latestTeamIdRef.current = selectedTeamId;
+	}, [selectedTeamId]);
+	useEffect(() => {
+		if (!selectedTeamId) {
+			setMembers([]);
+			setRoadmaps([]);
+			return;
+		}
+		setMembers([]);
+		setRoadmaps([]);
+	}, [selectedTeamId]);
 
 	useEffect(() => {
 		const loadTeams = async () => {
@@ -79,14 +92,22 @@ export default function TeamPage() {
 			try {
 				setLoadingMembers(true);
 				const response = await api.get(`/teams/${teamIdentifier}/members`);
+				if (latestTeamIdRef.current !== teamIdentifier) {
+					return;
+				}
 				setMembers(response.data?.members ?? []);
 				setError("");
 			} catch (err) {
+				if (latestTeamIdRef.current !== teamIdentifier) {
+					return;
+				}
 				const message = err.response?.data?.message || "Không thể tải thành viên.";
 				setError(message);
 				setMembers([]);
 			} finally {
-				setLoadingMembers(false);
+				if (latestTeamIdRef.current === teamIdentifier) {
+					setLoadingMembers(false);
+				}
 			}
 		},
 		[]
@@ -102,14 +123,22 @@ export default function TeamPage() {
 			try {
 				setRoadmapsLoading(true);
 				const response = await api.get(`/teams/${teamIdentifier}/roadmaps`);
+				if (latestTeamIdRef.current !== teamIdentifier) {
+					return;
+				}
 				setRoadmaps(response.data?.roadmaps ?? []);
 				setRoadmapError("");
 			} catch (err) {
+				if (latestTeamIdRef.current !== teamIdentifier) {
+					return;
+				}
 				const message = err.response?.data?.message || "Không thể tải danh sách roadmap.";
 				setRoadmaps([]);
 				setRoadmapError(message);
 			} finally {
-				setRoadmapsLoading(false);
+				if (latestTeamIdRef.current === teamIdentifier) {
+					setRoadmapsLoading(false);
+				}
 			}
 		},
 		[]
@@ -139,10 +168,10 @@ export default function TeamPage() {
 	}, [selectedTeamId]);
 
 	useEffect(() => {
-		if (teamId && teamId !== selectedTeamId) {
+		if (teamId) {
 			setSelectedTeamId(teamId);
 		}
-	}, [teamId, selectedTeamId]);
+	}, [teamId]);
 
 	useEffect(() => {
 		if (selectedTeamId && selectedTeamId !== teamId) {

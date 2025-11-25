@@ -3,14 +3,26 @@ import { Link } from 'react-router-dom';
 import './TopBarView.css';
 import { useEffect } from 'react';
 export default function TopBarView(props) {
-    const { roadmap = {}, user, deleteRoadmap, loading } = props;
+    const {
+        roadmap = {},
+        roadmapId,
+        user,
+        deleteRoadmap,
+        loading,
+        isMarked = false,
+        onToggleMark,
+        markLoading = false,
+    } = props;
     const [User,setUser]=React.useState({});
     useEffect(() => {
         if(!loading) {
           setUser(user);
         }
-    }, [loading]);
+    }, [loading, user]);
     const canManage = User.id && roadmap?.accountId && User.id === roadmap.accountId;
+    const bookmarkDisabled = !onToggleMark || markLoading || !(roadmap?.id || roadmapId);
+    const bookmarkClass = isMarked ? "btn-bookmark marked" : "btn-bookmark";
+    const bookmarkIcon = isMarked ? "bi bi-bookmark-fill" : "bi bi-bookmark";
 
     return (
         <div className="topbar-container">
@@ -20,8 +32,18 @@ export default function TopBarView(props) {
                 </Link>
 
                 <div className="actions-group">
-                    <button className="btn-bookmark">
-                        <i className="bi bi-bookmark"></i>
+                    <button
+                        className={bookmarkClass}
+                        type="button"
+                        onClick={onToggleMark}
+                        disabled={bookmarkDisabled}
+                        aria-label={isMarked ? "Bỏ đánh dấu roadmap" : "Đánh dấu roadmap"}
+                    >
+                        {markLoading ? (
+                            <i className="bi bi-arrow-repeat spin"></i>
+                        ) : (
+                            <i className={bookmarkIcon}></i>
+                        )}
                     </button>
                     {canManage && roadmap?.id && (
                     <div class="dropdown">
