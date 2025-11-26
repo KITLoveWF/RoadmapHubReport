@@ -124,7 +124,7 @@ CREATE TABLE Post(
   FOREIGN KEY (accountId) REFERENCES Account(id),
   FOREIGN KEY (classroomId) REFERENCES Classroom(id),
   createDate VARCHAR(16),
-  content VARCHAR(255)
+  content LONGTEXT
 );
 -- Comment table
 CREATE TABLE Comment(
@@ -136,7 +136,7 @@ CREATE TABLE Comment(
   FOREIGN KEY (classroomId) REFERENCES Classroom(id),
   FOREIGN KEY (postId) REFERENCES Post(id),
   createDate VARCHAR(16),
-  content VARCHAR(255)
+  content LONGTEXT
 );
 
 CREATE TABLE Notification (
@@ -239,3 +239,6 @@ INSERT INTO `studentclassroom` VALUES ('09d65ee2-5313-82b1-7389-3b662f357b0d', '
 INSERT INTO `notification` VALUES ('20a1f6cd-2e67-431a-e2a4-495bae748eda', '661b2db8-e1af-9824-f5c2-721965eaebb6', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', '<p>ádasdasdasd</p>', 0, '2025-09-26T10:24',NULL);
 INSERT INTO `notification` VALUES ('881c99ed-6240-6eea-7950-43f09f095c9a', '661b2db8-e1af-9824-f5c2-721965eaebb6', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', '<p>ádasdsda</p>', 0, '2025-09-26T09:54',NULL);
 INSERT INTO `notification` VALUES ('8ee0a30a-16b9-4eb3-eca6-d4074b78068b', '661b2db8-e1af-9824-f5c2-721965eaebb6', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', '<p>ádasdasdasdasd</p>', 0, '2025-09-26T10:24',NULL);
+-- Admin
+INSERT INTO Admin (id, username, password) 
+VALUES ('admin-uuid', 'admin', '$2a$12$shmaOiNMkdS/GuzTe1/olO8rZbmKWbiQbhgQAaVO38A4pwvWcu.AC');

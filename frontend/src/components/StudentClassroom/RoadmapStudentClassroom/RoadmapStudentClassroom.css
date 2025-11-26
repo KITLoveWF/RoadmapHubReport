@@ -1,0 +1,357 @@
+/* ============================================
+   ROADMAP STUDENT CLASSROOM - Premium Design
+   ============================================ */
+
+.student-roadmap-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 24px;
+}
+
+/* Header Section */
+.student-roadmap-header {
+  text-align: center;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.student-roadmap-header::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+}
+
+.student-roadmap-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.student-roadmap-header p {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Roadmap List */
+.student-roadmap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Roadmap Card */
+.student-roadmap-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.student-roadmap-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.student-roadmap-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.student-roadmap-card:hover::before {
+  opacity: 1;
+}
+
+/* Card Content */
+.student-roadmap-card-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+}
+
+/* Roadmap Icon */
+.student-roadmap-icon {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  font-size: 2rem;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.student-roadmap-card:hover .student-roadmap-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Roadmap Info */
+.student-roadmap-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.student-roadmap-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.student-roadmap-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-roadmap-description i {
+  color: #667eea;
+}
+
+/* Action Buttons */
+.student-roadmap-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.student-action-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.student-action-btn i {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+/* View Roadmap Button */
+.view-roadmap-btn {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 2px solid #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.view-roadmap-btn:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.view-roadmap-btn:hover i {
+  transform: translateX(3px);
+}
+
+/* View Topics Button */
+.view-topics-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.view-topics-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.view-topics-btn:hover i {
+  transform: translateX(3px);
+}
+
+/* Empty State */
+.student-empty-state {
+  text-align: center;
+  padding: 64px 32px;
+  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+  border: 2px dashed #d1d5db;
+  border-radius: 20px;
+  margin-top: 24px;
+}
+
+.student-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.student-empty-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.student-empty-description {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+/* Info Banner */
+.student-info-banner {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.student-info-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.student-info-content {
+  flex: 1;
+}
+
+.student-info-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.student-info-text {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .student-roadmap-container {
+    padding: 16px;
+  }
+
+  .student-roadmap-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .student-roadmap-card-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .student-roadmap-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.8rem;
+  }
+
+  .student-roadmap-name {
+    font-size: 1.1rem;
+  }
+
+  .student-roadmap-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .student-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .student-info-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-roadmap-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .student-roadmap-card-content {
+    padding: 16px;
+  }
+
+  .student-roadmap-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
+
+  .student-roadmap-name {
+    font-size: 1rem;
+  }
+
+  .student-roadmap-description {
+    font-size: 0.85rem;
+  }
+
+  .student-action-btn {
+    padding: 9px 16px;
+    font-size: 0.85rem;
+  }
+
+  .student-empty-icon {
+    font-size: 3rem;
+  }
+
+  .student-empty-title {
+    font-size: 1.1rem;
+  }
+
+  .student-empty-description {
+    font-size: 0.9rem;
+  }
+}

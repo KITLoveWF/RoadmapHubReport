@@ -78,49 +78,93 @@ export default function NavBar() {
       console.error("Error marking notification as read:", error);
     }
   };
+  // Format time ago helper
+  const formatTimeAgo = (date) => {
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " năm trước";
+    
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " tháng trước";
+    
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " ngày trước";
+    
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " giờ trước";
+    
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " phút trước";
+    
+    return "Vừa xong";
+  };
+
   let notificationbutton;
   if (localStorage.getItem("loggedFlag") === "true") {
     notificationbutton = (
-      <div className="dropdown me-3" style={{ flexShrink: 0 }}>
+      <div className="notification-dropdown dropdown me-3" style={{ flexShrink: 0 }}>
         <button
-          className="btn btn-dark position-relative"
+          className="notification-bell-btn btn position-relative"
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
-          style={{ width: "35px", height: "35px", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", minWidth: "35px" }}
         >
-          <i className="bi bi-bell-fill" style={{ fontSize: "16px" }}></i>
+          <i className="bi bi-bell-fill"></i>
           {unreadCount > 0 && (
-            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              {unreadCount}
+            <span className="notification-badge">
+              {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           )}
         </button>
-        <ul
-          className="dropdown-menu dropdown-menu-dark"
-          style={{ minWidth: "300px" }}
-        >
-          {notifications.length > 0 ? (
-            notifications.map((notif, index) => (
-              <li key={index}>
+        <div className="dropdown-menu dropdown-menu-end notification-menu">
+          {/* Header */}
+          <div className="notification-header">
+            <h6 className="mb-0">Thông báo</h6>
+            {unreadCount > 0 && (
+              <span className="unread-count">{unreadCount} mới</span>
+            )}
+          </div>
+          
+          {/* Notification List */}
+          <div className="notification-list">
+            {notifications.length > 0 ? (
+              notifications.map((notif, index) => (
                 <a
-                  className={`dropdown-item ${!notif.read ? "fw-bold" : ""}`}
+                  key={index}
+                  className={`notification-item ${!notif.isRead ? 'unread' : ''}`}
                   href={notif.link}
                   onClick={() => markAsRead(notif.id)}
                 >
-                  {notif.content}
-                  {/* <small className="text-muted d-block">
-                                                    {new Date(notif.createDate).toLocaleString()}
-                                                </small> */}
+                  <div className="notification-icon">
+                    <i className={`bi ${!notif.isRead ? 'bi-bell-fill' : 'bi-bell'}`}></i>
+                  </div>
+                  <div className="notification-content">
+                    <p className="notification-text" dangerouslySetInnerHTML={{ __html: notif.content }}></p>
+                    <span className="notification-time">
+                      {formatTimeAgo(notif.createDate)}
+                    </span>
+                  </div>
+                  {!notif.isRead && <div className="unread-dot"></div>}
                 </a>
-              </li>
-            ))
-          ) : (
-            <li>
-              <span className="dropdown-item">Không có thông báo</span>
-            </li>
+              ))
+            ) : (
+              <div className="notification-empty">
+                <i className="bi bi-bell-slash"></i>
+                <p>Không có thông báo</p>
+              </div>
+            )}
+          </div>
+          
+          {/* Footer - optional */}
+          {notifications.length > 0 && (
+            <div className="notification-footer">
+              <a href="#" className="view-all-link">
+                Xem tất cả thông báo
+              </a>
+            </div>
           )}
-        </ul>
+        </div>
       </div>
     );
   }

@@ -17,8 +17,8 @@ class RoadmapDAO {
       name,
       description,
       isPublic,
-      null,
-      null
+      0,
+      0
     );
     await db("Roadmap").insert(roadmap);
     return {
@@ -44,6 +44,7 @@ class RoadmapDAO {
     return roadmap;
   }
   async deleteRoadmap(id, accountId) {
+    await db('Classroom').where({ roadmapId: id }).update({ roadmapId: null });
     await db("Roadmap").where({ id }).del();
     await RoadmapSchemaModel.findOneAndDelete({ roadmapId: id });
     await QuizSchemaModel.findOneAndDelete({ roadmapId: id , userCreateQuiz: accountId});
@@ -138,13 +139,14 @@ class RoadmapDAO {
   async getRoadmapByUserId(accountId) {
     const rows = await db("Roadmap")
       .join("Account", "Roadmap.accountId", "Account.id")
+      .join("Profile", "Account.id", "Profile.accountId")
       .where("Account.id", accountId)
-      .select("Roadmap.*");
+      .select("Roadmap.*", "Profile.fullName as author");
     ////console.log("rows: ", rows);
     if (rows.length === 0) {
       return null;
     } else {
-      return rows.map((row) => Roadmap.fromRow(row));
+      return rows;
     }
   }
   async getRoadmapByTeamId(teamId) {

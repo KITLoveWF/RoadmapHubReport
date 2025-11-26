@@ -2,11 +2,17 @@
 
 .item-post {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 16px;
   margin: 12px 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #ddd;
+  border: 2px solid #e5e7eb;
   background: #fff;
+  transition: all 0.3s ease;
+}
+
+.item-post:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-color: #d1d5db;
 }
 
 .header-post {
@@ -16,12 +22,221 @@
   align-items: center;
 }
 
+.post-author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.post-avatar:hover {
+  border-color: #667eea;
+  transform: scale(1.05);
+}
+
+.post-author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.post-author-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1f2937;
+  margin: 0;
+}
+
+.post-date {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Dropdown Menu */
+.post-dropdown {
+  position: relative;
+}
+
+.post-dropdown-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6b7280;
+}
+
+.post-dropdown-toggle:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.post-dropdown-toggle:active,
+.post-dropdown-toggle:focus {
+  background: #e5e7eb;
+  outline: none;
+}
+
+.post-dropdown-toggle i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.post-dropdown-toggle:hover i {
+  transform: scale(1.1);
+}
+
+/* Dropdown Menu Styling */
+.post-dropdown .dropdown-menu {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 8px;
+  min-width: 180px;
+  margin-top: 8px;
+  animation: dropdownSlideIn 0.2s ease-out;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.post-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  background: transparent;
+  border: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.post-dropdown .dropdown-item i {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.post-dropdown .dropdown-item.edit-item:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  color: #667eea;
+}
+
+.post-dropdown .dropdown-item.edit-item:hover i {
+  transform: rotate(15deg);
+}
+
+.post-dropdown .dropdown-item.delete-item:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+  color: #ef4444;
+}
+
+.post-dropdown .dropdown-item.delete-item:hover i {
+  transform: scale(1.15);
+}
+
+.post-dropdown .dropdown-divider {
+  margin: 6px 0;
+  border-color: #e5e7eb;
+}
+
 .body-post {
   padding: 20px;
   word-break: break-word;
   color: #333;
+  line-height: 1.6;
 }
 
 .comment {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #e5e7eb;
+}
+
+.show-more-comments-btn {
+  background: transparent;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  margin: 8px 0 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.show-more-comments-btn:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+.show-more-comments-btn i {
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+}
+
+.show-more-comments-btn:hover i {
+  transform: translateY(2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .item-post {
+    border-radius: 12px;
+  }
+
+  .header-post {
+    padding: 16px;
+  }
+
+  .post-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .post-author-name {
+    font-size: 0.95rem;
+  }
+
+  .post-date {
+    font-size: 0.8rem;
+  }
+
+  .body-post {
+    padding: 16px;
+  }
+
+  .post-dropdown .dropdown-menu {
+    min-width: 160px;
+  }
 }

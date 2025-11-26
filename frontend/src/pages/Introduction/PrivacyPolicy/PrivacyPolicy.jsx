@@ -69,6 +69,9 @@ function PrivacyPolicy() {
   return (
     <div className="privacy-wrapper">
       <h1>Privacy Policy</h1>
+      <p className="privacy-header-subtitle">
+        Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.
+      </p>
       <div className="privacy-section-list">
         {sections.map(({ title, content }, index) => (
           <div

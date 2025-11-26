@@ -54,6 +54,9 @@ function TermsOfService() {
   return (
     <div className="tos-wrapper">
       <h1>Terms of Service</h1>
+      <p className="tos-header-subtitle">
+        Please read these terms carefully before using our services. By accessing our website, you agree to these terms and conditions.
+      </p>
       <div className="tos-section-list">
         {sections.map(({ title, content }, index) => (
           <div

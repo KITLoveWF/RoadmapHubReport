@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from "#utils/api";
 import TopicRoadmapClassroom from "#components/Classroom/RoadmapClassroom/TopicRoadmapClassroom/TopicRoadmapClassroom.jsx";
 import QuizRoadmapClassroom from "#components/Classroom/RoadmapClassroom/QuizRoadmapClassroom/QuizRoadmapClassroom.jsx";
+import "./RoadmapStudentClassroom.css";
 export default function RoadmapStudentClassroom(props) {
   const { classroomId } = props;
   const [step, setStep] = useState(1); // 1 = Roadmap, 2 = Topic, 3 = Quiz
@@ -38,6 +39,7 @@ export default function RoadmapStudentClassroom(props) {
           const userQuiz = responseQuizById.data[0];
           const response = await api.get('/quizzes/getQuiz',{params:{userCreateQuiz:selectedRoadmap?.data.roadmap.accountId,roadmapId:selectedRoadmap?.data.roadmap.roadmapId, classroomId:classroomId}});
           const quiz = response.data[0];
+          if(quiz && user){
            if(quiz.userCreateQuiz === user.accountId) setEdit(true);
           if(responseQuizById.data.length !== 0)
           { 
@@ -105,7 +107,7 @@ export default function RoadmapStudentClassroom(props) {
             }))
           }))
           });
-        }
+        }}
         }
         fetchAll();
         
@@ -162,42 +164,77 @@ export default function RoadmapStudentClassroom(props) {
     }
 
   return (
-
-    <div className="container mt-4">
+    <div className="student-roadmap-container">
       {/* --- STEP 1: DANH SÁCH ROADMAP --- */}
       {step === 1 && (
         <>
-          <h2 className="text-center mb-3">📌 List Roadmaps</h2>
+          {/* Header */}
+          <div className="student-roadmap-header">
+            <h2>🎓 Roadmaps Của Tôi</h2>
+            <p>Khám phá và học tập với các roadmap trong lớp học</p>
+          </div>
 
-          <ul className="list-group">
-            {roadmaps.map((r) => (
-              <li
-                key={r.id}
-                className="list-group-item d-flex justify-content-between align-items-center"
-              >
-                {r.data.roadmap.name}
-                <div>
+          {/* Info Banner */}
+          <div className="student-info-banner">
+            <div className="student-info-icon">
+              <i className="bi bi-lightbulb-fill"></i>
+            </div>
+            <div className="student-info-content">
+              <h3 className="student-info-title">Hướng dẫn sử dụng</h3>
+              <p className="student-info-text">
+                Nhấn "Xem Roadmap" để xem sơ đồ chi tiết hoặc "Xem Topics" để làm bài quiz và theo dõi tiến độ
+              </p>
+            </div>
+          </div>
 
-                    <button
-                  className="btn btn-sm btn-outline-secondary"
-                  onClick={()=>ViewPageRoadmap(r.data.roadmap)}
-                >
-                  Xem Roadmap →
-                </button>
-                 
-                   
-                <button
-                  className="btn btn-sm btn-outline-primary"
-                  onClick={() =>{handleSelectRoadmap(r)}}
-                >
-                  Xem Topics →
-                </button>
+          {/* Roadmap List */}
+          {roadmaps.length > 0 ? (
+            <div className="student-roadmap-list">
+              {roadmaps.map((r) => (
+                <div key={r.data.roadmap.roadmapId} className="student-roadmap-card">
+                  <div className="student-roadmap-card-content">
+                    {/* Icon */}
+                    <div className="student-roadmap-icon">🗺️</div>
+
+                    {/* Info */}
+                    <div className="student-roadmap-info">
+                      <h3 className="student-roadmap-name">{r.data.roadmap.name}</h3>
+                      <p className="student-roadmap-description">
+                        <i className="bi bi-diagram-3-fill"></i>
+                        {r.data.roadmap.nodes?.filter(n => n.type === 'topic').length || 0} chủ đề học tập
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="student-roadmap-actions">
+                      <button
+                        className="student-action-btn view-roadmap-btn"
+                        onClick={() => ViewPageRoadmap(r.data.roadmap)}
+                      >
+                        <i className="bi bi-map"></i>
+                        Xem Roadmap
+                      </button>
+                      <button
+                        className="student-action-btn view-topics-btn"
+                        onClick={() => handleSelectRoadmap(r)}
+                      >
+                        Xem Topics
+                        <i className="bi bi-arrow-right"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-               
-              </li>
-            )
-            )}
-          </ul>
+              ))}
+            </div>
+          ) : (
+            <div className="student-empty-state">
+              <div className="student-empty-icon">📚</div>
+              <h3 className="student-empty-title">Chưa Có Roadmap</h3>
+              <p className="student-empty-description">
+                Lớp học này chưa có roadmap nào. Hãy liên hệ giáo viên để được hướng dẫn!
+              </p>
+            </div>
+          )}
         </>
       )}
 

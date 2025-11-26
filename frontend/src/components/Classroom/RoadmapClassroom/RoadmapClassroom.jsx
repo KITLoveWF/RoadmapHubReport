@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "#utils/api";
 import TopicRoadmapClassroom from "#components/Classroom/RoadmapClassroom/TopicRoadmapClassroom/TopicRoadmapClassroom.jsx";
 import QuizRoadmapClassroom from "#components/Classroom/RoadmapClassroom/QuizRoadmapClassroom/QuizRoadmapClassroom.jsx";
+import "./RoadmapClassroom.css";
 export default function RoadmapClassroom(props) {
   const { classroomId } = props;
   const [step, setStep] = useState(1); // 1 = Roadmap, 2 = Topic, 3 = Quiz
@@ -147,55 +148,104 @@ export default function RoadmapClassroom(props) {
   };
 
   return (
-    <div style={{width: '100%', maxWidth: '850px'}}>
+    <div className="roadmap-classroom-container">
       {/* --- STEP 1: DANH SÁCH ROADMAP --- */}
       {step === 1 && (
         <>
-          <h2 className="text-center mb-3">📌 List Roadmaps</h2>
-          <div className="input-group mb-3 ">
-            <select
-              className="form-select me-2"
-              value={selectedRoadmap?.id || ""}
-              onChange={(e) => {
-                const roadmap = myRoadmaps.find((i) => i.id == e.target.value);
-                setSelectedRoadmap(roadmap);
-              }}
-            >
-              <option value="">Select Roadmaps</option>
-              {myRoadmaps?.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleAddRoadmap}
-            >
-              + Add Roadmap
-            </button>
+          {/* Header */}
+          <div className="roadmap-header-classroom">
+            <h2>📚 Quản Lý Roadmaps</h2>
+            <p>Thêm và quản lý các roadmap cho lớp học của bạn</p>
           </div>
 
-          <ul className="list-group">
-            {roadmaps[0]?.data.roadmap !== null &&
-              roadmaps?.map((r) => (
-                <li
-                  key={r.data.roadmap.roadmapId}
-                  className="list-group-item d-flex justify-content-between align-items-center"
+          {/* Add Roadmap Section */}
+          <div className="add-roadmap-section">
+            <div className="add-roadmap-title">
+              <i className="bi bi-plus-circle-fill"></i>
+              Thêm Roadmap Mới
+            </div>
+            <div className="roadmap-select-group">
+              <div className="roadmap-select-wrapper">
+                <select
+                  className="roadmap-select"
+                  value={selectedRoadmap?.id || ""}
+                  onChange={(e) => {
+                    const roadmap = myRoadmaps.find((i) => i.id == e.target.value);
+                    setSelectedRoadmap(roadmap);
+                  }}
                 >
-                  {r.data.roadmap.name}
-                  <button
-                    className="btn btn-sm btn-outline-primary"
-                    onClick={() => {
-                      handleSelectRoadmap(r);
-                    }}
-                  >
-                    Xem Topics →
-                  </button>
-                </li>
-              ))}
-          </ul>
+                  <option value="">Chọn roadmap từ danh sách của bạn...</option>
+                  {myRoadmaps?.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="button"
+                className="add-roadmap-btn"
+                onClick={handleAddRoadmap}
+                disabled={!selectedRoadmap}
+              >
+                <i className="bi bi-plus-lg"></i>
+                Thêm Vào Lớp
+              </button>
+            </div>
+          </div>
+
+          {/* Roadmap List */}
+          <div className="roadmap-list-container">
+            <div className="roadmap-list-header">
+              <div className="roadmap-list-title">
+                <i className="bi bi-map-fill"></i>
+                Roadmaps Trong Lớp
+              </div>
+              {roadmaps[0]?.data.roadmap !== null && roadmaps.length > 0 && (
+                <span className="roadmap-count-badge">
+                  {roadmaps.length} roadmap{roadmaps.length > 1 ? 's' : ''}
+                </span>
+              )}
+            </div>
+
+            {roadmaps[0]?.data.roadmap !== null && roadmaps.length > 0 ? (
+              roadmaps.map((r) => (
+                <div key={r.data.roadmap.roadmapId} className="roadmap-card-classroom">
+                  <div className="roadmap-card-content">
+                    <div className="roadmap-icon">🗺️</div>
+                    <div className="roadmap-info">
+                      <h3 className="roadmap-name">{r.data.roadmap.name}</h3>
+                      <div className="roadmap-meta">
+                        <span className="roadmap-meta-item">
+                          <i className="bi bi-diagram-3-fill"></i>
+                          {r.data.roadmap.nodes?.filter(n => n.type === 'topic').length || 0} topics
+                        </span>
+                        <span className="roadmap-meta-item">
+                          <i className="bi bi-person-fill"></i>
+                          Tạo bởi {r.data.roadmap.accountId === user.accountId ? 'bạn' : 'giáo viên'}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      className="view-topics-btn"
+                      onClick={() => handleSelectRoadmap(r)}
+                    >
+                      Xem Topics
+                      <i className="bi bi-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="empty-roadmap-state">
+                <div className="empty-icon">📭</div>
+                <h3 className="empty-title">Chưa Có Roadmap Nào</h3>
+                <p className="empty-description">
+                  Lớp học này chưa có roadmap. Hãy thêm roadmap đầu tiên để bắt đầu!
+                </p>
+              </div>
+            )}
+          </div>
         </>
       )}
 

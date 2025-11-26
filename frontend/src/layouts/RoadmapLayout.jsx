@@ -6,10 +6,12 @@ export default function RoadmapLayout(){
      useEffect(() => {
     // disable scroll khi vào trang này
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     return () => {
       // reset lại khi thoát khỏi layout này
       document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
     };
   }, []);
     return(

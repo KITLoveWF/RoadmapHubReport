@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useCheckLogin } from "#hooks/userCheckLogin.jsx";
 import RoadmapCardInHome from "#components/RoadmapView/RoadmapCardInHome/RoadmapCardInHome.jsx";
 import CreateClassroom from "#components/Classroom/CreateClassroom/CreateClassroom";
+import CardInHome from "#components/Home/CardInHome/CardInHome.jsx"; 
 import api from "#utils/api.js";
 
 export default function Home() {
@@ -67,8 +68,11 @@ export default function Home() {
   const ViewPageRoadmap = (roadmap) => {
     navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
   };
-  const ViewPageClassroom = (roadmap) => {
-    navigate(`/classroom/view/${roadmap.name}/${roadmap.id}`);
+  const ViewPageClassroom = (classItem) => {
+    navigate(`/classroom/view/${classItem.name}/${classItem.id}`);
+  }
+  const ViewPageStudentClassroom = (classItem) => {
+    navigate(`classroom/view-student/${classItem.name}/${classItem.id}`);
   }
 
   const handleBookmarkToggle = async (id) => {
@@ -122,7 +126,7 @@ export default function Home() {
         <div className="home-container">
           <div className="profile-header">
             <div className="profile-info">
-              <h2 className="profile-name">viethoangdz</h2>
+              <h2 className="profile-name">{user.userName}</h2>
             </div>
             <div className="teams-section">
               <button className="btn-create-team">+ Create Team</button>
@@ -196,23 +200,19 @@ export default function Home() {
                 <i className="bi bi-person-video3"></i> Your Class Teaching
               </h3>
               <div className="roadmap-grid">
-                {listTeachingClass?.map((roadmap) => (
+                {listTeachingClass?.map((classItem) => (
                   <div
-                    key={roadmap.id}
+                    key={classItem.id}
                     className="roadmap-card-wrapper"
-                    onClick={() => ViewPageClassroom(roadmap)}
+                    onClick={() => ViewPageClassroom(classItem)}
                   >
-                    <div key={roadmap.id} className="roadmap-card-wrapper">
-                      <RoadmapCardInHome
-                        id={roadmap.id}
-                        name={roadmap.name}
-                        description={roadmap.description}
-                        author={roadmap.author}
-                        learning={""}
-                        teaching={""}
+                    <div key={classItem.id} className="roadmap-card-wrapper">
+                      <CardInHome
+                        id={classItem.id}
+                        name={classItem.name}
+                        description={classItem.description}
+                        author={classItem.author}
                         isUserCard={true}
-                        isMarked={""}
-                        onBookmarkToggle={handleBookmarkToggle}
                       />
                     </div>
                   </div>
@@ -235,25 +235,22 @@ export default function Home() {
                 <i className="bi bi-mortarboard"></i> Your Class Learning
               </h3>
               <div className="roadmap-grid">
-                {listLearningClass?.map((roadmap) => (
-                  <a
-                    key={roadmap.id}
-                    href={`classroom/view-student/${roadmap.name}/${roadmap.classroomId}`}
+                {listLearningClass?.map((classItem) => (
+                  <div
+                    key={classItem.id}
+                    className="roadmap-card-wrapper"
+                    onClick={() => ViewPageStudentClassroom(classItem)}
                   >
-                    <div key={roadmap.id} className="roadmap-card-wrapper">
-                      <RoadmapCardInHome
-                        id={roadmap.id}
-                        name={roadmap.name}
-                        description={roadmap.description}
-                        author={roadmap.author}
-                        learning={""}
-                        teaching={""}
+                    <div key={classItem.id} className="roadmap-card-wrapper">
+                      <CardInHome
+                        id={classItem.id}
+                        name={classItem.name}
+                        description={classItem.description}
+                        author={classItem.author}
                         isUserCard={true}
-                        isMarked={""}
-                        onBookmarkToggle={handleBookmarkToggle}
                       />
                     </div>
-                  </a>
+                  </div>
                 ))}
               </div>
             </div>

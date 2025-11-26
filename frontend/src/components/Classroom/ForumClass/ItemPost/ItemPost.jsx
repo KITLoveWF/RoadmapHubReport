@@ -30,24 +30,57 @@ export default function ItemPost(props){
     {/* <form onSubmit={handleDelete}> */}
         <div className="item-post" id={`post-${post.id}`} key={key}>
         <div className="header-post">
-                <div className='d-flex'>
-                    <img src={post.avatar||"https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"} className="rounded-circle me-4" width="40" height="40" alt="avatar"/>
-                    <div className="d-flex flex-column">
-                        <span><strong>{post.name}</strong></span>
-                        <span>{post.createDate}</span>
+                <div className='post-author-info'>
+                    <img 
+                        src={post.avatar || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"} 
+                        className="post-avatar" 
+                        alt="avatar"
+                    />
+                    <div className="post-author-details">
+                        <h3 className="post-author-name">{post.name}</h3>
+                        <span className="post-date">
+                            <i className="bi bi-clock me-1"></i>
+                            {post.createDate}
+                        </span>
                     </div>
                 </div>
-                    {teacherEdit &&(<div className='dropdown'>
-                        <button className='btn ' id="dropdownMenu2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <li><button data-bs-toggle="modal" data-bs-target="#exampleModal" className="dropdown-item" type='button' onClick={() => setOpenEdit(true)}>Edit</button></li>
-                            <li><button className="dropdown-item" type='button' onClick={() => setOpenDelete(true)}>Delete</button></li>
-                        </ul>
-                        
-                        
-                    </div>
+                    {teacherEdit && (
+                        <div className='post-dropdown dropdown'>
+                            <button 
+                                className='post-dropdown-toggle' 
+                                id="dropdownMenu2" 
+                                type="button" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false"
+                            >
+                                <i className="bi bi-three-dots"></i>
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li>
+                                    <button 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#exampleModal" 
+                                        className="dropdown-item edit-item" 
+                                        type='button' 
+                                        onClick={() => setOpenEdit(true)}
+                                    >
+                                        <i className="bi bi-pencil-fill"></i>
+                                        Edit
+                                    </button>
+                                </li>
+                                <li><hr className="dropdown-divider" /></li>
+                                <li>
+                                    <button 
+                                        className="dropdown-item delete-item" 
+                                        type='button' 
+                                        onClick={() => setOpenDelete(true)}
+                                    >
+                                        <i className="bi bi-trash-fill"></i>
+                                        Delete
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     )}
                
         </div>
@@ -61,10 +94,20 @@ export default function ItemPost(props){
             {comments.length > 3 && (
             <button
               type="button"
-              className="btn btn-link p-0 mt-2 ms-4 mb-2"
+              className="show-more-comments-btn"
               onClick={() => setShowAll(!showAll)}
             >
-              {showAll ? "Ẩn bớt" : "Xem thêm"}
+              {showAll ? (
+                <>
+                  <i className="bi bi-chevron-up"></i>
+                  Ẩn bớt bình luận
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-chevron-down"></i>
+                  Xem thêm {comments.length - 3} bình luận
+                </>
+              )}
             </button>
           )}
             {openComment && <Comment post={post} avatar = {avatar} handleComment={handleComment}/>}

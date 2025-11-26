@@ -279,7 +279,6 @@ export default function ProcessClassroom({ classroomId }) {
         ...Object.fromEntries(
           allTopics.map(topic => [`${topic.topicName}`, ''])
         ),
-        'Điểm TB chung (thang 10)': ''
       });
 
       students.forEach((student, idx) => {
@@ -308,7 +307,7 @@ export default function ProcessClassroom({ classroomId }) {
           return topicStats.averageScore;
         }).reduce((a, b) => a + b, 0) / allTopics.length;
         
-        row['Điểm TB chung (thang 10)'] = allTopicsAvg.toFixed(1);
+        row['Điểm TB'] = allTopicsAvg.toFixed(1);
 
         summaryData.push(row);
       });
