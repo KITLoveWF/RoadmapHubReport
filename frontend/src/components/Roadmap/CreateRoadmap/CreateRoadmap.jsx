@@ -64,7 +64,6 @@ export default function CreateRoadmap(props) {
                         type="checkbox"
                         checked={isPublic}
                         onChange={() => setIsPublic(!isPublic)}
-                        required
                     />
                     <span className="slider"></span>
                     </label>

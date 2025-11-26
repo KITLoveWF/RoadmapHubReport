@@ -361,18 +361,46 @@ class RoadmapDAO {
     return roadmap;
   }
   async viewRoadmap(roadmapId) {
-    //await connectDB();
-    console.log("Check road map db mongo", roadmapId);
-    const roadmap = await RoadmapSchemaModel.findOne(
-      { roadmapId },
-      { nodes: 1, edges: 1, name: 1, teamId: 1, accountId: 1, ownerType: 1, _id: 0 }
-    );
+    const [roadmapDoc, roadmapMeta] = await Promise.all([
+      RoadmapSchemaModel.findOne(
+        { roadmapId },
+        { nodes: 1, edges: 1, name: 1, teamId: 1, accountId: 1, ownerType: 1, _id: 0 }
+      ),
+      db("Roadmap").where({ id: roadmapId }).first(),
+    ]);
 
-    console.log("roadmap: ", roadmap);
-    if (!roadmap) {
+    if (!roadmapDoc && !roadmapMeta) {
       return { nodes: [], edges: [] };
     }
-    return roadmap;
+
+    const normalizeOwnerType = () => {
+      if (roadmapDoc?.ownerType) {
+        return roadmapDoc.ownerType;
+      }
+      if (roadmapMeta?.teamId) {
+        return "team";
+      }
+      if (roadmapMeta) {
+        return "account";
+      }
+      return undefined;
+    };
+
+    return {
+      id: roadmapMeta?.id ?? roadmapDoc?.roadmapId ?? roadmapId,
+      accountId: roadmapDoc?.accountId ?? roadmapMeta?.accountId ?? null,
+      teamId: roadmapDoc?.teamId ?? roadmapMeta?.teamId ?? null,
+      ownerType: normalizeOwnerType(),
+      name: roadmapDoc?.name ?? roadmapMeta?.name ?? "Roadmap",
+      description: roadmapMeta?.description ?? null,
+      isPublic: roadmapMeta?.isPublic ?? null,
+      learning: roadmapMeta?.learning ?? null,
+      teaching: roadmapMeta?.teaching ?? null,
+      createdAt: roadmapMeta?.createdAt ?? null,
+      updatedAt: roadmapMeta?.updatedAt ?? null,
+      nodes: roadmapDoc?.nodes ?? [],
+      edges: roadmapDoc?.edges ?? [],
+    };
   }
   async getTopicRoadmapByUserId(roadmapId) {
     // await connectDB();
