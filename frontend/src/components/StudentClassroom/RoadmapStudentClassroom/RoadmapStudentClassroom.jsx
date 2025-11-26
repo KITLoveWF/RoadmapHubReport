@@ -188,7 +188,7 @@ export default function RoadmapStudentClassroom(props) {
           </div>
 
           {/* Roadmap List */}
-          {roadmaps.length > 0 ? (
+          {roadmaps[0]?.data.roadmap !== null && roadmaps.length > 0  ? (
             <div className="student-roadmap-list">
               {roadmaps.map((r) => (
                 <div key={r.data.roadmap.roadmapId} className="student-roadmap-card">
