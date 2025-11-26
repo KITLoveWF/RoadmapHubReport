@@ -43,6 +43,7 @@ export default function CreateRoadmap(props) {
                     className="form-control" 
                     placeholder="Enter Title"
                     onChange={(e)=>setTitle(e.target.value)}
+                    required
                 />
             </div>
             {error && <AlertError content={error}/>}

@@ -680,7 +680,7 @@ export default function TeamPage() {
 			{showAddMemberModal && (
 				<div className="modal-backdrop" role="dialog" aria-modal="true">
 					<div className="modal-card">
-						<header className="modal-header">
+						<header className="modal-header-create-team">
 							<div>
 								<h3>Add member</h3>
 								<p>Tìm kiếm toàn bộ tài khoản hoặc chọn nhanh từ bạn bè của bạn.</p>

@@ -129,7 +129,7 @@ export default function ManageTeamsPage() {
 						<h1>Manage your teams</h1>
 						<p>Select a team to view details, invite members, or update settings.</p>
 					</div>
-					<div className="search-box">
+					<div className="search-box-manage-teams">
 						<input
 							type="text"
 							placeholder="Search by team name"

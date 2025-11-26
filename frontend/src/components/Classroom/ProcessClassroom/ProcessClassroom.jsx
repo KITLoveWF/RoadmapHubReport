@@ -489,10 +489,10 @@ export default function ProcessClassroom({ classroomId }) {
       <div id="class-report" className="process-content">
         {/* Left Panel - Student List */}
         <div className="student-list-panel">
-          <div className="search-box">
+          <div className="search-box-process-classroom">
             <input
               type="text"
-              placeholder="🔍 Tìm kiếm học sinh..."
+              placeholder="Tìm kiếm học sinh..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="form-control"
