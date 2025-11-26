@@ -124,7 +124,7 @@ export default function Home() {
     <>
       {isLoggedIn ? (
         <div className="home-container">
-          <div className="profile-header">
+          <div className="profile-header-home">
             <div className="profile-info">
               <h2 className="profile-name">{user.userName}</h2>
             </div>
