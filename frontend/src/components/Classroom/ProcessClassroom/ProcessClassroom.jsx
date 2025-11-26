@@ -537,7 +537,7 @@ export default function ProcessClassroom({ classroomId }) {
               </div>
 
               {/* Stats */}
-              <div className="stats-grid">
+              <div className="stats-grid-student-details">
                 <div className="stat-card">
                   <div className="stat-icon">📊</div>
                   <div className="stat-content">

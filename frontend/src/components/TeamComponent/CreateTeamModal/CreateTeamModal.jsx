@@ -37,14 +37,14 @@ export default function CreateTeamModal({ onClose, onCreated }) {
   return (
     <div className="create-team-modal-overlay" role="dialog" aria-modal="true">
       <div className="create-team-modal">
-        <div className="modal-header">
+        <div className="modal-header-create-team">
           <h3>Create a new team</h3>
           <button className="icon-button" onClick={onClose} aria-label="Close modal">
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="modal-body">
+        <form onSubmit={handleSubmit} className="modal-body-create-team">
           <label htmlFor="team-name">Team name</label>
           <input
             id="team-name"

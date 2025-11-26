@@ -19,7 +19,7 @@
   margin: 0;
 }
 
-.stats-grid {
+.stats-grid-admin-dashboard {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
@@ -160,7 +160,7 @@
     font-size: 1.75rem;
   }
 
-  .stats-grid {
+  .stats-grid-admin-dashboard {
     grid-template-columns: 1fr;
     gap: 1rem;
   }

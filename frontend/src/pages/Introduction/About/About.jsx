@@ -87,7 +87,7 @@ function About() {
 
         {/* Stats Section */}
         <section className="stats-section">
-          <div className="stats-grid">
+          <div className="stats-grid-about">
             {stats.map((stat, index) => (
               <div key={index} className="stat-card">
                 <div className="stat-number">{stat.number}</div>

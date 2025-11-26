@@ -117,21 +117,21 @@
 	color: #475569;
 }
 
-.stats-grid {
+.stats-grid-team-page {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	gap: 16px;
 	margin: 32px 0;
 }
 
-.stats-grid article {
+.stats-grid-team-page article {
 	padding: 18px;
 	border-radius: 18px;
 	border: 1px solid rgba(15, 23, 42, 0.08);
 	background: rgba(255, 255, 255, 0.85);
 }
 
-.stats-grid .label {
+.stats-grid-team-page .label {
 	margin: 0;
 	letter-spacing: 0.05em;
 	font-size: 0.8rem;
@@ -139,7 +139,7 @@
 	color: #94a3b8;
 }
 
-.stats-grid .value {
+.stats-grid-team-page .value {
 	margin: 6px 0 0;
 	font-size: 2rem;
 	font-weight: 700;
@@ -508,7 +508,7 @@
 	box-shadow: 0 16px 48px rgba(15, 23, 42, 0.25);
 }
 
-.modal-header {
+.modal-header-create-team {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
@@ -516,12 +516,12 @@
 	border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
-.modal-header h3 {
+.modal-header-create-team h3 {
 	margin: 0;
 	font-size: 1.3rem;
 }
 
-.modal-header p {
+.modal-header-create-team p {
 	margin: 6px 0 0;
 	color: #64748b;
 }
@@ -534,7 +534,7 @@
 	cursor: pointer;
 }
 
-.modal-body {
+.modal-body-create-team {
 	padding: 16px 24px 20px;
 	overflow-y: auto;
 	display: flex;
@@ -555,15 +555,15 @@
 	margin-top: 4px;
 }
 
-.modal-body input,
-.modal-body textarea {
+.modal-body-create-team input,
+.modal-body-create-team textarea {
 	width: 100%;
 	border-radius: 12px;
 	border: 1px solid rgba(15, 23, 42, 0.12);
 	padding: 10px 14px;
 }
 
-.modal-body textarea {
+.modal-body-create-team textarea {
 	resize: vertical;
 }
 
@@ -642,7 +642,7 @@
 	box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
 }
 
-.modal-footer {
+.modal-footer-actions {
 	padding: 14px 24px 22px;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -724,7 +724,7 @@
 		justify-content: flex-start;
 	}
 
-	.modal-footer {
+	.modal-footer-actions {
 		grid-template-columns: 1fr;
 	}
 

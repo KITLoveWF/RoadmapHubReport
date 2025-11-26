@@ -496,7 +496,7 @@ export default function TeamPage() {
 							</p>
 						</header>
 
-						<div className="stats-grid">
+						<div className="stats-grid-team-page">
 							<article>
 								<p className="label">Total members</p>
 								<p className="value">{memberStats.total}</p>
@@ -689,7 +689,7 @@ export default function TeamPage() {
 								×
 							</button>
 						</header>
-						<div className="modal-body">
+						<div className="modal-body-create-team">
 							<section className="modal-section">
 								<label className="modal-label" htmlFor="account-search-input">
 									Search all accounts
@@ -778,7 +778,7 @@ export default function TeamPage() {
 								</div>
 							</section>
 						</div>
-						<footer className="modal-footer">
+						<footer className="modal-footer-actions">
 							<div className="selection-hint">
 								{selectedAccount ? (
 									<span>

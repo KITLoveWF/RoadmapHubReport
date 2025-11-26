@@ -30,14 +30,14 @@
   }
 }
 
-.modal-header {
+.modal-header-create-team {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
 }
 
-.modal-header h3 {
+.modal-header-create-team h3 {
   margin: 0;
   font-size: 1.3rem;
   color: #0f172a;
@@ -52,19 +52,19 @@
   color: #475569;
 }
 
-.modal-body {
+.modal-body-create-team {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.modal-body label {
+.modal-body-create-team label {
   font-weight: 600;
   font-size: 0.95rem;
   color: #0f172a;
 }
 
-.modal-body input {
+.modal-body-create-team input {
   padding: 12px;
   border-radius: 10px;
   border: 1px solid rgba(15, 23, 42, 0.15);
@@ -72,7 +72,7 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.modal-body input:focus {
+.modal-body-create-team input:focus {
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
