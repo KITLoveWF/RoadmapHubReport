@@ -42,7 +42,7 @@ export default function ForumStudentClass(props) {
   }
 
   return (
-    <div className="container mt-4">
+    <div style={{width: '100%', maxWidth: '850px'}}>
       {user && posts.map((post) => (
         <ItemPost key={post.postId} 
                   post={post.post} 

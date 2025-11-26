@@ -89,6 +89,7 @@ export default function ClassroomStudentSettings({ classroomId, classroomName,pr
   );
 
   return (
+    <div style={{width: '100%', maxWidth: '850px'}}>
     <div className="classroom-student-settings-container">
       <div className="settings-section">
         <h2>Cài đặt của bạn</h2>
@@ -151,6 +152,7 @@ export default function ClassroomStudentSettings({ classroomId, classroomName,pr
           onClose={() => setShowConfirmModal(false)}
         />
       )}
+    </div>
     </div>
   );
 }

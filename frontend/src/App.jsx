@@ -17,8 +17,13 @@ import ForgotPassword from "#pages/ForgotPassword/ForgotPassword/forgotPassword.
 import ResetPassword from "./pages/ForgotPassword/ResetPassword/ResetPassword";
 import RefreshToken from "#pages/Login/RefreshTokenPage/RefreshToken.jsx";
 import RoadmapEditPage from "#pages/Roadmap/RoadmapEditPage/RoadmapEditPage.jsx";
-import PrivacyPolicy from "#pages/TermsServiceAndPrivacyPolicy/PrivacyPolicy/PrivacyPolicy.jsx";
-import TermsService from "#pages/TermsServiceAndPrivacyPolicy/TermsService/TermsService.jsx";
+import PrivacyPolicy from "#pages/Introduction/PrivacyPolicy/PrivacyPolicy.jsx";
+import TermsService from "#pages/Introduction/TermsService/TermsService.jsx";
+import ContactUs from "#pages/Introduction/ContactUs/ContactUs.jsx";
+import About from "#/pages/Introduction/About/About.jsx";
+import FAQs from "#/pages/Introduction/FAQs/FAQs.jsx";
+import Guides from "#pages/Introduction/Guides/Guides.jsx";
+import Youtube from "#/pages/Introduction/Youtube/Youtube.jsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage/ProfilePage.jsx";
 import RoadmapView from "#pages/Roadmap/RoadmapView/RoadmapView.jsx";
 import Home from "#pages/Home/Home.jsx";
@@ -45,7 +50,13 @@ function App() {
         element: <HomeLayout />,
         children: [
           { index: true, element: <Home /> },
-          { path: "about", element: <h1>About Page</h1> },
+          { path: "about", element: <About /> },
+          { path: "privacy-policy", element: <PrivacyPolicy /> },
+          { path: "terms-of-service", element: <TermsService /> },
+          { path: "contact-us", element: <ContactUs /> },
+          { path: "faqs", element: <FAQs /> },
+          { path: "guides", element: <Guides /> },
+          { path: "youtube", element: <Youtube /> },
         ],
       },
       {
@@ -62,8 +73,6 @@ function App() {
           { path: "forgot-password", element: <ForgotPassword /> },
           { path: "reset-password/:token/:email", element: <ResetPassword /> },
           { path: "refresh-token", element: <RefreshToken /> },
-          { path: "privacy-policy", element: <PrivacyPolicy /> },
-          { path: "terms-of-service", element: <TermsService /> },
           { path: "profile", element: <ProfilePage /> },
           { path: "teams", element: <ManageTeamsPage /> },
           { path: "team/:teamId", element: <TeamPage /> },

@@ -279,7 +279,6 @@ export default function ProcessClassroom({ classroomId }) {
         ...Object.fromEntries(
           allTopics.map(topic => [`${topic.topicName}`, ''])
         ),
-        'Điểm TB chung (thang 10)': ''
       });
 
       students.forEach((student, idx) => {
@@ -308,7 +307,7 @@ export default function ProcessClassroom({ classroomId }) {
           return topicStats.averageScore;
         }).reduce((a, b) => a + b, 0) / allTopics.length;
         
-        row['Điểm TB chung (thang 10)'] = allTopicsAvg.toFixed(1);
+        row['Điểm TB'] = allTopicsAvg.toFixed(1);
 
         summaryData.push(row);
       });
@@ -509,7 +508,7 @@ export default function ProcessClassroom({ classroomId }) {
                 className={`student-item ${selectedStudent?.id === student.id ? 'active' : ''}`}
                 onClick={() => setSelectedStudent(student)}
               >
-                <img src={student.avatar} alt={student.name} className="student-avatar" />
+                <img src={student.avatar|| "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"} alt={student.name} className="student-avatar" />
                 <div className="student-info">
                   <h5>{student.name}</h5>
                   <p>{student.email}</p>
@@ -529,7 +528,7 @@ export default function ProcessClassroom({ classroomId }) {
               {/* Header */}
               <div className="report-header">
                 <div className="student-profile">
-                  <img src={selectedStudent.avatar} alt={selectedStudent.name} />
+                  <img src={selectedStudent.avatar || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"} alt={selectedStudent.name} />
                   <div>
                     <h2>{selectedStudent.name}</h2>
                     <p>{selectedStudent.email}</p>

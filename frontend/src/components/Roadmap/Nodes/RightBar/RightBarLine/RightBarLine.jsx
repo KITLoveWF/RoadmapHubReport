@@ -91,22 +91,6 @@ export default function RightBarLine({ selectedNode, onDeleteNode,onNodeChange }
                     Line Style
                 </h3>
 
-                <div className="line-type-buttons">
-                        <button 
-                            className={`line-type-btn ${selectedNode.data.style === 'solid' ? 'active' : ''}`}
-                            onClick={() => changeStyle('solid')}
-                        >
-                            <i className="bi bi-dash"></i>
-                            Solid
-                        </button>
-                        <button 
-                            className={`line-type-btn ${selectedNode.data.style === 'dashed' ? 'active' : ''}`}
-                            onClick={() => changeStyle('dashed')}
-                        >
-                            <i className="bi bi-dash-lg"></i>
-                            Dashed
-                        </button>
-                </div>
 
                     {/* Line Color */}
                     <div className="property-item">

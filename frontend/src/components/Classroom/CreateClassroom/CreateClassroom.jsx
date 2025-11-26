@@ -40,6 +40,7 @@ export default function CreateClassroom(props){
                         className="form-control" 
                         placeholder="Enter Name"
                         onChange={(e)=>setName(e.target.value)}
+                        required
                     />
                 </div>
                 {error && <AlertError content={error}/>}
@@ -50,6 +51,7 @@ export default function CreateClassroom(props){
                         placeholder="Enter Description"
                         maxLength={80}
                         onChange={(e)=>setDescription(e.target.value)}
+                        required
                     />
                 </div>
     

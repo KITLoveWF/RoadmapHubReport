@@ -24,7 +24,7 @@ export default function StudentClassroomView(){
         switch (activeNav) {
           case "Forum": return <ForumStudentClass classroomId={classroomId} key={classroomId} />;
           case "Roadmap": return <RoadmapStudentClassroom classroomId={classroomId}  key={classroomId}/>;
-          case "Settings": return <ClassroomStudentSettings classroomId={classroomId} key={classroomId} profile={profile} />;
+          case "Settings": return <ClassroomStudentSettings classroomId={classroomId} key={classroomId} profile={profile} classroomName={name} />;
           default: return null;
         }
       };
@@ -57,7 +57,9 @@ export default function StudentClassroomView(){
      <div className="profile-container">
             <SideBarClassroom activeNav={activeNav}navItems={navItems} handleNavClick = {setActiveNav} selectedClass = {selectedClass} setSelectedClass={setSelectedClass} classes={classes}/>
             <div className="main-content">
-                {renderContent()}
+                <div className="content-center-wrapper">
+                    {renderContent()}
+                </div>
             </div>
      </div>
 

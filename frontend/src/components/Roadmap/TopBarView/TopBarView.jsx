@@ -45,15 +45,16 @@ export default function TopBarView(props) {
                             <i className={bookmarkIcon}></i>
                         )}
                     </button>
-                    {canManage && roadmap?.id && (
-                    <div class="dropdown">
+                    {User.id === roadmap.accountId && (
+                    <div className="dropdown">
                         <button className="btn-schedule" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
+                            <i className="bi bi-three-dots-vertical"></i>
                             Action
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href={`/roadmap/edit/${roadmap.name}/${roadmap.id}`}>Edit</a></li>
-                            <li><a class="dropdown-item" href="/" onClick={deleteRoadmap}>Delete</a></li>
+                        <ul className="dropdown-menu">
+                            <li><a className="dropdown-item edit-item" href={`/roadmap/edit/${roadmap.name}/${roadmap.id}`}><i className="bi bi-pencil-fill me-3"></i>Edit</a></li>
+                            <li><hr className="dropdown-divider" /></li>
+                            <li><a className="dropdown-item delete-item" href="/" onClick={deleteRoadmap}> <i className="bi bi-trash-fill me-3"></i>Delete</a></li>
                         </ul>
                     </div>
                     )}

@@ -17,8 +17,8 @@ class RoadmapDAO {
       name,
       description,
       isPublic,
-      null,
-      null
+      0,
+      0
     );
     await db("Roadmap").insert(roadmap);
     return {
@@ -60,6 +60,7 @@ class RoadmapDAO {
       };
     }
 
+    await db("Classroom").where({ roadmapId: id }).update({ roadmapId: null });
     await db("Roadmap").where({ id: roadmap.id }).del();
     await RoadmapSchemaModel.findOneAndDelete({ roadmapId: id });
     await QuizSchemaModel.findOneAndDelete({ roadmapId: id , userCreateQuiz: roadmap.accountId});
@@ -162,6 +163,7 @@ class RoadmapDAO {
   async getRoadmapByUserId(accountId) {
     const rows = await db({ r: "Roadmap" })
       .leftJoin({ a: "Account" }, "r.accountId", "a.id")
+      .leftJoin({ p: "Profile" }, "a.id", "p.accountId")
       .leftJoin({ mr: "MarkRoadmap" }, function () {
         this.on("mr.roadmapId", "=", "r.id").andOn(
           "mr.accountId",
@@ -172,10 +174,9 @@ class RoadmapDAO {
       .where("a.id", accountId)
       .select(
         "r.*",
-        "a.username as author",
+        db.raw("COALESCE(p.fullName, a.username) as author"),
         db.raw("CASE WHEN mr.id IS NULL THEN 0 ELSE 1 END as isMarked")
       );
-    ////console.log("rows: ", rows);
     if (rows.length === 0) {
       return [];
     }

@@ -68,13 +68,16 @@ class ClassroomDAO{
     async getLearningClass(accountId){
         const rows = await db('Classroom')
                         .leftJoin('StudentClassroom','StudentClassroom.classroomId','Classroom.id')
-                        .select('*')
+                        .leftJoin('Profile','Profile.accountId','Classroom.teacherId')
+                        .select('Classroom.*','Profile.fullName as author')
                         .where({"StudentClassroom.studentId":accountId});
         return rows;
     }
     async getTeachingClass(accountId){
         const rows = await db('Classroom')
-                           .where('teacherId',accountId);
+                           .join('Profile','Profile.accountId','Classroom.teacherId')
+                           .where('teacherId',accountId)
+                           .select('Classroom.*','Profile.fullName as author');
         return rows;
     }
     async checkLearningClass(accountId,classroomId){
