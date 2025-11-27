@@ -170,8 +170,8 @@ export default function RoadmapStudentClassroom(props) {
         <>
           {/* Header */}
           <div className="student-roadmap-header">
-            <h2>🎓 Roadmaps Của Tôi</h2>
-            <p>Khám phá và học tập với các roadmap trong lớp học</p>
+            <h2>🎓 My Roadmaps</h2>
+            <p>Explore and learn with the roadmaps in your classroom</p>
           </div>
 
           {/* Info Banner */}
@@ -180,9 +180,9 @@ export default function RoadmapStudentClassroom(props) {
               <i className="bi bi-lightbulb-fill"></i>
             </div>
             <div className="student-info-content">
-              <h3 className="student-info-title">Hướng dẫn sử dụng</h3>
+              <h3 className="student-info-title">Usage Instructions</h3>
               <p className="student-info-text">
-                Nhấn "Xem Roadmap" để xem sơ đồ chi tiết hoặc "Xem Topics" để làm bài quiz và theo dõi tiến độ
+                Click "View Roadmap" to see the detailed map or "View Topics" to take quizzes and track progress
               </p>
             </div>
           </div>
@@ -201,7 +201,7 @@ export default function RoadmapStudentClassroom(props) {
                       <h3 className="student-roadmap-name">{r.data.roadmap.name}</h3>
                       <p className="student-roadmap-description">
                         <i className="bi bi-diagram-3-fill"></i>
-                        {r.data.roadmap.nodes?.filter(n => n.type === 'topic').length || 0} chủ đề học tập
+                        {r.data.roadmap.nodes?.filter(n => n.type === 'topic').length || 0} learning topics
                       </p>
                     </div>
 
@@ -212,13 +212,13 @@ export default function RoadmapStudentClassroom(props) {
                         onClick={() => ViewPageRoadmap(r.data.roadmap)}
                       >
                         <i className="bi bi-map"></i>
-                        Xem Roadmap
+                        View Roadmap
                       </button>
                       <button
                         className="student-action-btn view-topics-btn"
                         onClick={() => handleSelectRoadmap(r)}
                       >
-                        Xem Topics
+                        View Topics
                         <i className="bi bi-arrow-right"></i>
                       </button>
                     </div>
@@ -229,9 +229,9 @@ export default function RoadmapStudentClassroom(props) {
           ) : (
             <div className="student-empty-state">
               <div className="student-empty-icon">📚</div>
-              <h3 className="student-empty-title">Chưa Có Roadmap</h3>
+              <h3 className="student-empty-title">No Roadmaps Available</h3>
               <p className="student-empty-description">
-                Lớp học này chưa có roadmap nào. Hãy liên hệ giáo viên để được hướng dẫn!
+                This classroom has no roadmaps. Please contact your teacher for guidance!
               </p>
             </div>
           )}

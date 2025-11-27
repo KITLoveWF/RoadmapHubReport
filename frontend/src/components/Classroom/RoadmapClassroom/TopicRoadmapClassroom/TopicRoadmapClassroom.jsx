@@ -28,7 +28,7 @@ export default function TopicRoadmapClassroom(props) {
           <div className="topic-header-icon">📚</div>
           <h2 className="topic-header-title">{selectedRoadmap.data.roadmap.name}</h2>
           <p className="topic-header-subtitle">
-            {edit ? 'Quản lý và tạo quiz cho các chủ đề học tập' : 'Xem các quiz và bài kiểm tra'}
+            {edit ? 'Manage and create quizzes for learning topics' : 'View quizzes and tests'}
           </p>
           
           {/* Stats */}
@@ -39,7 +39,7 @@ export default function TopicRoadmapClassroom(props) {
             </div>
             <div className="topic-stat-item">
               <i className="bi bi-person-badge-fill"></i>
-              <span>{edit ? 'Chế độ chỉnh sửa' : 'Chế độ xem'}</span>
+              <span>{edit ? 'Edit Mode' : 'View Mode'}</span>
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function TopicRoadmapClassroom(props) {
                     <h3 className="topic-title">{t.data.label}</h3>
                     <p className="topic-description">
                       <i className="bi bi-lightbulb-fill"></i>
-                      {edit ? 'Nhấn để tạo hoặc chỉnh sửa quiz' : 'Nhấn để xem quiz và làm bài'}
+                      {edit ? 'Click to create or edit quizzes' : 'Click to view quizzes and take tests'}
                     </p>
                   </div>
 
@@ -72,14 +72,14 @@ export default function TopicRoadmapClassroom(props) {
                         onClick={() => handleSelectTopic(t)}
                       >
                         <i className="bi bi-plus-circle-fill"></i>
-                        Tạo Quiz
+                        Create Quiz
                       </button>
                     ) : (
                       <button
                         className="topic-action-btn view-quiz-btn"
                         onClick={() => handleSelectTopic(t)}
                       >
-                        Xem Quiz
+                        View Quiz
                         <i className="bi bi-arrow-right"></i>
                       </button>
                     )}
@@ -103,7 +103,7 @@ export default function TopicRoadmapClassroom(props) {
       <div className="back-button-container">
         <button className="back-btn" onClick={() => setStep(1)}>
           <i className="bi bi-arrow-left"></i>
-          Quay Lại Roadmaps
+          Back to Roadmaps
         </button>
       </div>
     </div>

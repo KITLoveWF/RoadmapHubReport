@@ -57,6 +57,8 @@ function App() {
           { path: "faqs", element: <FAQs /> },
           { path: "guides", element: <Guides /> },
           { path: "youtube", element: <Youtube /> },
+          { path: "verify/:email", element: <VerifyEmail /> },
+          { path: "login/verify", element: <LoginVerify /> },
         ],
       },
       {
@@ -65,10 +67,8 @@ function App() {
         children: [
           { path: "search/:query", element: <RoadmapSearchPage /> },
           { path: "signup", element: <SignUp /> },
-          { path: "verify/:email", element: <VerifyEmail /> },
           { path: "auth/verify-success", element: <EmailVerifySuccess /> },
           { path: "login", element: <Login /> },
-          { path: "login/verify", element: <LoginVerify /> },
           { path: "auth/google/callback", element: <GoogleOAuth2Callback /> },
           { path: "forgot-password", element: <ForgotPassword /> },
           { path: "reset-password/:token/:email", element: <ResetPassword /> },

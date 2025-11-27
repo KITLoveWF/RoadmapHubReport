@@ -97,12 +97,12 @@ export default function QuizRoadmapClassroom(props) {
           <div className="quiz-header-content" style={{ marginBottom: '32px' }}>
             <div className="quiz-header-icon">{edit ? '✏️' : '📝'}</div>
             <h2 className="quiz-header-title">
-              {edit ? 'Quản Lý Quiz' : 'Làm Bài Quiz'}
+              {edit ? 'Manage Quiz' : 'Take Quiz'}
             </h2>
             <p className="quiz-header-subtitle">
               {edit 
-                ? 'Tạo và chỉnh sửa các bài quiz cho học viên' 
-                : 'Hoàn thành các bài quiz để kiểm tra kiến thức'}
+                ? 'Create and edit quizzes for learners' 
+                : 'Complete quizzes to test your knowledge on the topic'}
             </p>
             <div className="quiz-topic-name">
               📚 {topic.topicName}
@@ -128,8 +128,8 @@ export default function QuizRoadmapClassroom(props) {
                   <div className="quiz-info-item">
                     <div className="quiz-info-icon">⏱️</div>
                     <div>
-                      <span className="quiz-info-label">Thời gian:</span>
-                      <span className="quiz-info-value">{quiz.duration} phút</span>
+                      <span className="quiz-info-label">Duration: </span>
+                      <span className="quiz-info-value">{quiz.duration} minutes</span>
                     </div>
                   </div>
 
@@ -137,8 +137,8 @@ export default function QuizRoadmapClassroom(props) {
                   <div className="quiz-info-item">
                     <div className="quiz-info-icon">📅</div>
                     <div className="quiz-date-range">
-                      <div><span className="quiz-info-label">Bắt đầu:</span> {new Date(quiz.startTime).toLocaleString('vi-VN')}</div>
-                      <div><span className="quiz-info-label">Kết thúc:</span> {new Date(quiz.endTime).toLocaleString('vi-VN')}</div>
+                      <div><span className="quiz-info-label">Start:</span> {new Date(quiz.startTime).toLocaleString('en-US')}</div>
+                      <div><span className="quiz-info-label">End:</span> {new Date(quiz.endTime).toLocaleString('en-US')}</div>
                     </div>
                   </div>
 
@@ -146,8 +146,8 @@ export default function QuizRoadmapClassroom(props) {
                   <div className="quiz-info-item">
                     <div className="quiz-info-icon">❓</div>
                     <div>
-                      <span className="quiz-info-label">Câu hỏi:</span>
-                      <span className="quiz-info-value">{quiz.questions?.length || 0} câu</span>
+                      <span className="quiz-info-label">Questions: </span>
+                      <span className="quiz-info-value">{quiz.questions?.length || 0} questions</span>
                     </div>
                   </div>
 
@@ -155,7 +155,7 @@ export default function QuizRoadmapClassroom(props) {
                   {!edit && (
                     <div className="quiz-score">
                       <i className="bi bi-trophy-fill"></i>
-                      <span className="quiz-score-text">Điểm của bạn:</span>
+                      <span className="quiz-score-text">Your Score:</span>
                       <span className="quiz-score-value">{quiz.point || 0}/10</span>
                     </div>
                   )}

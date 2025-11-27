@@ -113,19 +113,33 @@ export default function DoQuizDetail(props) {
         updateQuiz(selectedTopic,selectedQuizIndex, updatedQuiz);
     }
     if (!canTakeQuiz) {
+        const getIcon = () => {
+            if (message.includes('will be available')) return '⏰';
+            if (message.includes('ended')) return '🔒';
+            if (message.includes('submitted')) return '✅';
+            return '⚠️';
+        };
+
         return (
             <div className="quiz-unavailable">
-                <h2>{title}</h2>
-                <div className="alert alert-info">
-                    <i className="bi bi-clock me-2"></i>
-                    {message}
+                <div className="quiz-unavailable-header">
+                    <h2>{title}</h2>
                 </div>
-                <button 
-                    className="btn btn-secondary" 
-                    onClick={() => setSelectedQuizIndex(null)}
-                >
-                    ← Back to Quizzes
-                </button>
+                <div className="quiz-unavailable-body">
+                    <div className="quiz-unavailable-icon">
+                        {getIcon()}
+                    </div>
+                    <div className="alert alert-info">
+                        <i className="bi bi-clock me-2"></i>
+                        {message}
+                    </div>
+                    <button 
+                        className="btn btn-secondary" 
+                        onClick={() => setSelectedQuizIndex(null)}
+                    >
+                        ← Back to Quiz List
+                    </button>
+                </div>
             </div>
         );
     } 

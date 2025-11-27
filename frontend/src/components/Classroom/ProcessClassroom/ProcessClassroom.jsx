@@ -457,14 +457,14 @@ export default function ProcessClassroom({ classroomId }) {
   return (
     <div className="process-classroom-container">
       <div className="process-header">
-        <h1 style={{ color: 'white' }}>📊 Quản lý điểm sinh viên</h1>
-        <p className="text-muted">Xem và quản lý điểm của học sinh trong lớp</p>
+        <h1 style={{ color: 'white' }}>📊 Student Score Management</h1>
+        <p className="text-muted">View and manage student scores in the classroom</p>
       </div>
 
       {/* ✅ Export buttons - Xuất tất cả */}
       <div className="export-section">
         <div className="export-info">
-          <p>📥 Xuất điểm của tất cả <strong>{students.length}</strong> học sinh</p>
+          <p>📥 Export scores of all <strong>{students.length}</strong> students</p>
         </div>
         <div className="export-buttons-main">
           <button
@@ -475,11 +475,11 @@ export default function ProcessClassroom({ classroomId }) {
             {exportLoading ? (
               <>
                 <span className="spinner-border spinner-border-sm me-2"></span>
-                Đang xuất Excel...
+                Exporting Excel...
               </>
             ) : (
               <>
-                📊 Xuất Excel
+                📊 Export Excel
               </>
             )}
           </button>
@@ -492,7 +492,7 @@ export default function ProcessClassroom({ classroomId }) {
           <div className="search-box-process-classroom">
             <input
               type="text"
-              placeholder="Tìm kiếm học sinh..."
+              placeholder="Search students..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="form-control"
@@ -542,7 +542,7 @@ export default function ProcessClassroom({ classroomId }) {
                   <div className="stat-icon">📊</div>
                   <div className="stat-content">
                     <div className="stat-value">{Math.round(selectedStudent.stats.averageScore * 10) / 10}</div>
-                    <div className="stat-label">Điểm TB</div>
+                    <div className="stat-label">Average Score</div>
                   </div>
                 </div>
 
@@ -550,7 +550,7 @@ export default function ProcessClassroom({ classroomId }) {
                   <div className="stat-icon">🏆</div>
                   <div className="stat-content">
                     <div className="stat-value">{selectedStudent.stats.highestScore}</div>
-                    <div className="stat-label">Cao nhất</div>
+                    <div className="stat-label">Highest Score</div>
                   </div>
                 </div>
 
@@ -558,7 +558,7 @@ export default function ProcessClassroom({ classroomId }) {
                   <div className="stat-icon">📉</div>
                   <div className="stat-content">
                     <div className="stat-value">{selectedStudent.stats.lowestScore}</div>
-                    <div className="stat-label">Thấp nhất</div>
+                    <div className="stat-label">Lowest Score</div>
                   </div>
                 </div>
               </div>
@@ -566,7 +566,7 @@ export default function ProcessClassroom({ classroomId }) {
               {/* Charts */}
               <div className="charts-section">
                 <div className="chart-container">
-                  <h3>📈 So sánh Điểm cá nhân vs Trung bình lớp </h3>
+                  <h3>📈 Comparison of Individual Scores vs Class Average </h3>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={getChartData()}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -574,14 +574,14 @@ export default function ProcessClassroom({ classroomId }) {
                       <YAxis domain={[0, 10]} />
                       <Tooltip formatter={(value) => `${value}`} />
                       <Legend />
-                      <Bar dataKey="score" fill="#4CAF50" name="Điểm cá nhân" />
-                      <Bar dataKey="avgScore" fill="#2196F3" name="Trung bình lớp" />
+                      <Bar dataKey="score" fill="#4CAF50" name="Individual Score" />
+                      <Bar dataKey="avgScore" fill="#2196F3" name="Class Average" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
 
                 <div className="chart-container">
-                  <h3>📊 Xu hướng Điểm cá nhân vs Trung bình lớp </h3>
+                  <h3>📊 Trend of Individual Scores vs Class Average </h3>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={getChartData()}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -596,7 +596,7 @@ export default function ProcessClassroom({ classroomId }) {
                         strokeWidth={3}
                         dot={{ fill: '#4CAF50', r: 5 }}
                         activeDot={{ r: 7 }}
-                        name="Điểm cá nhân"
+                        name="Individual Score"
                       />
                       <Line 
                         type="monotone" 
@@ -605,7 +605,7 @@ export default function ProcessClassroom({ classroomId }) {
                         strokeWidth={2}
                         strokeDasharray="5 5"
                         dot={{ fill: '#2196F3', r: 4 }}
-                        name="Trung bình lớp"
+                        name="Class Average"
                       />
                     </LineChart>
                   </ResponsiveContainer>
