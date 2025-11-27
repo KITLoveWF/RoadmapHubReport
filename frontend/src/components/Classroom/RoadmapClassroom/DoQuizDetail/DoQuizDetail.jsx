@@ -143,7 +143,7 @@ export default function DoQuizDetail(props) {
             <div className="quiz-content">
                 <div className="question-box">
                     <h3>Question:</h3>
-                    <p>{currentIndex}</p>
+                    <p>{questions[currentIndex].question}</p>
                 </div>
 
                 <div className="answers-container">
