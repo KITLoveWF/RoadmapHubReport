@@ -10,17 +10,25 @@ export default function LoginVerify() {
   const location = useLocation();
   const navigate = useNavigate();
   const { hashedPin, encodeToken, encodeRefreshToken } = location.state;
-  //
+  
   const [pin, setPin] = useState(new Array(6).fill(""));
   const [error, setError] = useState("");
 
-  useEffect(() => {}, [error]);
+  useEffect(() => {
+    // Clear error after 5 seconds
+    if (error) {
+      const timer = setTimeout(() => setError(""), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleVerify = async () => {
     try {
+      setError(""); // Clear previous errors
+      
       const res = await api.post(
         "/auth/login/verify",
-        { hashedPin, encodeToken, encodeRefreshToken, pin: pin.join("") }, // body
+        { hashedPin, encodeToken, encodeRefreshToken, pin: pin.join("") },
         {
           headers: {
             "Content-Type": "application/json",
@@ -28,7 +36,6 @@ export default function LoginVerify() {
           withCredentials: true,
         }
       );
-      //console.log(res.data);
       if (res.data?.status === true) {
         // Lưu tokens vào localStorage
         if (res.data.accessToken) {
@@ -39,18 +46,26 @@ export default function LoginVerify() {
         }
         navigate("/");
       } else {
-        setError("Xác thực không thành công");
+        setError("Mã PIN không chính xác. Vui lòng thử lại.");
+        setPin(new Array(6).fill(""));
       }
     } catch (err) {
       console.error("Verify error:", err.response?.data || err.message);
-      setError("Xác thực không thành công");
+      setError("Xác thực không thành công. Vui lòng kiểm tra lại mã PIN.");
+      setPin(new Array(6).fill(""));
     }
   };
 
   return (
-    <div>
-      <EnterPin pin={pin} setPin={setPin} onClickFunction={handleVerify} />
-      {error && <AlertError content={error} />}
+    <div className="login-verify-page">
+      <div className="login-verify-content">
+        <EnterPin pin={pin} setPin={setPin} onClickFunction={handleVerify} />
+        {error && (
+          <div className="alert-error">
+            {error}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
