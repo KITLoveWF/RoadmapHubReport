@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import { useParams, useNavigate} from 'react-router-dom';
 import RoadmapCardInHome from '#components/RoadmapView/RoadmapCardInHome/RoadmapCardInHome.jsx';
 import './RoadmapSearchPage.css';
@@ -13,6 +13,9 @@ export default function RoadmapSearchPage() {
   const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate(); 
   const pageSize = 16;
+  const isLoadingRef = useRef(false);
+  const hasMoreRef = useRef(true);
+  const nextPageRef = useRef(1);
 
   const onClickFilter = (filter) => {
     setSelectedFilter(filter);
@@ -22,8 +25,20 @@ export default function RoadmapSearchPage() {
     navigate(`/roadmap/view/${roadmap.id}`, { state: roadmap });
   };
 
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
+
+  useEffect(() => {
+    hasMoreRef.current = hasMore;
+  }, [hasMore]);
+
+  useEffect(() => {
+    nextPageRef.current = index;
+  }, [index]);
+
   const fetchMoreRoadmaps = useCallback(async (page) => {
-    if (isLoading || (!hasMore && page !== 1)) {
+    if (isLoadingRef.current || (!hasMoreRef.current && page !== 1)) {
       return;
     }
     setIsLoading(true);
@@ -38,10 +53,17 @@ export default function RoadmapSearchPage() {
           isUserCard: false,
         }));
         setRoadmapsList((prev) => (page === 1 ? normalized : [...prev, ...normalized]));
+        const hasNext = normalized.length === pageSize;
+        setHasMore(hasNext);
+        nextPageRef.current = page + 1;
         setIndex(page + 1);
-        setHasMore(normalized.length === pageSize);
-      } else if (page === 1) {
-        setRoadmapsList([]);
+        if (!hasNext && normalized.length === 0 && page === 1) {
+          setRoadmapsList([]);
+        }
+      } else {
+        if (page === 1) {
+          setRoadmapsList([]);
+        }
         setHasMore(false);
       }
     } catch (error) {
@@ -49,28 +71,29 @@ export default function RoadmapSearchPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [query, selectedFilter, hasMore, isLoading, pageSize]);
+  }, [query, selectedFilter, pageSize]);
 
   useEffect(() => {
+    setRoadmapsList([]);
     setIndex(1);
+    nextPageRef.current = 1;
     setHasMore(true);
     fetchMoreRoadmaps(1);
   }, [query, selectedFilter, fetchMoreRoadmaps]);
   //xử lý scroll để load thêm roadmap
   useEffect(() => {
-  const handleWindowScroll = () => {
+    const handleWindowScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const windowHeight = window.innerHeight;
       const fullHeight = document.documentElement.scrollHeight;
-      
-      if (scrollTop + windowHeight >= fullHeight - 1 && !isLoading && hasMore) {
+      if (scrollTop + windowHeight >= fullHeight - 1 && !isLoadingRef.current && hasMoreRef.current) {
         console.log("Chạm đáy trang!");
-        fetchMoreRoadmaps(index);
+        fetchMoreRoadmaps(nextPageRef.current);
       }
     };
     window.addEventListener('scroll', handleWindowScroll);
     return () => window.removeEventListener('scroll', handleWindowScroll);
-  }, [index, fetchMoreRoadmaps, hasMore, isLoading]);
+  }, [fetchMoreRoadmaps]);
 
   const handleBookmarkToggle = async (id, nextState) => {
     try {
