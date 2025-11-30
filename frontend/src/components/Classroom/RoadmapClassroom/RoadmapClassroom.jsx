@@ -154,15 +154,15 @@ export default function RoadmapClassroom(props) {
         <>
           {/* Header */}
           <div className="roadmap-header-classroom">
-            <h2>📚 Quản Lý Roadmaps</h2>
-            <p>Thêm và quản lý các roadmap cho lớp học của bạn</p>
+            <h2>📚 Manage Roadmaps</h2>
+            <p>Add and manage roadmaps for your classroom</p>
           </div>
 
           {/* Add Roadmap Section */}
           <div className="add-roadmap-section">
             <div className="add-roadmap-title">
               <i className="bi bi-plus-circle-fill"></i>
-              Thêm Roadmap Mới
+              Add New Roadmap
             </div>
             <div className="roadmap-select-group">
               <div className="roadmap-select-wrapper">
@@ -174,7 +174,7 @@ export default function RoadmapClassroom(props) {
                     setSelectedRoadmap(roadmap);
                   }}
                 >
-                  <option value="">Chọn roadmap từ danh sách của bạn...</option>
+                  <option value="">Select a roadmap from your list...</option>
                   {myRoadmaps?.map((r) => (
                     <option key={r.id} value={r.id}>
                       {r.name}
@@ -189,7 +189,7 @@ export default function RoadmapClassroom(props) {
                 disabled={!selectedRoadmap}
               >
                 <i className="bi bi-plus-lg"></i>
-                Thêm Vào Lớp
+                Add to Class
               </button>
             </div>
           </div>
@@ -199,7 +199,7 @@ export default function RoadmapClassroom(props) {
             <div className="roadmap-list-header">
               <div className="roadmap-list-title">
                 <i className="bi bi-map-fill"></i>
-                Roadmaps Trong Lớp
+                Roadmaps In Class
               </div>
               {roadmaps[0]?.data.roadmap !== null && roadmaps.length > 0 && (
                 <span className="roadmap-count-badge">
@@ -222,7 +222,7 @@ export default function RoadmapClassroom(props) {
                         </span>
                         <span className="roadmap-meta-item">
                           <i className="bi bi-person-fill"></i>
-                          Tạo bởi {r.data.roadmap.accountId === user.accountId ? 'bạn' : 'giáo viên'}
+                          Created by {r.data.roadmap.accountId === user.accountId ? 'you' : 'teacher'}
                         </span>
                       </div>
                     </div>
@@ -230,7 +230,7 @@ export default function RoadmapClassroom(props) {
                       className="view-topics-btn"
                       onClick={() => handleSelectRoadmap(r)}
                     >
-                      Xem Topics
+                      View Topics
                       <i className="bi bi-arrow-right"></i>
                     </button>
                   </div>
@@ -239,9 +239,9 @@ export default function RoadmapClassroom(props) {
             ) : (
               <div className="empty-roadmap-state">
                 <div className="empty-icon">📭</div>
-                <h3 className="empty-title">Chưa Có Roadmap Nào</h3>
+                <h3 className="empty-title">No Roadmaps Available</h3>
                 <p className="empty-description">
-                  Lớp học này chưa có roadmap. Hãy thêm roadmap đầu tiên để bắt đầu!
+                  This classroom has no roadmaps. Add the first roadmap to get started!
                 </p>
               </div>
             )}

@@ -1,6 +1,7 @@
 import express from "express";
 import RoadmapController from "../controllers/Roadmap.controller.js";
 import requireAuth from "../middlewares/RequireAuth.js";
+import authenticate from "../middlewares/AuthMiddleware.js";
 const router = express.Router();
 
 // Protected routes (cần authentication)
@@ -9,7 +10,11 @@ router.post("/edit/:name", requireAuth, RoadmapController.editRoadmap);
 router.post("/delete", requireAuth, RoadmapController.deleteRoadmap);
 router.post("/edit-nodes", requireAuth, RoadmapController.editNodeRoadmap);
 router.get("/edit/:name", requireAuth, RoadmapController.getRoadmapByName);
-router.get("/search/:search/:typeSearch/:index", RoadmapController.searchRoadmap);
+router.get(
+  "/search/:search/:typeSearch/:index",
+  authenticate,
+  RoadmapController.searchRoadmap
+);
 router.post("/mark/:roadmapId", requireAuth, RoadmapController.markRoadmap);
 router.get("/mark", requireAuth, RoadmapController.getMarkRoadmaps);
 router.get(

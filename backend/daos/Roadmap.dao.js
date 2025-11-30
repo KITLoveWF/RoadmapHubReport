@@ -9,11 +9,11 @@ import QuizSchemaModel from "../models/QuizSchema.model.js";
 import QuizResultSchemaModel from "../models/QuizResultSchema.model.js";
 class RoadmapDAO {
   //====================my sql
-  async createRoadmap(name, description, accountId, isPublic) {
+  async createRoadmap(name, description, accountId, isPublic, teamId = null) {
     const roadmap = new Roadmap(
       geneUUID(),
       accountId,
-      null,
+      teamId,
       name,
       description,
       isPublic,
@@ -29,7 +29,7 @@ class RoadmapDAO {
   }
   async editRoadmap(name, description, accountId, roadmapId,isPublic) {
     await db("Roadmap")
-      .where({ accountId: accountId, id: roadmapId })
+      .where({ accountId: accountId, id: roadmapId, teamId: null })
       .update({ name: name, description: description, isPublic: isPublic });
     return {
       success: true,
@@ -43,12 +43,28 @@ class RoadmapDAO {
       .first();
     return roadmap;
   }
-  async deleteRoadmap(id, accountId) {
-    await db('Classroom').where({ roadmapId: id }).update({ roadmapId: null });
-    await db("Roadmap").where({ id }).del();
+  async deleteRoadmap(id, accountId = null, teamId = null) {
+    const query = db("Roadmap").where({ id });
+    if (accountId) {
+      query.andWhere({ accountId });
+    }
+    if (teamId) {
+      query.andWhere({ teamId });
+    }
+
+    const roadmap = await query.first();
+    if (!roadmap) {
+      return {
+        success: false,
+        message: "Roadmap not found or access denied",
+      };
+    }
+
+    await db("Classroom").where({ roadmapId: id }).update({ roadmapId: null });
+    await db("Roadmap").where({ id: roadmap.id }).del();
     await RoadmapSchemaModel.findOneAndDelete({ roadmapId: id });
-    await QuizSchemaModel.findOneAndDelete({ roadmapId: id , userCreateQuiz: accountId});
-    await QuizResultSchemaModel.findOneAndDelete({ roadmapId: id, userCreateQuiz: accountId });
+    await QuizSchemaModel.findOneAndDelete({ roadmapId: id , userCreateQuiz: roadmap.accountId});
+    await QuizResultSchemaModel.findOneAndDelete({ roadmapId: id, userCreateQuiz: roadmap.accountId });
     return {
       success: true,
       message: "Delete roadmap successfully",
@@ -93,73 +109,150 @@ class RoadmapDAO {
       }
     };
   }
-  async searchRoadmap(search, typeSearch, index) {
+  async searchRoadmap(search, typeSearch, index, accountId = null) {
     const pageSize = 16;
     const offset = (index - 1) * pageSize;
-    const searchTerm = search.trim().split(/\s+/).map(word => `${word}*`).join(' ');
-    let results = [];
-    if(typeSearch==="popular"){
-      results = await db("Roadmap")
-        .whereRaw(
-            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
-            [searchTerm]
-        )
-        .select('*')
-        .limit(pageSize)
-        .offset(offset);
+    const searchTerm = search
+      .trim()
+      .split(/\s+/)
+      .map((word) => `${word}*`)
+      .join(" ");
+
+    const baseQuery = db({ r: "Roadmap" })
+      .leftJoin({ a: "Account" }, "r.accountId", "a.id")
+      .whereRaw(
+        "MATCH(r.name, r.description) AGAINST(? IN BOOLEAN MODE)",
+        [searchTerm]
+      )
+      .andWhere("r.isPublic", 1)
+      .select("r.*", "a.username as author");
+
+    if (accountId) {
+      baseQuery.leftJoin({ mr: "MarkRoadmap" }, function () {
+        this.on("mr.roadmapId", "=", "r.id").andOn(
+          "mr.accountId",
+          "=",
+          db.raw("?", [accountId])
+        );
+      });
+      baseQuery.select(
+        db.raw("CASE WHEN mr.id IS NULL THEN 0 ELSE 1 END as isMarked")
+      );
+    } else {
+      baseQuery.select(db.raw("0 as isMarked"));
     }
-    else if(typeSearch==="newest"){
-      results = await db("Roadmap")
-        .whereRaw(
-            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
-            [searchTerm]
-        )
-        .select('*')
-        .limit(pageSize)
-        .offset(offset)
-        .orderBy('createdAt', 'desc');
+
+    if (typeSearch === "newest") {
+      baseQuery.orderBy("r.createdAt", "desc");
+    } else if (typeSearch === "oldest") {
+      baseQuery.orderBy("r.createdAt", "asc");
     }
-    else if(typeSearch==="oldest"){
-      results = await db("Roadmap")
-        .whereRaw(
-            'MATCH(name, description) AGAINST(? IN BOOLEAN MODE)',
-            [searchTerm]
-        )
-        .select('*')
-        .limit(pageSize)
-        .offset(offset)
-        .orderBy('createdAt', 'asc');
-    }
-    return results;
-}
+
+    const results = await baseQuery.limit(pageSize).offset(offset);
+
+    return results.map((row) => ({
+      ...Roadmap.fromRow(row),
+      author: row.author,
+      isMarked: Boolean(row.isMarked),
+    }));
+  }
   // async editNodeRoadmap(accountId,name,nodes,edges,id) {
   //     const roadmap = RoadmapSchemaModel({accountId,name, roadmapId: id,nodes,edges,id});
   //     await roadmap.save();
   // }
   async getRoadmapByUserId(accountId) {
-    const rows = await db("Roadmap")
-      .join("Account", "Roadmap.accountId", "Account.id")
-      .join("Profile", "Account.id", "Profile.accountId")
-      .where("Account.id", accountId)
-      .select("Roadmap.*", "Profile.fullName as author");
-    ////console.log("rows: ", rows);
+    const rows = await db({ r: "Roadmap" })
+      .leftJoin({ a: "Account" }, "r.accountId", "a.id")
+      .leftJoin({ p: "Profile" }, "a.id", "p.accountId")
+      .leftJoin({ mr: "MarkRoadmap" }, function () {
+        this.on("mr.roadmapId", "=", "r.id").andOn(
+          "mr.accountId",
+          "=",
+          db.raw("?", [accountId])
+        );
+      })
+      .where("a.id", accountId)
+      .select(
+        "r.*",
+        db.raw("COALESCE(p.fullName, a.username) as author"),
+        db.raw("CASE WHEN mr.id IS NULL THEN 0 ELSE 1 END as isMarked")
+      );
     if (rows.length === 0) {
-      return null;
-    } else {
-      return rows;
+      return [];
     }
+    return rows.map((row) => {
+      const roadmap = Roadmap.fromRow(row);
+      return {
+        ...roadmap,
+        author: row.author,
+        isMarked: Boolean(row.isMarked),
+      };
+    });
   }
   async getRoadmapByTeamId(teamId) {
-    await db("Roadmap")
-      .join("Team", "Roadmap.teamId", "Team.id")
-      .where("Team.id", teamId)
+    const rows = await db("Roadmap")
+      .where({ teamId })
       .select("Roadmap.*");
+    return rows;
+  }
+  async getTeamRoadmaps(teamId) {
+    return await db("Roadmap")
+      .where({ teamId })
+      .orderBy("createdAt", "desc");
+  }
+  async getRoadmapById(roadmapId) {
+    return await db("Roadmap")
+      .where({ id: roadmapId })
+      .first();
+  }
+  async updateTeamRoadmap(roadmapId, teamId, payload) {
+    const nextPayload = {};
+    if (payload.name !== undefined) nextPayload.name = payload.name;
+    if (payload.description !== undefined) nextPayload.description = payload.description;
+    if (payload.isPublic !== undefined) nextPayload.isPublic = payload.isPublic;
+
+    if (Object.keys(nextPayload).length === 0) {
+      return { success: true, message: "Nothing to update" };
+    }
+
+    const updated = await db("Roadmap")
+      .where({ id: roadmapId, teamId })
+      .update(nextPayload);
+
+    if (!updated) {
+      return { success: false, message: "Roadmap không tồn tại trong team" };
+    }
+
+    return { success: true, message: "Cập nhật roadmap thành công" };
   }
   async getRoadmapByName(accountId, name) {
     const roadmap = await db("Roadmap")
       .where({ accountId: accountId, name: name })
       .first();
     return roadmap;
+  }
+  async checkTeamRoadmap(name, teamId, type) {
+    const countResult = await db("Roadmap")
+      .where({ name, teamId })
+      .count("* as count")
+      .first();
+
+    const count = Number(countResult.count);
+    const isCreateFlow = type === "create";
+    const threshold = isCreateFlow ? 0 : 1;
+
+    if (count > threshold) {
+      return {
+        success: false,
+        message: "Name of roadmap already taken in this team",
+        count,
+      };
+    }
+    return {
+      success: true,
+      message: "Roadmap name is available",
+      count,
+    };
   }
   async markRoadmap(accountId, roadmapId) {
     try {
@@ -215,23 +308,21 @@ class RoadmapDAO {
 
   //====================mongoDB
   async editNodeRoadmap(accountId, name, roadmapId, nodes, edges) {
-    ////console.log("lll",accountId,name,nodes,edges);
-    //await connectDB();
     const roadmap = RoadmapSchemaModel({
       accountId,
       name,
       roadmapId,
       nodes,
       edges,
+      ownerType: "account",
     });
     await roadmap.save();
   }
   async updateRoadmap(accountId, name, nodes, edges) {
-    //await connectDB();
     const roadmap = await RoadmapSchemaModel.findOneAndUpdate(
       { accountId, name },
-      { $set: { nodes, edges } },
-      { new: true } // trả về document sau khi update
+      { $set: { nodes, edges, ownerType: "account" } },
+      { new: true }
     );
     if (!roadmap) {
       throw new Error("Roadmap không tồn tại");
@@ -250,19 +341,66 @@ class RoadmapDAO {
     ////console.log("roadmap exist:", !!roadmap);
     return !!roadmap; // trả về true nếu tồn tại, false nếu không
   }
-  async viewRoadmap(roadmapId) {
-    //await connectDB();
-    console.log("Check road map db mongo", roadmapId);
-    const roadmap = await RoadmapSchemaModel.findOne(
+  async upsertTeamRoadmapNodes(teamId, roadmapId, name, nodes, edges) {
+    const roadmap = await RoadmapSchemaModel.findOneAndUpdate(
       { roadmapId },
-      { nodes: 1, edges: 1, _id: 0 }
+      {
+        $set: {
+          nodes,
+          edges,
+          teamId,
+          name,
+          ownerType: "team",
+        },
+        $setOnInsert: {
+          accountId: null,
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
     );
+    return roadmap;
+  }
+  async viewRoadmap(roadmapId) {
+    const [roadmapDoc, roadmapMeta] = await Promise.all([
+      RoadmapSchemaModel.findOne(
+        { roadmapId },
+        { nodes: 1, edges: 1, name: 1, teamId: 1, accountId: 1, ownerType: 1, _id: 0 }
+      ),
+      db("Roadmap").where({ id: roadmapId }).first(),
+    ]);
 
-    console.log("roadmap: ", roadmap);
-    if (!roadmap) {
+    if (!roadmapDoc && !roadmapMeta) {
       return { nodes: [], edges: [] };
     }
-    return roadmap;
+
+    const normalizeOwnerType = () => {
+      if (roadmapDoc?.ownerType) {
+        return roadmapDoc.ownerType;
+      }
+      if (roadmapMeta?.teamId) {
+        return "team";
+      }
+      if (roadmapMeta) {
+        return "account";
+      }
+      return undefined;
+    };
+
+    return {
+      id: roadmapMeta?.id ?? roadmapDoc?.roadmapId ?? roadmapId,
+      accountId: roadmapDoc?.accountId ?? roadmapMeta?.accountId ?? null,
+      teamId: roadmapDoc?.teamId ?? roadmapMeta?.teamId ?? null,
+      ownerType: normalizeOwnerType(),
+      name: roadmapDoc?.name ?? roadmapMeta?.name ?? "Roadmap",
+      description: roadmapMeta?.description ?? null,
+      isPublic: roadmapMeta?.isPublic ?? null,
+      learning: roadmapMeta?.learning ?? null,
+      teaching: roadmapMeta?.teaching ?? null,
+      createdAt: roadmapMeta?.createdAt ?? null,
+      updatedAt: roadmapMeta?.updatedAt ?? null,
+      nodes: roadmapDoc?.nodes ?? [],
+      edges: roadmapDoc?.edges ?? [],
+    };
   }
   async getTopicRoadmapByUserId(roadmapId) {
     // await connectDB();

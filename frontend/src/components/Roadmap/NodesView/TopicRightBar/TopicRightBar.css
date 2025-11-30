@@ -53,6 +53,12 @@
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
 
+.status-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin: 4px 24px 0;
+}
+
 /* Loại bỏ header cũ */
 .rightbar-header {
   display: none;

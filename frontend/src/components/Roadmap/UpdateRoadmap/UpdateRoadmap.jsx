@@ -1,42 +1,115 @@
-import React, { useState ,useEffect, use} from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '#utils/api.js'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './UpdateRoadmap.css';
 import AlertError from '#components/SignUp/AlertError.jsx';
+
 export default function UpdateRoadmap(props) {
-    const { onClose ,user,nameRoadmap} = props;
+    const routeParams = useParams();
+    const {
+        onClose,
+        nameRoadmap,
+        teamId: propTeamId,
+        roadmapId: propRoadmapId,
+        onUpdated,
+    } = props;
+    const resolvedTeamId = propTeamId ?? routeParams.teamId ?? null;
+    const resolvedRoadmapId = propRoadmapId ?? routeParams.roadmapId ?? routeParams.id ?? '';
+    const resolvedName = nameRoadmap ?? routeParams.name ?? '';
+    const isTeamRoadmap = Boolean(resolvedTeamId && resolvedRoadmapId);
     const [title, setTitle] = useState('');
-    const [description, setDescription] = useState( '');
+    const [description, setDescription] = useState('');
     const [isPublic, setIsPublic] = useState(true);
     const [error, setError] = useState('');
-    const [roadmapId, setRoadmapId] = useState('');
+    const [currentRoadmapId, setCurrentRoadmapId] = useState(resolvedRoadmapId || '');
     const navigate = useNavigate();
     useEffect(() => {
+        setCurrentRoadmapId(resolvedRoadmapId || '');
+    }, [resolvedRoadmapId]);
+    useEffect(() => {
+        let isMounted = true;
         async function fetchData() {
-            const response  = await api.get(`/roadmaps/edit/${nameRoadmap}`,{params:{accountId:user.id}});
-            setTitle(response.data.name);
-            setDescription(response.data.description);
-            setRoadmapId(response.data.id);
-            setIsPublic(response.data.isPublic);
+            try {
+                if (isTeamRoadmap) {
+                    const response = await api.get(`/teams/${resolvedTeamId}/roadmaps/${resolvedRoadmapId}`);
+                    const data = response.data?.roadmap;
+                    if (isMounted && data) {
+                        setTitle(data.name || '');
+                        setDescription(data.description || '');
+                        setIsPublic(Boolean(data.isPublic));
+                        setCurrentRoadmapId(data.id);
+                    }
+                    return;
+                }
+                if (!resolvedName) {
+                    return;
+                }
+                const response  = await api.get(`/roadmaps/edit/${encodeURIComponent(resolvedName)}`);
+                if (!isMounted) {
+                    return;
+                }
+                setTitle(response.data.name);
+                setDescription(response.data.description);
+                setCurrentRoadmapId(response.data.id);
+                setIsPublic(Boolean(response.data.isPublic));
+            } catch (fetchError) {
+                if (isMounted) {
+                    setError(fetchError.response?.data?.message || 'Không thể tải thông tin roadmap.');
+                }
+            }
         }
         fetchData();
-        
-    }, []);
+        return () => {
+            isMounted = false;
+        };
+    }, [isTeamRoadmap, resolvedTeamId, resolvedRoadmapId, resolvedName]);
    
     const onhandleSubmit = async (e) => {
         e.preventDefault();
-        // Handle roadmap creation logic here
-        const response = await api.post(`/roadmaps/edit/${nameRoadmap}`, { name:title, description:description, accountId:user.id, roadmapId: roadmapId, isPublic:isPublic });
-        //console.log(response)
-        
-        if(response.data.success){
-            navigate(`/roadmap/edit/${title}/${roadmapId}`)
-            onClose();
+        setError('');
+        const trimmedTitle = title.trim();
+        if (!trimmedTitle) {
+            setError('Tên roadmap không được để trống.');
+            return;
         }
-        else {
-            setError(response.data.message);
+        try {
+            if (isTeamRoadmap) {
+                const response = await api.put(`/teams/${resolvedTeamId}/roadmaps/${resolvedRoadmapId}`, {
+                    name: trimmedTitle,
+                    description,
+                    isPublic,
+                });
+                if (response.data?.success === false) {
+                    setError(response.data.message || 'Không thể cập nhật roadmap.');
+                    return;
+                }
+                onUpdated?.({ name: trimmedTitle, description, isPublic });
+                onClose();
+                return;
+            }
+
+            if (!resolvedName) {
+                setError('Không xác định được roadmap cần cập nhật.');
+                return;
+            }
+            const response = await api.post(`/roadmaps/edit/${encodeURIComponent(resolvedName)}`, {
+                name: trimmedTitle,
+                description,
+                roadmapId: currentRoadmapId,
+                isPublic: isPublic,
+            });
+
+            if(response.data.success){
+                onUpdated?.({ name: trimmedTitle, description, isPublic });
+                navigate(`/roadmap/edit/${trimmedTitle}/${currentRoadmapId}`)
+                onClose();
+            }
+            else {
+                setError(response.data.message);
+            }
+        } catch (submitError) {
+            setError(submitError.response?.data?.message || 'Không thể cập nhật roadmap.');
         }
-       
     }
     
     return (

@@ -1,66 +1,85 @@
 import { useEffect, useState } from "react";
-import {useParams} from "react-router-dom"
 import "./TopicRightBar.css";
 import QuizItem from "../SmallItem/QuizItem/QuizItem";
 import ItemTopic from "../SmallItem/ItemTopic/ItemTopic";
-import api from '../../../../utils/api.js';
+import api from "../../../../utils/api.js";
 
-export default function TopicRightBar({ selectedNode, setIsReload, isReload }) {
-  //const [isUpdating, setIsUpdating] = useState(false);
+export default function TopicRightBar({ selectedNode, onTopicStatusUpdate }) {
   const [activeTab, setActiveTab] = useState("content");
-  const [topicStatus, setTopicStatus] = useState();
-  const [items, setItems] = useState(selectedNode?.data?.itemsTopic ?? [])
-  useEffect(()=>{
-    //console.log(selectedNode);
-    setTopicStatus(selectedNode.data?.topicStatus??"none");
-    //console.log(selectedNode.data?.topicStatus??"none");
-    ////console.log(topicStatus);
-  },[])
-  const getLearnTopic = async() =>{
+  const [topicStatus, setTopicStatus] = useState(selectedNode?.data?.topicStatus ?? "none");
+  const [items, setItems] = useState(selectedNode?.data?.itemsTopic ?? []);
+  const [saving, setSaving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    setTopicStatus(selectedNode?.data?.topicStatus ?? "none");
+    setItems(selectedNode?.data?.itemsTopic ?? []);
+    setErrorMessage("");
+  }, [selectedNode]);
+
+  const getLearnTopic = async () => {
+    const response = await api.get(`/learnTopic/get-learnTopic/${selectedNode?.id}`, {
+      withCredentials: true,
+    });
+    return response.data.success;
+  };
+
+  const createLearnTopic = async (status) => {
+    await api.post(
+      `learnTopic/create-learnTopic`,
+      { topicId: selectedNode?.id, process: status },
+      { withCredentials: true }
+    );
+  };
+
+  const updateLearnTopic = async (status) => {
+    await api.post(
+      `learnTopic/update-learnTopic`,
+      { topicId: selectedNode?.id, process: status },
+      { withCredentials: true }
+    );
+  };
+
+  const deleteLearnTopic = async (status) => {
+    await api.post(
+      `learnTopic/delete-learnTopic`,
+      { topicId: selectedNode?.id, process: status },
+      { withCredentials: true }
+    );
+  };
+
+  const persistTopicStatus = async (nextStatus) => {
+    const exists = await getLearnTopic();
+    if (nextStatus === "none") {
+      if (exists) {
+        await deleteLearnTopic(nextStatus);
+      }
+      return;
+    }
+    if (!exists) {
+      await createLearnTopic(nextStatus);
+    } else {
+      await updateLearnTopic(nextStatus);
+    }
+  };
+
+  const handleStatusSelect = async (event) => {
+    const nextStatus = event.target.value;
+    const prevStatus = topicStatus;
+    setTopicStatus(nextStatus);
+    setErrorMessage("");
+    setSaving(true);
     try {
-      const res = await api.get(`/learnTopic/get-learnTopic/${selectedNode?.id}`,{withCredentials: true})
-      //console.log("run here: ",res.data);
-      return res.data.success;
+      await persistTopicStatus(nextStatus);
+      onTopicStatusUpdate?.(selectedNode.id, nextStatus);
     } catch (error) {
-      console.error("error status:", error.response?.status);
-      console.error("error data:", error.response?.data);
+      console.error("Không thể cập nhật trạng thái topic", error);
+      setTopicStatus(prevStatus);
+      setErrorMessage("Không thể lưu trạng thái. Vui lòng thử lại.");
+    } finally {
+      setSaving(false);
     }
-  }
-  const createLearnTopic = async() =>{
-    await api.post(`learnTopic/create-learnTopic`,{topicId: selectedNode?.id, process: topicStatus},{withCredentials: true});
-  }
-  const updateLearnTopic = async() =>{
-    await api.post(`learnTopic/update-learnTopic`,{topicId: selectedNode?.id, process: topicStatus},{withCredentials: true});
-  }
-  const deleteLearnTopic = async() =>{
-    await api.post(`learnTopic/delete-learnTopic`,{topicId: selectedNode?.id, process: topicStatus},{withCredentials: true});
-  }
-  const changeTopicStatus = async(newValue) =>{
-    //console.log(newValue);
-    const learnTopic = await getLearnTopic();
-    setIsReload(!isReload);
-    //console.log(learnTopic);
-    if(newValue === "none"){
-      if(learnTopic){
-        //console.log("delete");
-        await deleteLearnTopic();
-      }
-    }
-    else if(newValue !== null && newValue !== undefined){
-      //console.log(learnTopic);
-      if(!learnTopic){
-        //console.log("create new");
-        await createLearnTopic();
-      }
-      else{
-        //console.log("update old");
-        await updateLearnTopic();
-      }
-    }
-  }
-  useEffect(()=>{
-    changeTopicStatus(topicStatus);
-  },[topicStatus]);
+  };
   return (
     <div className={`topic-rightbar ${selectedNode ? "open" : ""}`}>
       <div className="tab-status-row">
@@ -91,7 +110,8 @@ export default function TopicRightBar({ selectedNode, setIsReload, isReload }) {
         <select
           className="status-select-inline"
           value={topicStatus}
-          onChange={(e) => setTopicStatus(e.target.value)}
+          onChange={handleStatusSelect}
+          disabled={saving}
         >
           <option value="none">None</option>
           <option value="progress">In Progress</option>
@@ -99,6 +119,7 @@ export default function TopicRightBar({ selectedNode, setIsReload, isReload }) {
           <option value="skip">Skip</option>
         </select>
       </div>
+      {errorMessage && <p className="status-error">{errorMessage}</p>}
 
       {/* Content Area */}
       <div className="rightbar-content">

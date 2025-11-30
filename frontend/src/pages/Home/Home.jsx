@@ -124,7 +124,7 @@ export default function Home() {
     <>
       {isLoggedIn ? (
         <div className="home-container">
-          <div className="profile-header">
+          <div className="profile-header-home">
             <div className="profile-info">
               <h2 className="profile-name">{user.userName}</h2>
             </div>
@@ -140,7 +140,7 @@ export default function Home() {
                 <i className="bi bi-bookmark-fill"></i> Roadmap Marked
               </h3>
               <div className="roadmap-grid">
-                {markedRoadmaps.map((roadmap) => (
+                {markedRoadmaps?.map((roadmap) => (
                   <div key={roadmap.id} className="roadmap-card-wrapper"
                     onClick={() => ViewPageRoadmap(roadmap)}
                   >
@@ -379,7 +379,6 @@ export default function Home() {
       {openCreateRoadmap && (
         <CreateRoadmap
           onClose={() => setOpenCreateRoadmap(false)}
-          user={user}
         />
       )}
       {openCreateClassroom && (

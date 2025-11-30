@@ -749,7 +749,7 @@ select.form-control {
 }
 
 /* Profile Header */
-.profile-header {
+.profile-header-home {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -895,7 +895,7 @@ select.form-control {
         padding: var(--space-16);
     }
     
-    .profile-header {
+    .profile-header-home {
         flex-direction: column;
         gap: var(--space-16);
         text-align: center;
@@ -941,7 +941,7 @@ select.form-control {
         padding: var(--space-12);
     }
     
-    .profile-header {
+    .profile-header-home {
         padding: var(--space-20);
         flex-direction: column;
         gap: var(--space-12);

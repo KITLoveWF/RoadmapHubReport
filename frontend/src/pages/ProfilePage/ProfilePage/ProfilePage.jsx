@@ -1,50 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './ProfilePage.css';
 import ProfileComponent from '../../../components/ProfileComponent/ProfileComponent/ProfileComponent.jsx';
 import SettingComponent from '../../../components/ProfileComponent/SettingComponent/SettingComponent.jsx';
 import FriendsComponent from '../../../components/ProfileComponent/FriendsComponent/FriendsComponent.jsx';
 import RoadmapsComponent from '../../../components/ProfileComponent/RoadmapsComponent/RoadmapsComponent.jsx';
-import { useNavigate } from 'react-router-dom';
-import api from '../../../utils/api.js';
 //import {useCheckLogin} from '../../../hooks/userCheckLogin.jsx'
 
 const ProfilePage = () => {
-    const navigate = useNavigate();
     //side bar data
-    const [selectedTeam, setSelectedTeam] = useState('your account');
     const [activeNav, setActiveNav] = useState('Profile');
     // const { user } = useCheckLogin();
     // //console.log(user);
-    const [teams, setTeams] = useState(['your account']);
 
     const changeIntoSetting = () => {
         setMainContent(setting);
         setActiveNav('Setting');
     };
-
-    useEffect(() => {
-        const getTeams = async () =>{
-            try {
-                const response = await api.get(`/teams/get-teams`, {
-                    withCredentials: true
-                });
-                if(response.data.status === true)
-                    setTeams(['your account', ...response.data.teams.map(team => team.name)]);
-            } catch (error) {
-                console.error('Error fetching teams:', error);
-            }
-        } 
-        getTeams();
-    }, []);
-
-    useEffect(() => {
-        if(selectedTeam === 'your account') {
-            navigate('/profile');
-        }
-        else{
-            navigate(`/team/${selectedTeam}`);
-        }
-    }, [selectedTeam]);
 
     const profile = <ProfileComponent changeIntoSetting={changeIntoSetting}/>;
     const setting = <SettingComponent/>;
@@ -78,20 +49,6 @@ const ProfilePage = () => {
     return (
         <div className="profile-container">
         <div className="sidebar">
-            <div className="team-selector">
-            <label className="team-label" htmlFor="team-select">Choose Team</label>
-            <select
-                id="team-select"
-                className="team-select"
-                value={selectedTeam}
-                onChange={e => setSelectedTeam(e.target.value)}
-            >
-                {teams.map((team, idx) => (
-                <option value={team} key={idx}>{team}</option>
-                ))}
-            </select>
-            </div>
-
         <nav className="sidebar-nav">
             {navItems.map((item) => (
                 <div

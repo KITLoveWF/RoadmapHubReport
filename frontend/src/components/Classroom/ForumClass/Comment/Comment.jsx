@@ -18,15 +18,13 @@ export default function Comment(props) {
     <div className="d-flex align-items-center handle-comment">
       {/* Avatar */}
       <div className="me-3" >
-        {avatar && (
           <img
-            src={avatar}
+            src={avatar || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"}
             className="rounded-circle"
             width="40"
             height="40"
             alt="avatar"
           />
-        )}
       </div>
 
       {/* Input */}

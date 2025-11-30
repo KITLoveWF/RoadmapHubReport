@@ -8,12 +8,12 @@ export default function CreateRoadmap(props) {
     const [description, setDescription] = useState('');
     const [isPublic, setIsPublic] = useState(true);
     const [error, setError] = useState('');
-    const { onClose ,user} = props;
+    const { onClose } = props;
     const navigate = useNavigate();
     const onhandleSubmit = async (e) => {
         e.preventDefault();
         // Handle roadmap creation logic here
-        const response = await api.post('/roadmaps/create', { name:title, description:description, accountId:user.id, isPublic:isPublic });
+        const response = await api.post('/roadmaps/create', { name:title, description:description, isPublic:isPublic });
         //console.log(response)
         
         if(response.data.success){
@@ -43,6 +43,7 @@ export default function CreateRoadmap(props) {
                     className="form-control" 
                     placeholder="Enter Title"
                     onChange={(e)=>setTitle(e.target.value)}
+                    required
                 />
             </div>
             {error && <AlertError content={error}/>}
@@ -64,7 +65,6 @@ export default function CreateRoadmap(props) {
                         type="checkbox"
                         checked={isPublic}
                         onChange={() => setIsPublic(!isPublic)}
-                        required
                     />
                     <span className="slider"></span>
                     </label>

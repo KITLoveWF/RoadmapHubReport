@@ -13,14 +13,14 @@ const RoadmapCard = ({
   isMarked = false,
   onBookmarkToggle,
 }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(Boolean(isMarked));
   const [hovered, setHovered] = useState(false);
   const [cardRect, setCardRect] = useState(null);
   const cardRef = useRef();
 
   useEffect(() => {
-    setIsBookmarked(isMarked);
-  }, []);
+    setIsBookmarked(Boolean(isMarked));
+  }, [isMarked]);
 
   const truncate = (text, max = 16) => {
     if (typeof text !== "string" || !text) return "";

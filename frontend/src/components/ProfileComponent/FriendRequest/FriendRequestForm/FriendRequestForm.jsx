@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./FriendRequestForm.css";
-import axios from "axios";
 import api from "../../../../utils/api";
 
 export default function FriendRequestForm() {
@@ -20,17 +19,24 @@ export default function FriendRequestForm() {
   };
 
   return (
-    <form className="request-form-card" onSubmit={handleSubmit}>
-      <h2>Send Friend Request</h2>
-      <input
-        type="email"
-        placeholder="Enter email..."
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="request-form-input"
-        required
-      />
-      <button type="submit" className="request-form-btn">Send</button>
-    </form>
+    <div className="friends-card">
+      <header>
+        <h2>Gửi lời mời kết bạn</h2>
+        <p>Nhập email của người bạn muốn kết nối.</p>
+      </header>
+      <form className="friends-form" onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Nhập email bạn bè"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="friends-input"
+          required
+        />
+        <button type="submit" className="friends-btn primary">
+          Gửi lời mời
+        </button>
+      </form>
+    </div>
   );
 }

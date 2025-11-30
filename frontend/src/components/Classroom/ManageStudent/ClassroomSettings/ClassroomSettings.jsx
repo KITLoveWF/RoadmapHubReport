@@ -26,11 +26,11 @@ export default function ClassroomSettings({ classroomId, onDelete }) {
           navigate('/');
         }, 1500);
       } else {
-        setError(response.data.message || 'Xóa lớp học thất bại');
+        setError(response.data.message || 'Delete classroom failed');
       }
     } catch (error) {
       console.error('Error deleting classroom:', error);
-      setError(error.response?.data?.message || 'Có lỗi xảy ra khi xóa lớp học');
+      setError(error.response?.data?.message || 'An error occurred while deleting the classroom');
     } finally {
       setDeleteLoading(false);
     }
@@ -40,10 +40,10 @@ export default function ClassroomSettings({ classroomId, onDelete }) {
   const modalBody = (
     <div className="delete-confirm-body">
       <p className="warning-text">
-        Bạn có chắc chắn muốn xóa lớp học này không?
+        Are you sure you want to delete this classroom?
       </p>
       <p className="warning-text warning-important">
-        ❗ Hành động này <strong>không thể hoàn tác</strong>. Tất cả dữ liệu liên quan sẽ bị xóa vĩnh viễn.
+        ❗ This action <strong>cannot be undone</strong>. All related data will be permanently deleted.
       </p>
     </div>
   );
@@ -57,7 +57,7 @@ export default function ClassroomSettings({ classroomId, onDelete }) {
         onClick={() => setShowConfirmModal(false)}
         disabled={deleteLoading}
       >
-        Hủy
+        Cancel
       </button>
       <button
         type="button"
@@ -67,10 +67,10 @@ export default function ClassroomSettings({ classroomId, onDelete }) {
       >
         {deleteLoading ? (
           <>
-            <span className="spinner"></span> Đang xóa...
+            <span className="spinner"></span> Deleting...
           </>
         ) : (
-          '✓ Xóa lớp học'
+          '✓ Delete Classroom'
         )}
       </button>
     </div>
@@ -79,26 +79,26 @@ export default function ClassroomSettings({ classroomId, onDelete }) {
   return (
     <div className="classroom-settings-container">
       <div className="settings-section">
-        <h2>Cài đặt lớp học</h2>
+        <h2>Classroom Settings</h2>
 
         {/* Danger Zone */}
         <div className="danger-zone">
           <div className="danger-zone-header">
-            <h3>⚠️ Vùng nguy hiểm</h3>
-            <p>Những hành động này không thể hoàn tác</p>
+            <h3>⚠️ Danger Zone</h3>
+            <p>These actions cannot be undone</p>
           </div>
 
           <div className="danger-zone-content">
             <div className="delete-section">
               <div className="delete-info">
-                <h4>Xóa lớp học</h4>
-                <p>Xóa lớp học này và tất cả dữ liệu liên quan của nó</p>
+                <h4>Delete Classroom</h4>
+                <p>Delete this classroom and all related data</p>
               </div>
               <button
                 className="btn-delete-classroom"
                 onClick={() => setShowConfirmModal(true)}
               >
-                Xóa lớp học
+                Delete Classroom
               </button>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function ClassroomSettings({ classroomId, onDelete }) {
       {/* ✅ Sử dụng Modal Component */}
       {showConfirmModal && (
         <Modal
-          header={<h3 style={{ margin: 0 }}>⚠️ Xác nhận xóa lớp học</h3>}
+          header={<h3 style={{ margin: 0 }}>⚠️ Confirm Delete Classroom</h3>}
           body={modalBody}
           footer={modalFooter}
           onClose={() => setShowConfirmModal(false)}
