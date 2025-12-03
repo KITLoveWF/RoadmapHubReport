@@ -56,7 +56,7 @@ CREATE TABLE Roadmap(
   teamId VARCHAR(36),
   FOREIGN KEY (accountId) REFERENCES Account(id),
   FOREIGN KEY (teamId) REFERENCES Team(id),
-  name VARCHAR(16),
+  name VARCHAR(255),
   description VARCHAR(255),
   isPublic TINYINT(1) DEFAULT(0),
   learning INT DEFAULT(0),
