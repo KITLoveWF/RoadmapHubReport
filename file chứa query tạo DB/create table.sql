@@ -171,6 +171,12 @@ FOREIGN KEY (accountId) REFERENCES Account(id) ON DELETE CASCADE;
 
 -- Add index for faster token lookup
 CREATE INDEX idx_account_token ON RefreshToken(accountId, isRevoked);
+
+-- 
+ALTER TABLE Roadmap ADD FULLTEXT(name, description);
+
+ALTER TABLE Roadmap
+ADD COLUMN createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 -- ============================================ Mock Data =========================================
 -- Account
 INSERT INTO account (id, username, email, password, classroomLimit)
