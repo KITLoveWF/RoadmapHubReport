@@ -8,18 +8,18 @@ export function SendEmail(mailData){
     const { to, text, html } = mailData;
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',  // Dùng host cụ thể thay vì service: 'gmail'
-        port: 587,               // Cổng chuẩn cho TLS
-        secure: false,           // false cho cổng 587 (true cho cổng 465)
+        port: 465,
+        //port: 587,               // Cổng chuẩn cho TLS
+        secure: true,           // false cho cổng 587 (true cho cổng 465)
         // service: 'gmail',
         auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD
         },
         family: 4, // Use IPv4, tránh IPv6 nếu có vấn đề
-        // Tăng thời gian chờ (Tùy chọn)
-        connectionTimeout: 10000, 
-        greetingTimeout: 10000,
-        socketTimeout: 10000,
+        // Thêm log để debug xem nó chết ở đâu
+        debug: true,
+        logger: true
     });
 
     const mailConfigurations = {
