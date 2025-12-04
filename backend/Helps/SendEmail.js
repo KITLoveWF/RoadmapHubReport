@@ -4,12 +4,12 @@ import nodemailer from 'nodemailer';
 import promises from 'bluebird';
 import { Resend } from 'resend';
 dotenv.config();
-
+const resend = new Resend(process.env.RESEND_API);
 export async function SendEmail(mailData) {
     const { to, text, html } = mailData;
     try {
         const data = await resend.emails.send({
-            from: 'onboarding@resend.dev', 
+            from: 'RoadmapHub Support <no-reply@nengoilahoang.io.vn>',
             to: to, // Email người nhận
             subject: 'Email Verification',
             html: html,
