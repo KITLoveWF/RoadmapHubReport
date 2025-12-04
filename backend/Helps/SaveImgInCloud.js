@@ -26,3 +26,16 @@ export const uploadToCloudinary = async (filePath) => {
     throw error;
   }
 };
+export const uploadFileToCloudinary = async (filePath) => {
+  try {
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: "user_uploads", // tùy chọn folder để quản lý
+      use_filename: true,  // Giữ tên file gốc
+      unique_filename: false, // Không thêm chuỗi ngẫu nhiên vào tên file
+    });
+    return result; // result.secure_url là link file dùng được
+  } catch (error) {
+    console.error("Upload error:", error);
+    throw error;
+  }
+};

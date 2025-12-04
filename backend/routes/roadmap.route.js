@@ -2,6 +2,8 @@ import express from "express";
 import RoadmapController from "../controllers/Roadmap.controller.js";
 import requireAuth from "../middlewares/RequireAuth.js";
 import authenticate from "../middlewares/AuthMiddleware.js";
+import multer from "multer";
+const upload = multer({ dest: "file-topic/" }); // thư mục lưu file tạm thời
 const router = express.Router();
 
 // Protected routes (cần authentication)
@@ -50,5 +52,6 @@ router.get(
   requireAuth,
   RoadmapController.viewRoadmapPublic
 );
+router.post("/upload-file-topic",upload.single("file"), requireAuth, RoadmapController.uploadFileTopic);
 
 export default router;

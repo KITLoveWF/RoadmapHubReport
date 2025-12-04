@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap');
+
+:root {
+  --font-balsamiq: "Balsamiq Sans", sans-serif;
+}
+
+/* Override ReactFlow fonts */
+.react-flow {
+  font-family: var(--font-balsamiq);
+}
+
+.react-flow__node {
+  font-family: var(--font-balsamiq);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Style cho từng loại node */
+.react-flow__node-topic,
+.react-flow__node-title,
+.react-flow__node-button,
+.react-flow__node-section,
+.react-flow__node-paragraph,
+.react-flow__node-checklist,
+.react-flow__node-horizontalline,
+.react-flow__node-verticalline {
+  font-family: var(--font-balsamiq) !important;
+}
+
+/* Node title đậm hơn */
+.react-flow__node-title {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Controls và Minimap */
+.react-flow__controls,
+.react-flow__minimap {
+  font-family: var(--font-balsamiq);
+}
+
+/* Edge labels */
+.react-flow__edge-text {
+  font-family: var(--font-balsamiq);
+  font-size: 12px;
+}
+
+/* Node content bên trong */
+.react-flow__node div,
+.react-flow__node span,
+.react-flow__node p {
+  font-family: var(--font-balsamiq) !important;
+}

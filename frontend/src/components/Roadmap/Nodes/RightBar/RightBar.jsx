@@ -9,11 +9,11 @@ import RightBarCheckList from "./RightBarCheckList/RightBarCheckList";
 import RightBarLine from "./RightBarLine/RightBarLine";
 //import "./RightBar.css";
 
-export default function RightBar({ selectedNode, onDeleteNode, onNodeChange }) {
+export default function RightBar({ selectedNode, onDeleteNode, onNodeChange, onOpenEditor }) {
   if (!selectedNode) return null;
   switch (selectedNode.type) {
     case 'topic':
-      return <RightBarTopic selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
+      return <RightBarTopic selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange} onOpenEditor={onOpenEditor}/>
       break;
     case 'title':
       return <RightBarTitle selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
