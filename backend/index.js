@@ -42,7 +42,7 @@ app.use(
   cors({
     origin: [
       process.env.FRONTEND_URL || "http://localhost:3000",
-      "https://roadmaphub.nengoilahoang.io.vn"
+      "https://www.nengoilahoang.io.vn"
     ], // FE port
     credentials: true,
   })
@@ -52,7 +52,7 @@ const io = new Server(httpServer, {
   cors: {
     origin:[
       process.env.FRONTEND_URL || "http://localhost:3000",
-      "https://roadmaphub.nengoilahoang.io.vn"
+      "https://www.nengoilahoang.io.vn"
     ],
     credentials: true,
   },

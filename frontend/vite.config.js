@@ -40,7 +40,7 @@ export default defineConfig({
     //         },
     // },
     allowedHosts: [
-      "roadmaphub.nengoilahoang.io.vn"
+      "www.nengoilahoang.io.vn"
     ],
   },
   preview: {
