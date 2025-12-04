@@ -73,6 +73,7 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
                             type="url"
                             className="url-input"
                             placeholder="https://example.com"
+                            value={selectedNode.data?.url || ''}
                             onChange={(e) => changeUrl(e.target.value)}
                         />
                 </div>

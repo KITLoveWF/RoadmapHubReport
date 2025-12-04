@@ -158,8 +158,8 @@
 }
 
 /* Topic Title as H1 - No background, no border */
-.topic-title {
-  font-size: 24px;
+.topic-title-view-roadmap {
+  font-size: 40px;
   font-weight: 700;
   color: #1f2937;
   margin: 0;
@@ -168,13 +168,13 @@
 }
 
 /* Topic Description as Paragraph - No background, no border */
-.topic-description {
+.topic-description-view-roadmap {
   font-size: 16px;
   color: #6b7280;
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  max-height: 200px;
+  max-height: 600px;
   overflow-y: auto;
 }
 
@@ -252,25 +252,25 @@
 /* Scrollbar styling */
 .rightbar-content::-webkit-scrollbar,
 .quiz-list::-webkit-scrollbar,
-.topic-description::-webkit-scrollbar {
+.topic-description-view-roadmap::-webkit-scrollbar {
   width: 4px;
 }
 
 .rightbar-content::-webkit-scrollbar-track,
 .quiz-list::-webkit-scrollbar-track,
-.topic-description::-webkit-scrollbar-track {
+.topic-description-view-roadmap::-webkit-scrollbar-track {
   background: transparent;
 }
 
 .rightbar-content::-webkit-scrollbar-thumb,
 .quiz-list::-webkit-scrollbar-thumb,
-.topic-description::-webkit-scrollbar-thumb {
+.topic-description-view-roadmap::-webkit-scrollbar-thumb {
   background: #d1d5db;
   border-radius: 4px;
 }
 
 .rightbar-content::-webkit-scrollbar-thumb:hover,
 .quiz-list::-webkit-scrollbar-thumb:hover,
-.topic-description::-webkit-scrollbar-thumb:hover {
+.topic-description-view-roadmap::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }

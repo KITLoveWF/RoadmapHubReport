@@ -25,6 +25,7 @@ import api from "../../../utils/api";
 import RightBarView from "#components/Roadmap/NodesView/RightBarView/RightBarView.jsx";
 import RightBarPopUp from "#components/Roadmap/NodesView/RightBarPopUp/RightBarPopUp.jsx"
 import {useCheckLogin} from "#hooks/userCheckLogin";
+import './RoadmapView.css'; 
 //import { set } from "mongoose";
 
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
@@ -99,6 +100,20 @@ export default function RoadmapView(){
         if(node.type==="topic"){
             setSelectedNode(node);
             //console.log(node);
+        }
+        if (node?.type === "button") {
+            // Lấy URL từ node data
+            const targetUrl = node?.data?.url || node?.data?.link;
+            console.log("Target URL:", targetUrl);
+
+            // Nếu là external link (http/https)
+            if (targetUrl?.startsWith('http')) {
+                window.open(targetUrl, '_blank');
+            }
+            // Nếu là internal route
+            else if (targetUrl) {
+                navigate(targetUrl);
+            }
         }
         else if(node.type==="checklist"){
             setCheckListSelected(node);

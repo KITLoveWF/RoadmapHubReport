@@ -126,13 +126,12 @@ export default function TopicRightBar({ selectedNode, onTopicStatusUpdate }) {
         {activeTab === "content" && (
           <div className="content-panel-simple">
             {/* Title as H1 */}
-            <h1 className="topic-title">
+            <h2 className="topic-title-view-roadmap">
               {selectedNode?.data?.titleTopic || "there is no title"}
-            </h1>
+            </h2>
             
             {/* Description as paragraph */}
-            <p className="topic-description">
-              {selectedNode?.data?.descriptionTopic || "there is no content"}
+            <p className="topic-description-view-roadmap" dangerouslySetInnerHTML={{ __html: selectedNode?.data?.descriptionTopic || "there is no content" }}>
             </p>
             
             <div className="links-divider">

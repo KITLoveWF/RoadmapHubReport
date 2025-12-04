@@ -31,6 +31,7 @@ import { useParams,useNavigate } from "react-router-dom";
 import RightBarEdge from '#components/Roadmap/Nodes/RightBar/RightBarEdge/RightBarEdge';
 
 import RoadmapDemo, {useRoadmapDemo} from "../../../components/Roadmap/RoadmapDemo/RoadmapDemo";
+import EditorModal from '#components/Roadmap/EditorModal/EditorModal.jsx';
 
 import ChatBox from '#components/Roadmap/AIChatBox/AIChatBox.jsx';
 const getRandomId = () => {
@@ -235,6 +236,9 @@ export default function RoadmapEditPage() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [rightBarOpen, setRightBarOpen] = useState(0);
   const [selectedEdge, setSelectedEdge] = useState(null);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [editorValue, setEditorValue] = useState('');
+  const [editorTitle, setEditorTitle] = useState('Chỉnh Sửa Mô Tả');
 
   const handleDeleteNode = (nodeId) => {
   setNodes((nds) => nds.filter((n) => n.id !== nodeId));
@@ -268,6 +272,30 @@ export default function RoadmapEditPage() {
   )))
   setSelectedEdge(updatedEdge);
   }
+  
+  const handleOpenEditor = (value, title) => {
+    setEditorValue(value || '');
+    setEditorTitle(title || 'Chỉnh Sửa Mô Tả');
+    setIsEditorOpen(true);
+  };
+  
+  const handleEditorChange = (newValue) => {
+    setEditorValue(newValue);
+    if (selectedNode) {
+      const updatedNode = {
+        ...selectedNode,
+        data: {
+          ...selectedNode.data,
+          descriptionTopic: newValue,
+        },
+      };
+      handleNodeChange(updatedNode);
+    }
+  };
+  
+  const handleCloseEditor = () => {
+    setIsEditorOpen(false);
+  };
   return (
     <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
       <TopBar onSaveNode={onSaveNodes}/>
@@ -279,10 +307,19 @@ export default function RoadmapEditPage() {
               setSelectedNode={setSelectedNode} setRightBarOpen={setRightBarOpen} rightBarOpen={rightBarOpen}
               setSelectedEdge={setSelectedEdge}/>
           </div>
-          {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} onNodeChange={handleNodeChange} />}
+          {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} onNodeChange={handleNodeChange} onOpenEditor={handleOpenEditor} />}
           {selectedEdge &&<RightBarEdge selectedEdge={selectedEdge}  onEdgeChange={handleEdgeChange} />}
           
           </DnDProvider>
+          
+          {/* Editor Modal */}
+          <EditorModal
+            isOpen={isEditorOpen}
+            onClose={handleCloseEditor}
+            value={editorValue}
+            onChange={handleEditorChange}
+            title={editorTitle}
+          />
           <ChatBox nodes={nodes} 
             edges={edges} 
             demoNodes={demoNodes} 

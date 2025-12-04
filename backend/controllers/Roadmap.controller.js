@@ -3,6 +3,7 @@ import LearnTopicService from "../services/LearnTopic.service.js";
 import CheckListAccountService from "../services/CheckListAccount.service.js";
 import { Buffer } from "buffer";
 import { stat } from "fs";
+import { uploadToCloudinary, uploadFileToCloudinary } from "../Helps/SaveImgInCloud.js";
 class RoadmapController {
   async createRoadmap(req, res) {
     const accountId = req.authenticate?.id;
@@ -209,6 +210,16 @@ class RoadmapController {
     const accountId = req.authenticate.id;
     const response = await RoadmapService.getMarkRoadmaps(accountId);
     res.json({status:"success", data: response });
+  }
+  async uploadFileTopic(req, res) {
+    try {
+      const file = req.file;
+      const generalFile = await uploadFileToCloudinary(file.path);
+      res.json({ status: "success", fileUrl: generalFile.url });
+    } catch (error) {
+      console.error("Error uploading file topic:", error);
+      res.status(500).json({ status: "failed", message: "Error uploading file topic" });
+    }
   }
 }
 export default new RoadmapController(RoadmapService);

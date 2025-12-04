@@ -46,7 +46,7 @@ export default function StudentClassroomView(){
                     withCredentials: true
                 });
                 //console.log(response)
-                setClassess([...response.data.map(classItem => ({name:classItem.name,id:classItem.classroomId}))]);
+                setClassess([...response.data.map(classItem => ({name:classItem.name,id:classItem.id}))]);
                 } 
         getClasses();
     }, []);

@@ -3,7 +3,7 @@ import { useState,useEffect } from "react";
 import RightBarTop from "../RightBarTop/RightBarTop";
 import "./RightBarTopic.css";
 
-export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChange}) {
+export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChange, onOpenEditor}) {
   if (!selectedNode) return null;
   const [activeTab, setActiveTab] = useState('properties');
    
@@ -146,6 +146,15 @@ export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChang
                 value={selectedNode.data?.descriptionTopic}
                 onChange={(e)=>{changeDescriptionTopic(e.target.value)}}
               />
+              {onOpenEditor && (
+                <button 
+                  className="btn-expand-editor"
+                  onClick={() => onOpenEditor(selectedNode.data?.descriptionTopic, 'Edit Topic Description')}
+                  type="button"
+                >
+                  <i className="bi bi-arrows-fullscreen"></i> Expand Editor
+                </button>
+              )}
             </div>
 
             <div className="links-section">

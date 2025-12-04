@@ -158,6 +158,7 @@ export function ResizableNode(props) {
     //   //data.onNodeDataChange(id, { itemsCheckList: newList });
     // };
     return(
+      <div> {type == "section" && <>{data.label}</>}
         <div
         style={style}
     >
@@ -169,7 +170,7 @@ export function ResizableNode(props) {
           data.onResize(id, params.width, params.height);
         }}
       />
-      {type==="checklist"?(<div style={{ padding: "5px" }}>
+      {type==="checklist" && (<div style={{ padding: "5px" }}>
         {checkList && checkList.length > 0 ? (
           checkList.map((item, index) => (
             <div key={index} style={{ display: "flex", alignItems: "center" }}>
@@ -187,9 +188,12 @@ export function ResizableNode(props) {
         ) : (
           <span>No items</span>
         )}
-      </div>):(data.label)
+      </div>)
       }
+      {type !== "section" && type!== "checklist" && <>{data.label}</>}
         {allNodeHandles}
       </div>
+      </div>
+        
     )
 }
