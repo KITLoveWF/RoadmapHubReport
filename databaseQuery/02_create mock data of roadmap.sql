@@ -1,3 +1,4 @@
+USE test;
 ALTER TABLE Roadmap ADD FULLTEXT(name, description);
 
 ALTER TABLE Roadmap

@@ -8,7 +8,7 @@ async function connectDB() {
         await mongoose.connect(process.env.MONGO_URI,{
             // useNewUrlParser: true,
             // useUnifiedTopology: true,
-            dbName: "roadmap",
+            // dbName: "roadmap",
             maxPoolSize: 10,        // ✅ Giới hạn connection pool
             serverSelectionTimeoutMS: 5000, // ✅ Timeout nhanh hơn
             socketTimeoutMS: 45000,  // ✅ Timeout cho operations

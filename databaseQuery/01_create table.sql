@@ -1,5 +1,6 @@
-DROP DATABASE test;
-CREATE DATABASE test;
+-- DROP DATABASE test;
+-- CREATE DATABASE test;
+USE test;
 -- Account table
 CREATE TABLE Account(
   id VARCHAR(36) PRIMARY KEY,

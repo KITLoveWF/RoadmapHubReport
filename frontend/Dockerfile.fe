@@ -1,0 +1,26 @@
+# # Giai đoạn 1: Build FE
+# FROM node:18-alpine as builder
+# WORKDIR /app
+# COPY package*.json ./
+# RUN npm install
+# COPY . .
+# # CHÚ Ý: Đảm bảo file .env.production (hoặc tương tự) đã được copy và sẵn sàng cho build
+# RUN npm run dev
+
+# # Giai đoạn 2: Serve bằng Nginx
+# FROM nginx:alpine
+# RUN rm -rf /usr/share/nginx/html/*
+# COPY --from=builder /app/dist /usr/share/nginx/html # Output Vite thường là 'dist'
+# EXPOSE 80
+# CMD ["nginx", "-g", "daemon off;"]
+
+# File: frontend/Dockerfile.fe
+FROM node:22-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+# Vite Dev Server mặc định lắng nghe cổng 5173 hoặc 3000
+EXPOSE 3000 
+# Chạy chế độ Dev (có Hot Reload)
+CMD ["npm", "run", "dev"]

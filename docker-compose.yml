@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # ------------------------------------
+  # 1. DỊCH VỤ MYSQL (Database)
+  # ------------------------------------
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    ports:
+      - "3306:3306" # Mở ra máy local để dùng Navicat/XAMPP
+    environment:
+      # Cấu hình "Tay Mơ" - Dễ dàng nhất
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: test
+    volumes:
+      # LƯU Ý QUAN TRỌNG: Gắn thư mục khởi tạo vào nơi MySQL tự động chạy script
+      - ./databaseQuery:/docker-entrypoint-initdb.d/
+      # Volume lưu trữ dữ liệu vĩnh viễn
+      - mysql_data:/var/lib/mysql
+
+  # ------------------------------------
+  # 2. DỊCH VỤ MONGODB (Database)
+  # ------------------------------------
+  mongo_db:
+    image: mongo:latest
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017" # Mở ra máy local để dùng Compass
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: '123456'
+      MONGO_INITDB_DATABASE: roadmap
+    volumes:
+      - mongo_data:/data/db
+
+  # ------------------------------------
+  # 3. DỊCH VỤ BACK-END (Node.js)
+  # ------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.be
+    container_name: be_app
+    restart: always
+    ports:
+      - "5000:5000" # Mở cổng BE ra máy local
+    environment:
+      # Biến môi trường kết nối DB
+      DB_HOST: mysql_db      # SỬ DỤNG TÊN SERVICE
+      MONGO_HOST: mongo_db   # SỬ DỤNG TÊN SERVICE
+      MONGO_PASS: '123456'
+      MONGO_URI: mongodb://root:123456@mongo_db:27017/roadmap?authSource=admin
+      # ... (Các biến môi trường khác từ file .env của BE cần được khai báo ở đây) ...
+    # Mount code: Thay đổi code local sẽ tự động cập nhật trong container (tiện cho DEV)
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mysql_db
+      - mongo_db
+    env_file:
+      - ./backend/.env
+
+  # ------------------------------------
+  # 4. DỊCH VỤ FRONT-END (React/Vite)
+  # ------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.fe
+    container_name: fe_app
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+  mongo_data:
