@@ -14,7 +14,12 @@ export function SendEmail(mailData){
         auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD
-        }
+        },
+        family: 4, // Use IPv4, tránh IPv6 nếu có vấn đề
+        // Tăng thời gian chờ (Tùy chọn)
+        connectionTimeout: 10000, 
+        greetingTimeout: 10000,
+        socketTimeout: 10000,
     });
 
     const mailConfigurations = {
