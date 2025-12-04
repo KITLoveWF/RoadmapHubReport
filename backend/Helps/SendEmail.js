@@ -7,7 +7,10 @@ dotenv.config();
 export function SendEmail(mailData){
     const { to, text, html } = mailData;
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',  // Dùng host cụ thể thay vì service: 'gmail'
+        port: 587,               // Cổng chuẩn cho TLS
+        secure: false,           // false cho cổng 587 (true cho cổng 465)
+        // service: 'gmail',
         auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD
