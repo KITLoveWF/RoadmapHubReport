@@ -91,5 +91,12 @@ class QuizController{
         });
         res.json(response);
     }
+    async createQuizByAI (req,res){
+        const {text, topic, quiz, history} = req.body;
+        const userId = req.authenticate.id;
+        const response = await QuizService.createQuizByAI({ text, topic, quiz, history, userId });
+        console.log("AI Response:", response);
+        res.json(response);
+    }
 }
 export default new QuizController(QuizService);

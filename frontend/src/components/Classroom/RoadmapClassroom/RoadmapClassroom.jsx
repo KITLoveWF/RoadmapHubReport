@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "#utils/api";
 import TopicRoadmapClassroom from "#components/Classroom/RoadmapClassroom/TopicRoadmapClassroom/TopicRoadmapClassroom.jsx";
 import QuizRoadmapClassroom from "#components/Classroom/RoadmapClassroom/QuizRoadmapClassroom/QuizRoadmapClassroom.jsx";
+import ChatBox from '#components/Classroom/RoadmapClassroom/AIChatBoxQuiz/AIChatBoxQuiz.jsx';
 import "./RoadmapClassroom.css";
 export default function RoadmapClassroom(props) {
   const { classroomId } = props;
@@ -271,6 +272,9 @@ export default function RoadmapClassroom(props) {
           updateQuiz={updateQuiz}
           removeQuiz={removeQuiz}
         />
+      )}
+      { selectedTopic !== null && quizzes !== null && (
+        <ChatBox topic={selectedTopic} quiz={quizzes} updateQuiz={updateQuiz} addQuiz={addQuiz} />
       )}
     </div>
   );

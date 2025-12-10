@@ -9,4 +9,5 @@ router.post("/updateQuiz", requireAuth, QuizController.updateQuizClassroom);
 router.get("/getQuizById", requireAuth, QuizController.getQuizById);
 router.post("/doQuiz", requireAuth, QuizController.doQuiz);
 router.post("/getScoreStudent", requireAuth, QuizController.getScoreStudent);
+router.post("/createQuizByAI", requireAuth, QuizController.createQuizByAI);
 export default router;
